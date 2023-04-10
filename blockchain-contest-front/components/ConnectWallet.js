@@ -1,4 +1,4 @@
-import styles from "@styles/ConnectWallet.module.scss";
+import styles from "@/styles/ConnectWallet.module.scss";
 import Link from "next/link";
 
 export default function ConnectWallet() {
