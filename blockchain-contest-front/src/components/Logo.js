@@ -6,7 +6,7 @@ export default function Logo({ width, height }) {
         <Link href="/">
             <div className={styles.logo} style={{
                 width: width || "auto",
-                height: height || "100%`",
+                height: height || "100%",
             }}/>
         </Link>
         
