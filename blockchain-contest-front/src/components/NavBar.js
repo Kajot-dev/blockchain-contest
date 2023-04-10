@@ -1,4 +1,4 @@
-import styles from "../styles/NavBar.module.scss";
+import styles from "@styles/NavBar.module.scss";
 import Link from "next/link";
 import ConnectWallet from "./ConnectWallet";
 import Logo from "./Logo";
