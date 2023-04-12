@@ -1,0 +1,85 @@
+:root {
+  --accent-color: #00b981;
+  --text_color: #000000;
+  --bg_color: #fff;
+  --shadow-color: 0,0,0;
+  --shadow-alpha: 0.6;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent-color: #00b981;
+    --text_color: #ffffff;
+    --bg_color: #000;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg_color);
+  min-height: 100vh;
+  width: 100vw;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: var(--accent-color);
+}
+
+a:hover {
+  filter: brightness(1.2);
+}
+
+main {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  padding-top: 60px;
+}
+
+.fill {
+  position: absolute;
+  display: block;
+  width: stretch;
+  height: stretch;
+  overflow: hidden;
+}
+
+.magic-bg {
+  opacity: 0.3;
+  display: block;
+  filter: blur(20px);
+  background:
+    radial-gradient(circle at 78% 35%, var(--accent-color) 0%, var(--accent-color) 6%, transparent 25%, transparent),
+    radial-gradient(circle at 17% 63%, var(--accent-color) 0%, var(--accent-color) 3%, transparent 26%, transparent),
+    radial-gradient(circle at 42% 34%, var(--accent-color) 0%, var(--accent-color) 8%, transparent 37%, transparent),
+    radial-gradient(circle at 64% 65%, var(--accent-color) 0%, var(--accent-color) 2%, transparent 28%, transparent);
+  animation: magic 60s ease infinite alternate;
+}
+
+@keyframes magic {
+  0% {
+    transform: translate(0px, 0px) rotate(0deg) scale(1, 1);
+  }
+  20% {
+    transform: translate(143px, 227px) rotate(24deg) scale(1.3, 1.2);
+  }
+  40% {
+    transform: translate(-122px, -512px) rotate(12deg) scale(1.2, 1.4);
+  }
+  60% {
+    transform: translate(313px, -234px) rotate(-15deg) scale(1.3, 1.1);
+  }
+  80% {
+    transform: translate(426px, -322px) rotate(5deg) scale(1.4, 1.3);
+  }
+}

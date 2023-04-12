@@ -3,19 +3,21 @@
     letter-spacing: inherit;
     background-color: transparent;
     border: 1.5px solid;
-    border-color: $text_color;
+    border-color: var(--text_color);
     border-radius: 0.5rem;
     padding: 0.5rem 0.5rem;
     box-sizing: margin-box;
-    color: $text_color;
-    box-shadow: 2px 2px 8px change-color($shadow_color, $alpha: 0);
+    color: var(--text_color);
+    box-shadow: 2px 2px 8px rgba(var(--shadow-color), 0);
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
   }
+
+
   
 .walletBtn:hover {
-    box-shadow: 2px 2px 8px adjust-color($shadow_color, $alpha: -0.6);
-    border-color: $accent_color;
-    color: $accent_color;
+    box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
+    border-color: var(--accent-color);
+    color: var(--accent-color);
     transform: scale(1.05);
     border-radius: 0.2rem;
     cursor: pointer;

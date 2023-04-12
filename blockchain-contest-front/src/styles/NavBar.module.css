@@ -1,21 +1,22 @@
 .header {
-    background-color: $bg_color;
-    border-bottom: 3px solid $accent_color;
+    background-color: var(--bg_color);
+    border-bottom: 3px solid var(--accent-color);
     display: flex;
     position: fixed;
     width: 100vw;
     box-sizing: border-box;
     height: 60px;
     margin: 0;
-    color: $text_color;
+    color: var(--text_color);
     padding: 0.3rem;
     justify-content: space-between;
     align-items: stretch;
-    box-shadow: 2px 2px 8px adjust-color($shadow_color, $alpha: -0.6);
+    box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
+    z-index: 10;
 }
 
 .header a {
-  color: $text_color;
+  color: var(--text_color);
 }
 
 .navbarRight {
@@ -28,13 +29,13 @@
 }
 
 .navbarRight > a {
-  border-bottom: solid $accent_color;
+  border-bottom: solid var(--accent-color);
   border-bottom-width: 0px;
   padding-bottom: 0.1rem;
   transition: border-bottom-width 0.2s ease-in-out;
 }
 
 .navbarRight > a:hover {
-  border-bottom: solid $accent_color;
+  border-bottom: solid var(--accent-color);
   border-bottom-width: 2px;
 }
