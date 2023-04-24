@@ -1,14 +1,14 @@
 import styles from "@styles/ConnectForm.module.css";
 import { useMetaMask } from "metamask-react";
 import { useState } from "react";
-import { Fira_Mono, Roboto_Condensed } from "next/font/google";
-import InfoBox from "./InfoBox";
+import { Roboto_Condensed } from "next/font/google";
+import { PulseLoader } from "react-spinners";
+import { InfoBox, ErrorBox } from "./Boxes";
+import MetaMaskAvatar from "./MetaMaskAvatar";
 import Link from "next/link";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
 export default function ConnectForm() {
-  const [isProcessing, setIsProcessing] = useState(false);
-
   return (
     <div className={`${styles.connectForm} ${roboto.className}`}>
       <div className={styles.title}>Connect your wallet</div>
@@ -18,9 +18,10 @@ export default function ConnectForm() {
 }
 
 function FormContents() {
-  const { status, account, chainId, connect, switchChain } = useMetaMask();
 
-  let testStatus = "unavailable";
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const { status, account, chainId, connect, switchChain } = useMetaMask();
 
   const handleRefreshClick = (e) => {
     e.preventDefault();
@@ -37,6 +38,19 @@ function FormContents() {
     } 
   };
 
+  const handleConnectClick = async (e) => {
+    e.preventDefault();
+    setIsProcessing(true);
+    try {
+      await connect();
+      setErrorMsg("");
+    } catch (e) {
+      setErrorMsg(e.message);
+    } finally {
+      setIsProcessing(false);
+    }
+  }
+
   switch (status) {
     case "unavailable":
       return (
@@ -52,8 +66,28 @@ function FormContents() {
           </Link>
         </>
       );
+    case "initializing":
+      return (
+        <div>
+          <PulseLoader color="var(--accent-color)" size={10} />
+        </div>
+      );
+    case "notConnected":
+      return (
+        <>
+          <div className="side-margin">
+            <InfoBox text="Please connect yout wallet using metamask" />
+          </div>
+          <div className="side-margin">
+            <ErrorBox text={errorMsg} />
+          </div>
+          <button className={styles.formBtn} onClick={handleConnectClick}>
+            {isProcessing ? (<PulseLoader color="currentColor" size={7} />) : ("Connect")}
+          </button>
+        </>
+      );
     case "connected":
-      if (chainId !== 0x1) {
+      if (chainId !== "0x1") {
         return (
           <>
             <div className="side-margin">
@@ -63,12 +97,13 @@ function FormContents() {
           </>
         );
       } else {
-        return ( //TODO add avatar
+        return ( 
           <>
           <div className="side-margin">
             <InfoBox text="You are all set!" />
           </div>
-          <Link href="/" target="_blank">
+          <MetaMaskAvatar address={account} size={75} />
+          <Link href="/">
             <button className={styles.formBtn}>Explore</button>
           </Link>
         </>
