@@ -37,7 +37,7 @@ function FormContents() {
     } 
   };
 
-  switch (testStatus) {
+  switch (status) {
     case "unavailable":
       return (
         <>
