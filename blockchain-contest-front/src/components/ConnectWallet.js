@@ -13,9 +13,9 @@ export default function ConnectWallet({ connectLocation }) {
   const { status, account, chainId } = useMetaMask();
 
   useEffect(() => {
-    connectLocation += "?redirect=" + encodeURIComponent(window.location.pathname);
-    setDestination(connectLocation)
-  })
+    let finalLocation = connectLocation + "?redirect=" + encodeURIComponent(window.location.pathname);
+    setDestination(finalLocation);
+  }, [connectLocation])
 
   const getConnect = (text) => {
     return (

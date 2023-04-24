@@ -8,8 +8,6 @@ export default function MetaMaskAvatar({ address, size }) {
   const [avatar, setAvatar] = useState(null);
   const [isPending, startTransition] = useTransition();
 
-  if (!address) return null;
-
   useEffect(() => {
     if (cachedAvatars[address]) {
       setAvatar(cachedAvatars[address]);
@@ -20,7 +18,9 @@ export default function MetaMaskAvatar({ address, size }) {
         setAvatar(avatar);
       });
     }
-  }, [address]);
+  }, [address, size]);
+
+  if (!address) return null;
 
   return isPending ? (
     <PulseLoader color="var(--accent-color)" size={10} />
