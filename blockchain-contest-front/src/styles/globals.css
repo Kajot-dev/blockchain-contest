@@ -1,9 +1,12 @@
 :root {
   --accent-color: #00b981;
   --text_color: #000000;
-  --bg_color: #fff;
+  --bg-color: #fff;
+  --bg-color-semi-transparent: rgba(255, 255, 255, 0.6);
+  --bg-inv-semi-transparent: rgba(0, 0, 0, 0.2);
   --shadow-color: 0,0,0;
   --shadow-alpha: 0.6;
+  --border-color: #000;
 }
 
 
@@ -11,15 +14,19 @@
   :root {
     --accent-color: #00b981;
     --text_color: #ffffff;
-    --bg_color: #000;
+    --bg-color: #000;
+    --bg-color-semi-transparent: rgba(0, 0, 0, 0.6);
+    --bg-inv-semi-transparent: rgba(255, 255, 255, 0.2);
+    --border-color: #fff;
   }
 }
 
 body {
   margin: 0;
-  background-color: var(--bg_color);
+  background-color: var(--bg-color);
   min-height: 100vh;
   width: 100vw;
+  color: var(--text_color);
 }
 
 * {
@@ -29,10 +36,12 @@ body {
 a {
   text-decoration: none;
   color: var(--accent-color);
+  transition: filter 0.2s ease-in-out;
 }
 
 a:hover {
   filter: brightness(1.2);
+  cursor: pointer;
 }
 
 main {
@@ -52,6 +61,10 @@ main {
   width: stretch;
   height: stretch;
   overflow: hidden;
+}
+
+.side-margin {
+  margin: 0 1rem;
 }
 
 .magic-bg {

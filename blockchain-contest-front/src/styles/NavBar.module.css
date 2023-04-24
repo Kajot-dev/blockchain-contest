@@ -1,5 +1,5 @@
 .header {
-    background-color: var(--bg_color);
+    background-color: var(--bg-color);
     border-bottom: 3px solid var(--accent-color);
     display: flex;
     position: fixed;
@@ -38,4 +38,24 @@
 .navbarRight > a:hover {
   border-bottom: solid var(--accent-color);
   border-bottom-width: 2px;
+}
+
+button.colorful {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  text-transform: inherit;
+  box-sizing: margin-box;
+  box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+button.colorful:hover {
+  box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
+  transform: scale(1.05);
+  border-radius: 0.2rem;
+  cursor: pointer;
 }
