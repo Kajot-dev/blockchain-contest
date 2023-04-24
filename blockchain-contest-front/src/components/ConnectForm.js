@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Roboto_Condensed } from "next/font/google";
 import { PulseLoader } from "react-spinners";
 import { InfoBox, ErrorBox } from "./Boxes";
-import MetaMaskAvatar from "./MetaMaskAvatar";
+import JazzIcon, { jsNumberForAddress } from 'react-jazzicon'
 import Link from "next/link";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
@@ -19,7 +19,6 @@ export default function ConnectForm() {
 
 function FormContents() {
 
-  const [isProcessing, setIsProcessing] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const { status, account, chainId, connect, switchChain } = useMetaMask();
 
@@ -30,24 +29,20 @@ function FormContents() {
 
   const handleSwitchClick = async (e) => {
     e.preventDefault();
-    setIsProcessing(true);
     try {
       await switchChain({ chainId: "0x1" });
-    } finally {
-      setIsProcessing(false);
-    } 
+    } catch (e) {
+      setErrorMsg(e.message);
+    }
   };
 
   const handleConnectClick = async (e) => {
     e.preventDefault();
-    setIsProcessing(true);
     try {
       await connect();
       setErrorMsg("");
     } catch (e) {
       setErrorMsg(e.message);
-    } finally {
-      setIsProcessing(false);
     }
   }
 
@@ -72,20 +67,22 @@ function FormContents() {
           <PulseLoader color="var(--accent-color)" size={10} />
         </div>
       );
+    case "connecting":
     case "notConnected":
       return (
         <>
           <div className="side-margin">
-            <InfoBox text="Please connect yout wallet using metamask" />
+            <InfoBox text="Please connect your wallet using metamask" />
           </div>
           <div className="side-margin">
             <ErrorBox text={errorMsg} />
           </div>
           <button className={styles.formBtn} onClick={handleConnectClick}>
-            {isProcessing ? (<PulseLoader color="currentColor" size={7} />) : ("Connect")}
+            {status === "connecting" ? (<PulseLoader color="currentColor" size={7} />) : ("Connect")}
           </button>
         </>
       );
+    
     case "connected":
       if (chainId !== "0x1") {
         return (
@@ -99,10 +96,16 @@ function FormContents() {
       } else {
         return ( 
           <>
-          <div className="side-margin">
-            <InfoBox text="You are all set!" />
+          <div className={styles.subTitle}>
+            You&apos;re all set!
           </div>
-          <MetaMaskAvatar address={account} size={75} />
+          <JazzIcon diameter={75} seed={jsNumberForAddress(account)} />
+          <div className={styles.subtle}>
+            Welcome
+          </div>
+          <div className={styles.account}>
+            {account}
+          </div>
           <Link href="/">
             <button className={styles.formBtn}>Explore</button>
           </Link>

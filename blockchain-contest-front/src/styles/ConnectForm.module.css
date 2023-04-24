@@ -12,7 +12,7 @@
     border: 0.75px solid;
     border-color: var(--border-color);
     border-radius: 1rem;
-    padding: 2rem 1rem;
+    padding: 2rem 2rem;
     transition: border-color 0.2s ease-in-out;
 }
 
@@ -39,4 +39,19 @@
     box-sizing: margin-box;
     box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.connectForm .subTitle {
+    font-size: 1.5rem;
+    margin-top: 0.2rem;
+}
+
+.connectForm .subtle {
+    font-size: 1rem;
+    opacity: 0.7;
+}
+
+.connectForm .account {
+    color: var(--accent-color);
+    text-shadow: 0px 0px 12px var(--accent-color);
 }

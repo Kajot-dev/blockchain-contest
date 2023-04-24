@@ -3,7 +3,7 @@ import Link from "next/link";
 import { PulseLoader } from "react-spinners";
 import { useState, useEffect, useTransition } from "react";
 import { useMetaMask } from "metamask-react";
-import MetaMaskAvatar from "./MetaMaskAvatar";
+import JazzIcon, { jsNumberForAddress } from 'react-jazzicon'
 
 export default function ConnectWallet({ connectLocation }) {
 
@@ -36,7 +36,7 @@ export default function ConnectWallet({ connectLocation }) {
     } else { //TODO Add link to account page (for switching wallets)
       return (
         <div>
-          <MetaMaskAvatar address={account} size={30} />
+          <JazzIcon diameter={35} seed={jsNumberForAddress(account)} />
         </div>
       )
     }
