@@ -1,0 +1,61 @@
+.header {
+    background-color: var(--bg-color);
+    border-bottom: 3px solid var(--accent-color);
+    display: flex;
+    position: fixed;
+    width: 100vw;
+    box-sizing: border-box;
+    height: 60px;
+    margin: 0;
+    color: var(--text_color);
+    padding: 0.3rem;
+    justify-content: space-between;
+    align-items: stretch;
+    box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
+    z-index: 10;
+}
+
+.header a {
+  color: var(--text_color);
+}
+
+.navbarRight {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-right: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+
+.navbarRight > a {
+  border-bottom: solid var(--accent-color);
+  border-bottom-width: 0px;
+  padding-bottom: 0.1rem;
+  transition: border-bottom-width 0.2s ease-in-out;
+}
+
+.navbarRight > a:hover {
+  border-bottom: solid var(--accent-color);
+  border-bottom-width: 2px;
+}
+
+button.colorful {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  text-transform: inherit;
+  box-sizing: margin-box;
+  box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+button.colorful:hover {
+  box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
+  transform: scale(1.05);
+  border-radius: 0.2rem;
+  cursor: pointer;
+}
