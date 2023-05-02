@@ -65,7 +65,7 @@ export default function CreateLaunchPanel() {
     );
   };
 
-  // id: item info, ipfs, attribute, symbol, name
+  // id: ipfs, attribute, symbol, name
   const ItemInfo = () => {
     return (
       <div className={styles.itemInfo}>
