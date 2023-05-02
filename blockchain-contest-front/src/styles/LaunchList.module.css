@@ -1,0 +1,66 @@
+.listContainer {
+  margin: 32px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  max-height: 262px;
+}
+
+.listContainer::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.listContainer::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+}
+.listContainer::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.listContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+.listContainer::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.listContainer {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.1);
+}
+
+.listHeader,
+.listRow {
+  display: grid;
+  grid-template-columns: 2fr 5fr 20px;
+  /* grid-gap: 16px; */
+  align-items: left;
+}
+
+.quantity,
+.trait,
+.delete {
+  display: flex;
+  justify-content: left;
+  align-items: left;
+}
+
+.listHeader {
+  font-weight: bold;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 8px;
+  margin-bottom: 2px;
+}
+
+.listRow {
+  padding: 2px 0;
+}
+
+.listRow:not(:last-child) {
+  border-bottom: 2px solid #eee;
+}
+
+.delete {
+  cursor: pointer;
+}
