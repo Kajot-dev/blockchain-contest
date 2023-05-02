@@ -1,4 +1,4 @@
-import { Input, Select, Button, IconButton } from "@chakra-ui/react";
+import { Input, IconButton, Select, Button } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import styles from "@styles/CreateLaunchPanel.module.css";
 import stylesList from "@styles/LaunchList.module.css";
@@ -10,9 +10,8 @@ export default function CreateLaunchPanel() {
   const [trait, setTrait] = useState("");
 
   const handleAdd = () => {
+    if (quantity === 0 || trait === "") return;
     setLaunches([...launches, { id: Date.now(), quantity, trait }]);
-    setQuantity(0);
-    setTrait("");
   };
 
   const handleRemove = (id) => {
@@ -87,16 +86,18 @@ export default function CreateLaunchPanel() {
         <label className={styles.label}>
           <a className={styles.boxtext}>Item info</a>
         </label>
-        <div className={styles.line3}>
+        <div className={styles.line1}>
           <Input
             className={styles.ipfs}
             variant="flushed"
             width="542px"
-            id="ipfs"
-            placeholder="IPFS (optional)"
+            id="name"
+            size="md"
+            placeholder="Name"
             w="542px"
           />
         </div>
+
         <div className={styles.line2}>
           <Input
             className={styles.attribute}
@@ -105,6 +106,7 @@ export default function CreateLaunchPanel() {
             id="attribute"
             placeholder="Attribute"
             w="330px"
+            position="absolute"
           />
           <Input
             className={styles.symbol}
@@ -116,15 +118,14 @@ export default function CreateLaunchPanel() {
             w="180px"
           />
         </div>
-        <div className={styles.line1}>
+        <div className={styles.line3}>
           <Input
             className={styles.ipfs}
-            variant="flushed"
             width="542px"
-            id="name"
-            size="md"
-            placeholder="Name"
+            id="ipfs"
+            placeholder="IPFS (optional)"
             w="542px"
+            variant="flushed"
           />
         </div>
       </div>
@@ -148,7 +149,7 @@ export default function CreateLaunchPanel() {
                   <div className={stylesList.trait}>{launch.trait}</div>
                   <div
                     className={stylesList.delete}
-                    onClick={() => handleRemove(launch.id)}
+                    onClick={() => handleRemove(launch.id)} // REMOVE
                   ></div>
                 </div>
               ))}
@@ -167,28 +168,32 @@ export default function CreateLaunchPanel() {
           </label>
           <Input
             className={styles.quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={(e) => setQuantity(e.target.value)} // SET QUANTITY
             variant="flushed"
             width="208px"
             id="quantity"
             placeholder="Quantity"
             w="208px"
+            position="absolute"
           />
           <Input
             className={styles.trait}
-            onChange={(e) => setTrait(e.target.value)}
+            onChange={(e) => setTrait(e.target.value)} // SET TRAIT
             width="208px"
             id="trait"
             placeholder="Trait"
             w="208px"
+            variant="flushed"
+            position="absolute"
           />
           <IconButton
             className={styles.addButton2}
-            onClick={() => handleAdd()}
+            onClick={() => handleAdd()} // ADD
             w="32px"
             colorScheme="blue"
             id="add"
             icon={<AddIcon />}
+            position="absolute"
           />
         </div>
       </div>
