@@ -2,8 +2,23 @@ import { Input, Select, Button, IconButton } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import styles from "@styles/CreateLaunchPanel.module.css";
 import stylesList from "@styles/LaunchList.module.css";
+import { useState } from "react";
 
 export default function CreateLaunchPanel() {
+  const [launches, setLaunches] = useState([]);
+  const [quantity, setQuantity] = useState(0);
+  const [trait, setTrait] = useState("");
+
+  const handleAdd = () => {
+    setLaunches([...launches, { id: Date.now(), quantity, trait }]);
+    setQuantity(0);
+    setTrait("");
+  };
+
+  const handleRemove = (id) => {
+    setLaunches(launches.filter((launch) => launch.id !== id));
+  };
+
   // id: date, time, type, deploy
   const DeployLaunch = () => {
     return (
@@ -103,7 +118,7 @@ export default function CreateLaunchPanel() {
         </div>
         <div className={styles.line1}>
           <Input
-            className={styles.inputflushed2}
+            className={styles.ipfs}
             variant="flushed"
             width="542px"
             id="name"
@@ -116,96 +131,66 @@ export default function CreateLaunchPanel() {
     );
   };
 
-  // id: quantity, trait, add
-  const AddItem = () => {
-    return (
-      <div className={styles.addItem}>
-        <label className={styles.label}>
-          <a className={styles.boxtext}>Add item</a>
-        </label>
-        <Input
-          className={styles.quantity}
-          variant="flushed"
-          width="208px"
-          id="quantity"
-          placeholder="Quantity"
-          w="208px"
-        />
-        <Input
-          className={styles.trait}
-          variant="flushed"
-          width="208px"
-          id="trait"
-          placeholder="Trait"
-          w="208px"
-        />
-        <IconButton
-          className={styles.addButton2}
-          variant="solid"
-          w="32px"
-          colorScheme="blue"
-          id="add"
-          icon={<AddIcon />}
-        />
-      </div>
-    );
-  };
-
-  const LaunchList = () => {
-    const generateElement = (quantity, trait) => {
-      return (
-        <div className={stylesList.listRow}>
-          <div className={stylesList.quantity}>{quantity}</div>
-          <div className={stylesList.trait}>{trait}</div>
-          <div className={stylesList.delete}></div>
-        </div>
-      );
-    };
-
-    const List = () => {
-      return (
-        <div className={stylesList.listContainer}>
-          <div className={stylesList.listBody}>
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-            {generateElement(5, "Lorem ipsum dolor sit amet")}
-          </div>
-        </div>
-      );
-    };
-
-    return (
-      <div className={styles.launchList}>
-        <label className={styles.label}>
-          <a className={styles.boxtext}>Launch list</a>
-        </label>
-        <List />
-      </div>
-    );
-  };
-
   return (
     <div className={styles.launch}>
       <div className={styles.launchSection}>
         <DeployLaunch />
 
-        <LaunchList />
+        <div className={styles.launchList}>
+          <label className={styles.label}>
+            <a className={styles.boxtext}>Launch list</a>
+          </label>
+          <div className={stylesList.listContainer}>
+            <div className={stylesList.listBody}>
+              {launches.map((launch) => (
+                <div className={stylesList.listRow}>
+                  <div className={stylesList.quantity}>{launch.quantity}</div>
+                  <div className={stylesList.trait}>{launch.trait}</div>
+                  <div
+                    className={stylesList.delete}
+                    onClick={() => handleRemove(launch.id)}
+                  ></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
       <div className={styles.itemSection}>
         <ItemImage />
 
         <ItemInfo />
 
-        <AddItem />
+        <div className={styles.addItem}>
+          <label className={styles.label}>
+            <a className={styles.boxtext}>Add item</a>
+          </label>
+          <Input
+            className={styles.quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+            variant="flushed"
+            width="208px"
+            id="quantity"
+            placeholder="Quantity"
+            w="208px"
+          />
+          <Input
+            className={styles.trait}
+            onChange={(e) => setTrait(e.target.value)}
+            width="208px"
+            id="trait"
+            placeholder="Trait"
+            w="208px"
+          />
+          <IconButton
+            className={styles.addButton2}
+            onClick={() => handleAdd()}
+            w="32px"
+            colorScheme="blue"
+            id="add"
+            icon={<AddIcon />}
+          />
+        </div>
       </div>
     </div>
   );
