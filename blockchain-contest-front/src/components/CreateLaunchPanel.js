@@ -1,20 +1,26 @@
-import { Input, IconButton, Select, Button } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
-import styles from "@styles/CreateLaunchPanel.module.css";
-import stylesList from "@styles/LaunchList.module.css";
+import styles from "@styles/CreateLaunch/Panel.module.css";
+import stylesList from "@styles/CreateLaunch/List.module.css";
 import { useState } from "react";
+import { TextField } from "@mui/material";
+import { FormControl, Select, MenuItem } from "@mui/material";
 
 export default function CreateLaunchPanel() {
+  // ADD ITEM - LIST
   const [launches, setLaunches] = useState([]);
   const [quantity, setQuantity] = useState(0);
   const [trait, setTrait] = useState("");
 
-  const handleAdd = () => {
+  // DEPLOY
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [type, setType] = useState("");
+
+  const listAdd = () => {
     if (quantity === 0 || trait === "") return;
     setLaunches([...launches, { id: Date.now(), quantity, trait }]);
   };
 
-  const handleRemove = (id) => {
+  const listRemove = (id) => {
     setLaunches(launches.filter((launch) => launch.id !== id));
   };
 
@@ -27,33 +33,33 @@ export default function CreateLaunchPanel() {
         </label>
         <div className={styles.deployLaunchContainer}>
           <div className={styles.line}>
-            <Input
+            <TextField
               className={styles.datetime}
-              variant="flushed"
+              variant="standard"
               width="200px"
-              placeholder="mm/dd/yyyy"
-              w="200px"
               id="date"
+              label="Date"
+              placeholder="mm/dd/yyyy"
+              onChange={(e) => setDate(e.target.value)}
             />
-            <Input
+            <TextField
               className={styles.datetime}
-              variant="flushed"
+              variant="standard"
               width="164px"
               id="time"
+              label="Time"
               placeholder="hh:mm"
-              w="164px"
+              onChange={(e) => setTime(e.target.value)}
             />
           </div>
-          <Select
-            variant="flushed"
-            w="396px"
-            id="type"
-            placeholder="FCFS"
-            backgroundColor="rgba(25, 192, 25, 0)"
-          />
-          <Button variant="solid" colorScheme="blue" id="deploy">
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+            <Select value={type} label="Type">
+              <MenuItem value={"FCFS"}>FCFS</MenuItem>
+            </Select>
+          </FormControl>
+          {/* <Button variant="solid" colorScheme="blue" id="deploy">
             Deploy
-          </Button>
+          </Button> */}
         </div>
       </div>
     );
@@ -67,19 +73,13 @@ export default function CreateLaunchPanel() {
           <a className={styles.boxtext}>Item image</a>
         </label>
         <img className={styles.pngIcon} alt="" id="png" src="/png@2x.png" />
-        <IconButton
-          className={styles.addButton}
-          variant="solid"
-          w="32px"
-          colorScheme="blue"
-          id="add"
-          icon={<AddIcon />}
-        />
+        <button className="addImageButton" />
       </div>
     );
   };
 
   // id: ipfs, attribute, symbol, name
+  // TODO: add ipfs - update photo to ipfs
   const ItemInfo = () => {
     return (
       <div className={styles.itemInfo}>
@@ -87,45 +87,45 @@ export default function CreateLaunchPanel() {
           <a className={styles.boxtext}>Item info</a>
         </label>
         <div className={styles.line1}>
-          <Input
-            className={styles.ipfs}
-            variant="flushed"
+          <TextField
+            className={styles.name}
+            variant="standard"
             width="542px"
             id="name"
-            size="md"
+            label="Name"
             placeholder="Name"
-            w="542px"
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
 
         <div className={styles.line2}>
-          <Input
+          <TextField
             className={styles.attribute}
-            variant="flushed"
+            variant="standard"
             width="330px"
             id="attribute"
+            label="Attribute"
             placeholder="Attribute"
-            w="330px"
-            position="absolute"
+            onChange={(e) => setAttribute(e.target.value)}
           />
-          <Input
+          <TextField
             className={styles.symbol}
-            variant="flushed"
+            variant="standard"
             width="180px"
             id="symbol"
-            size="md"
+            label="Symbol"
             placeholder="Symbol"
-            w="180px"
+            onChange={(e) => setSymbol(e.target.value)}
           />
         </div>
         <div className={styles.line3}>
-          <Input
+          <TextField
             className={styles.ipfs}
             width="542px"
             id="ipfs"
+            label="IPFS"
             placeholder="IPFS (optional)"
-            w="542px"
-            variant="flushed"
+            onChange={(e) => setIpfs(e.target.value)} // TODO: add ipfs
           />
         </div>
       </div>
@@ -137,6 +137,7 @@ export default function CreateLaunchPanel() {
       <div className={styles.launchSection}>
         <DeployLaunch />
 
+        {/* LAUNCH LIST */}
         <div className={styles.launchList}>
           <label className={styles.label}>
             <a className={styles.boxtext}>Launch list</a>
@@ -162,38 +163,32 @@ export default function CreateLaunchPanel() {
 
         <ItemInfo />
 
+        {/* ADD ITEM */}
         <div className={styles.addItem}>
           <label className={styles.label}>
             <a className={styles.boxtext}>Add item</a>
           </label>
-          <Input
+          <TextField
             className={styles.quantity}
-            onChange={(e) => setQuantity(e.target.value)} // SET QUANTITY
-            variant="flushed"
-            width="208px"
+            variant="standard"
             id="quantity"
+            label="Quantity"
             placeholder="Quantity"
-            w="208px"
-            position="absolute"
-          />
-          <Input
-            className={styles.trait}
-            onChange={(e) => setTrait(e.target.value)} // SET TRAIT
+            onChange={(e) => setQuantity(e.target.value)}
             width="208px"
-            id="trait"
-            placeholder="Trait"
-            w="208px"
-            variant="flushed"
-            position="absolute"
           />
-          <IconButton
-            className={styles.addButton2}
-            onClick={() => handleAdd()} // ADD
-            w="32px"
-            colorScheme="blue"
-            id="add"
-            icon={<AddIcon />}
-            position="absolute"
+          <TextField
+            className={styles.trait}
+            variant="standard"
+            id="trait"
+            label="Trait"
+            placeholder="Trait"
+            onChange={(e) => setTrait(e.target.value)}
+            width="208px"
+          />
+          <button
+            className={styles.addItemButton}
+            onClick={() => listAdd()} // ADD
           />
         </div>
       </div>

@@ -30,23 +30,6 @@
   width: 462px;
   height: 320px;
 }
-.datetime {
-  background-color: transparent;
-}
-.deployLaunchContainer,
-.line {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 32px;
-}
-.deployLaunchContainer {
-  position: absolute;
-  top: calc(50% - 88px);
-  left: calc(50% - 198px);
-  flex-direction: column;
-}
 .deployLaunch {
   position: absolute;
   top: 7px;
@@ -72,11 +55,6 @@
   height: 250px;
   object-fit: cover;
 }
-.addButton {
-  position: absolute;
-  bottom: -16px;
-  left: calc(50% - 16px);
-}
 .itemImage {
   position: absolute;
   top: 0;
@@ -85,12 +63,6 @@
   background-color: var(--accent-color);
   width: 320px;
   height: 320px;
-}
-.ipfs {
-  background-color: transparent;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 .line3 {
   position: absolute;
@@ -133,21 +105,6 @@
   background-color: var(--accent-color);
   width: 606px;
   height: 195px;
-}
-.quantity,
-.trait {
-  background-color: transparent;
-  position: absolute;
-  top: calc(50% - 15.5px);
-  left: 37px;
-}
-.trait {
-  left: 286px;
-}
-.addButton2 {
-  position: absolute;
-  top: calc(50% - 15.5px);
-  left: 535px;
 }
 .addItem {
   position: absolute;
