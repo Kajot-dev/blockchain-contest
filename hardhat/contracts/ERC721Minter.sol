@@ -24,10 +24,10 @@ contract ERC721Minter is ERC721, ERC721URIStorage {
         return "ipfs://";
     }
 
-    function safeMint(address to, string memory uri) public onlyOwner {
+    function safeMint(string memory uri) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
-        _safeMint(to, tokenId);
+        _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, uri);
     }
 

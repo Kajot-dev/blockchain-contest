@@ -19,6 +19,7 @@ contract Marketplace is ReentrancyGuard {
     struct Listing {
         uint256 price;
         address seller;
+        uint256 time;
     }
 
     event ItemListed(
@@ -54,15 +55,22 @@ contract Marketplace is ReentrancyGuard {
     }
 
     modifier isListed(address nftAddress, uint256 tokenId) {
-        Listing memory listing = s_listings[nftAddress][tokenId];
+        Listing memory listing = s_listings[nftAddress][tokenId][time];
 
         if (listing.price <= 0) {
-            revert NotListed(nftAddress, tokenId);
+            revert NotListed(nftAddress, tokenId, time);
         }
         _;
     }
 
+    modifier whenAvailable(address nftAddress, uint256 tokenId, uint256 time) {
+        Listing memory listing = s_listings[nftAddress][tokenId];
 
+        if (listing.price <= 0) {
+            revert NotYetEligible(nftAddress, tokenId);
+        }
+        _;
+    }
 
     modifier isOwner(
         address nftAddress,
@@ -103,13 +111,9 @@ contract Marketplace is ReentrancyGuard {
         }
         
         activationTime = block.timestamp + (startTime * MINUTES);
-        parsedTime = activationTime - block.timestamp;
+        parsedTime = (activationTime - block.timestamp) / MINUTES;
 
-        if (parsedTime < 0){
-            parsedTime = 0;
-        }
-
-        s_listings[nftAddress][tokenId] = Listing(price, msg.sender);
+        s_listings[nftAddress][tokenId] = Listing(price, msg.sender, parsedTime);
         emit ItemListed(msg.sender, nftAddress, tokenId, price);
     }
 
