@@ -82,33 +82,37 @@ const DeployLaunch = () => {
       <label className={styles.label}>
         <a className={styles.boxtext}>Deploy launch</a>
       </label>
-      <div className={stylesBox.deployLaunchBox}>
-        <div className={styles.line}>
-          <TextField
-            className={styles.datetime}
-            variant="standard"
-            width="200px"
-            id="date"
-            label="Date"
-            placeholder="mm/dd/yyyy"
-            onChange={(e) => setDate(e.target.value)}
-          />
-          <TextField
-            className={styles.datetime}
-            variant="standard"
-            width="164px"
-            id="time"
-            label="Time"
-            placeholder="hh:mm"
-            // onChange={(e) => setTime(e.target.value)}
-          />
+      <div className={stylesBox.deployLaunchBoxCenter}>
+        <div className={stylesBox.deployLaunchBox}>
+          <div className={stylesBox.line}>
+            <TextField
+              className={stylesBox.date}
+              variant="standard"
+              id="date"
+              label="Date"
+              placeholder="mm/dd/yyyy"
+              onChange={(e) => setDate(e.target.value)}
+            />
+            <TextField
+              className={stylesBox.time}
+              variant="standard"
+              id="time"
+              label="Time"
+              placeholder="hh:mm"
+              // onChange={(e) => setTime(e.target.value)}
+            />
+          </div>
+          <div className={stylesBox.line}>
+            <FormControl className={stylesBox.select} variant="standard">
+              <Select label="Type">
+                <MenuItem value={"FCFS"}>FCFS</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <div className={stylesBox.line}>
+            <Button interior={"Deploy"} />
+          </div>
         </div>
-        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-          <Select label="Type">
-            <MenuItem value={"FCFS"}>FCFS</MenuItem>
-          </Select>
-        </FormControl>
-        <Button interior={"Deploy"} />
       </div>
     </div>
   );

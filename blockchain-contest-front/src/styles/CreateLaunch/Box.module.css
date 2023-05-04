@@ -61,7 +61,33 @@
 
 .deployLaunchBox {
   display: flex;
+  flex-direction: column;
+  gap: 32px; /* Gap between each line */
+  padding: 32px; /* 20px margin inside the container */
+}
+
+.deployLaunchBox .line {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  justify-content: center; /* Center the items horizontally */
+}
+
+.deployLaunchBox .line:first-child {
+  justify-content: space-between; /* Add a gap between date and time fields on the first line */
+}
+
+.date,
+.time {
+  width: calc(50% - 16px); /* 50% width minus 16px gap */
+}
+
+.select {
+  width: 100%;
+}
+
+.deployLaunchBoxCenter {
+  display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px;
+  height: calc(100% - 32px);
 }
