@@ -1,5 +1,6 @@
 import styles from "@styles/CreateLaunch/Panel.module.css";
 import stylesList from "@styles/CreateLaunch/List.module.css";
+import stylesBox from "@styles/CreateLaunch/Box.module.css";
 import { useState } from "react";
 import { TextField } from "@mui/material";
 import { FormControl, Select, MenuItem } from "@mui/material";
@@ -11,48 +12,46 @@ const ItemInfo = ({ setName, setAttribute, setSymbol, setIpfs }) => {
       <label className={styles.label}>
         <a className={styles.boxtext}>Item info</a>
       </label>
-      <div className={styles.line1}>
-        <TextField
-          className={styles.name}
-          variant="standard"
-          width="542px"
-          id="name"
-          label="Name"
-          placeholder="Name"
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
+      <div className={stylesBox.itemInfoBox}>
+        <div className={stylesBox.line1}>
+          <TextField
+            className={stylesBox.name}
+            variant="standard"
+            id="name"
+            label="Name"
+            placeholder="Name"
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
 
-      <div className={styles.line2}>
-        <TextField
-          className={styles.attribute}
-          variant="standard"
-          width="330px"
-          id="attribute"
-          label="Attribute"
-          placeholder="Attribute"
-          onChange={(e) => setAttribute(e.target.value)}
-        />
-        <TextField
-          className={styles.symbol}
-          variant="standard"
-          width="180px"
-          id="symbol"
-          label="Symbol"
-          placeholder="Symbol"
-          onChange={(e) => setSymbol(e.target.value)}
-        />
-      </div>
-      <div className={styles.line3}>
-        <TextField
-          className={styles.ipfs}
-          width="542px"
-          id="ipfs"
-          label="IPFS"
-          placeholder="IPFS (optional)"
-          variant="standard"
-          onChange={(e) => setIpfs(e.target.value)}
-        />
+        <div className={stylesBox.line2}>
+          <TextField
+            className={stylesBox.symbol}
+            variant="standard"
+            id="symbol"
+            label="Symbol"
+            placeholder="Symbol"
+            onChange={(e) => setSymbol(e.target.value)}
+          />
+          <TextField
+            className={stylesBox.attribute}
+            variant="standard"
+            id="attribute"
+            label="Attribute"
+            placeholder="Attribute"
+            onChange={(e) => setAttribute(e.target.value)}
+          />
+        </div>
+        <div className={stylesBox.line3}>
+          <TextField
+            className={stylesBox.ipfs}
+            id="ipfs"
+            label="IPFS"
+            placeholder="IPFS (optional)"
+            variant="standard"
+            onChange={(e) => setIpfs(e.target.value)}
+          />
+        </div>
       </div>
     </div>
   );

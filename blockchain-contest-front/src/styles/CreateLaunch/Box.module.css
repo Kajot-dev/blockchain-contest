@@ -1,0 +1,25 @@
+.itemInfoBox {
+  margin: 20px;
+}
+
+.line1,
+.line2,
+.line3 {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: auto;
+}
+
+.name,
+.ipfs {
+  width: 100%;
+}
+
+.attribute,
+.symbol {
+  width: calc(50% - 16px);
+}
+
+.line2 {
+  justify-content: space-between;
+}
