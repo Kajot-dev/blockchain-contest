@@ -22,6 +22,7 @@ const ItemInfo = ({ setName, setAttribute, setSymbol, setIpfs }) => {
             label="Name"
             placeholder="Name"
             onChange={(e) => setName(e.target.value)}
+            autoComplete="off"
           />
         </div>
 
@@ -33,6 +34,7 @@ const ItemInfo = ({ setName, setAttribute, setSymbol, setIpfs }) => {
             label="Symbol"
             placeholder="Symbol"
             onChange={(e) => setSymbol(e.target.value)}
+            autoComplete="off"
           />
           <TextField
             className={stylesBox.attribute}
@@ -41,6 +43,7 @@ const ItemInfo = ({ setName, setAttribute, setSymbol, setIpfs }) => {
             label="Attribute"
             placeholder="Attribute"
             onChange={(e) => setAttribute(e.target.value)}
+            autoComplete="off"
           />
         </div>
         <div className={stylesBox.line3}>
@@ -51,6 +54,7 @@ const ItemInfo = ({ setName, setAttribute, setSymbol, setIpfs }) => {
             placeholder="IPFS (optional)"
             variant="standard"
             onChange={(e) => setIpfs(e.target.value)}
+            autoComplete="off"
           />
         </div>
       </div>
@@ -92,6 +96,7 @@ const DeployLaunch = () => {
               label="Date"
               placeholder="mm/dd/yyyy"
               onChange={(e) => setDate(e.target.value)}
+              autoComplete="off"
             />
             <TextField
               className={stylesBox.time}
@@ -100,6 +105,7 @@ const DeployLaunch = () => {
               label="Time"
               placeholder="hh:mm"
               // onChange={(e) => setTime(e.target.value)}
+              autoComplete="off"
             />
           </div>
           <div className={stylesBox.line}>
@@ -165,6 +171,7 @@ export default function CreateLaunchPanel() {
               placeholder="Quantity"
               onChange={(e) => setQuantity(e.target.value)}
               width="208px"
+              autoComplete="off"
             />
             <TextField
               className={stylesBox.trait}
@@ -174,6 +181,7 @@ export default function CreateLaunchPanel() {
               placeholder="Trait"
               onChange={(e) => setTrait(e.target.value)}
               width="208px"
+              autoComplete="off"
             />
             <Button onClick={() => listAdd()} interior={"+"} />
           </div>
