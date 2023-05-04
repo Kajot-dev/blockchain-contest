@@ -64,8 +64,12 @@ const ItemImage = (func) => {
       <label className={styles.label}>
         <a className={styles.boxtext}>Item image</a>
       </label>
-      <img className={styles.pngIcon} alt="" id="png" src="/png@2x.png" />
-      <button className="addImageButton" onClick={() => func()} />
+      <div className={stylesBox.itemImageBox}>
+        <img className={stylesBox.image} alt="" id="png" src="/png@2x.png" />
+        <div className={stylesBox.imgButtonBox}>
+          <button className={stylesBox.addButton} onClick={() => func()} />
+        </div>
+      </div>
     </div>
   );
 };
@@ -147,28 +151,30 @@ export default function CreateLaunchPanel() {
           <label className={styles.label}>
             <a className={styles.boxtext}>Add item</a>
           </label>
-          <TextField
-            className={styles.quantity}
-            variant="standard"
-            id="quantity"
-            label="Quantity"
-            placeholder="Quantity"
-            onChange={(e) => setQuantity(e.target.value)}
-            width="208px"
-          />
-          <TextField
-            className={styles.trait}
-            variant="standard"
-            id="trait"
-            label="Trait"
-            placeholder="Trait"
-            onChange={(e) => setTrait(e.target.value)}
-            width="208px"
-          />
-          <button
-            className={styles.addItemButton}
-            onClick={() => listAdd()} // ADD
-          />
+          <div className={stylesBox.addItemBox}>
+            <TextField
+              className={stylesBox.quantity}
+              variant="standard"
+              id="quantity"
+              label="Quantity"
+              placeholder="Quantity"
+              onChange={(e) => setQuantity(e.target.value)}
+              width="208px"
+            />
+            <TextField
+              className={stylesBox.trait}
+              variant="standard"
+              id="trait"
+              label="Trait"
+              placeholder="Trait"
+              onChange={(e) => setTrait(e.target.value)}
+              width="208px"
+            />
+            <button
+              className={stylesBox.addButton}
+              onClick={() => listAdd()} // ADD
+            />
+          </div>
         </div>
       </div>
       <div className={styles.launchSection}>
