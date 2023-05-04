@@ -37,38 +37,19 @@
   flex: 1;
 }
 
-.addButton {
-  width: 32px;
-  height: 32px;
-  background-color: #007bff;
-  border: none;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  transition-duration: 0.4s;
-  cursor: pointer;
-}
-
-.addButton:hover {
-  background-color: #0069d9;
-  color: white;
-}
-
 .itemImageBox {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%; /* Adjust this value based on the desired height of the itemImageBox */
+  height: 100%;
 }
 
 .image {
   max-width: 100%;
   max-height: 100%;
-  /* round corners slightly */
   border-radius: 5px;
+  /* border: 2px solid #ccc; */
 }
 
 .imgButtonBox {
@@ -76,4 +57,11 @@
   bottom: 0;
   left: 50%;
   transform: translate(-50%, 50%);
+}
+
+.deployLaunchBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
 }

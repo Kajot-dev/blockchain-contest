@@ -4,6 +4,7 @@ import stylesBox from "@styles/CreateLaunch/Box.module.css";
 import { useState } from "react";
 import { TextField } from "@mui/material";
 import { FormControl, Select, MenuItem } from "@mui/material";
+import { Button } from "./Utils";
 
 // TODO: if ipfs provided, update photo
 const ItemInfo = ({ setName, setAttribute, setSymbol, setIpfs }) => {
@@ -58,7 +59,7 @@ const ItemInfo = ({ setName, setAttribute, setSymbol, setIpfs }) => {
 };
 
 // TODO: on click, open file explorer, get png, validate it, and update image
-const ItemImage = (func) => {
+const ItemImage = () => {
   return (
     <div className={styles.itemImage}>
       <label className={styles.label}>
@@ -67,7 +68,7 @@ const ItemImage = (func) => {
       <div className={stylesBox.itemImageBox}>
         <img className={stylesBox.image} alt="" id="png" src="/png@2x.png" />
         <div className={stylesBox.imgButtonBox}>
-          <button className={stylesBox.addButton} onClick={() => func()} />
+          <Button interior={"+"} onClick={() => console.log("click")} />
         </div>
       </div>
     </div>
@@ -81,7 +82,7 @@ const DeployLaunch = () => {
       <label className={styles.label}>
         <a className={styles.boxtext}>Deploy launch</a>
       </label>
-      <div className={styles.deployLaunchContainer}>
+      <div className={stylesBox.deployLaunchBox}>
         <div className={styles.line}>
           <TextField
             className={styles.datetime}
@@ -107,7 +108,7 @@ const DeployLaunch = () => {
             <MenuItem value={"FCFS"}>FCFS</MenuItem>
           </Select>
         </FormControl>
-        <button className="deployButton" id="deploy" />
+        <Button interior={"Deploy"} />
       </div>
     </div>
   );
@@ -170,10 +171,7 @@ export default function CreateLaunchPanel() {
               onChange={(e) => setTrait(e.target.value)}
               width="208px"
             />
-            <button
-              className={stylesBox.addButton}
-              onClick={() => listAdd()} // ADD
-            />
+            <Button onClick={() => listAdd()} interior={"+"} />
           </div>
         </div>
       </div>
