@@ -1,66 +1,54 @@
 @import url("https://fonts.googleapis.com/css2?family=Unbounded:wght@700&display=swap");
 
-.launch {
-  /* launch */
-
-  /* Auto layout */
-  position: relative;
+.main {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+  position: absolute;
+  top: 32px;
+  margin: 32px;
+  transform: scale(0.9);
+}
+
+.launch {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   padding: 0px;
   gap: 64px;
-
   width: 1030px;
   height: 704px;
-
-  /* Inside auto layout */
-
+  position: relative;
   flex: none;
   order: 0;
   flex-grow: 0;
 }
 
 .itemSection {
-  /* item-section */
-
-  /* Auto layout */
-
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: flex-end;
   padding: 0px;
   gap: 104px;
-
   width: 1030px;
   height: 320px;
-
-  /* Inside auto layout */
-
   flex: none;
   order: 0;
   flex-grow: 0;
 }
 
 .launchSection {
-  /* launch-section */
-
-  /* Auto layout */
-
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: flex-end;
   padding: 0px;
   gap: 108px;
-
   width: 1030px;
   height: 320px;
-
-  /* Inside auto layout */
-
   flex: none;
   order: 1;
   flex-grow: 0;
@@ -72,12 +60,8 @@
   align-items: flex-start;
   padding: 0px;
   gap: 32px;
-
   width: 606px;
   height: 320px;
-
-  /* Inside auto layout */
-
   flex: none;
   order: 0;
   flex-grow: 0;
@@ -86,12 +70,8 @@
 .itemInfo {
   width: 606px;
   height: 195px;
-
   background: #abbfcb;
   border-radius: 32px;
-
-  /* Inside auto layout */
-
   flex: none;
   order: 0;
   flex-grow: 0;
@@ -100,12 +80,8 @@
 .itemImage {
   width: 320px;
   height: 320px;
-
   background: #abbfcb;
   border-radius: 32px;
-
-  /* Inside auto layout */
-
   flex: none;
   order: 1;
   flex-grow: 0;
@@ -114,12 +90,8 @@
 .addItem {
   width: 606px;
   height: 93px;
-
   background: #abbfcb;
   border-radius: 32px;
-
-  /* Inside auto layout */
-
   flex: none;
   order: 1;
   flex-grow: 0;
@@ -128,12 +100,8 @@
 .launchList {
   width: 462px;
   height: 320px;
-
   background: #abbfcb;
   border-radius: 32px;
-
-  /* Inside auto layout */
-
   flex: none;
   order: 0;
   flex-grow: 0;
@@ -142,12 +110,8 @@
 .deployLaunch {
   width: 460px;
   height: 320px;
-
   background: #abbfcb;
   border-radius: 32px;
-
-  /* Inside auto layout */
-
   flex: none;
   order: 1;
   flex-grow: 0;
@@ -159,7 +123,6 @@
   align-items: flex-start;
   padding: 0px;
   isolation: isolate;
-
   position: absolute;
 }
 
@@ -168,26 +131,11 @@
   left: 29px;
   top: -10px;
   width: 300px;
-
-  /* H3
-
-nav bar
-*/
   font-family: "Unbounded";
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
   line-height: 16px;
-  /* identical to box height, or 100% */
-
   letter-spacing: 0.4px;
-
-  color: #000000;
-
-  /* Inside auto layout */
-
-  flex: none;
-  order: 0;
-  flex-grow: 0;
-  z-index: 0;
+  color: #000;
 }

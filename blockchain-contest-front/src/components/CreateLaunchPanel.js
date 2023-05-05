@@ -146,68 +146,70 @@ export default function CreateLaunchPanel() {
   };
 
   return (
-    <div className={styles.launch}>
-      <div className={styles.itemSection}>
-        <ItemImage />
-        <div className={styles.itemSectionLeft}>
-          <ItemInfo
-            setName={setName}
-            setAttribute={setAttribute}
-            setSymbol={setSymbol}
-            setIpfs={setIpfs}
-          />
+    <div className={styles.main}>
+      <div className={styles.launch}>
+        <div className={styles.itemSection}>
+          <ItemImage />
+          <div className={styles.itemSectionLeft}>
+            <ItemInfo
+              setName={setName}
+              setAttribute={setAttribute}
+              setSymbol={setSymbol}
+              setIpfs={setIpfs}
+            />
 
-          {/* ADD ITEM */}
-          <div className={styles.addItem}>
-            <label className={styles.label}>
-              <a className={styles.boxtext}>Add item</a>
-            </label>
-            <div className={stylesBox.addItemBox}>
-              <TextField
-                className={stylesBox.quantity}
-                variant="standard"
-                id="quantity"
-                label="Quantity"
-                placeholder="Quantity"
-                onChange={(e) => setQuantity(e.target.value)}
-                width="208px"
-                autoComplete="off"
-              />
-              <TextField
-                className={stylesBox.trait}
-                variant="standard"
-                id="trait"
-                label="Trait"
-                placeholder="Trait"
-                onChange={(e) => setTrait(e.target.value)}
-                width="208px"
-                autoComplete="off"
-              />
-              <Button onClick={() => listAdd()} interior={"+"} />
+            {/* ADD ITEM */}
+            <div className={styles.addItem}>
+              <label className={styles.label}>
+                <a className={styles.boxtext}>Add item</a>
+              </label>
+              <div className={stylesBox.addItemBox}>
+                <TextField
+                  className={stylesBox.quantity}
+                  variant="standard"
+                  id="quantity"
+                  label="Quantity"
+                  placeholder="Quantity"
+                  onChange={(e) => setQuantity(e.target.value)}
+                  width="208px"
+                  autoComplete="off"
+                />
+                <TextField
+                  className={stylesBox.trait}
+                  variant="standard"
+                  id="trait"
+                  label="Trait"
+                  placeholder="Trait"
+                  onChange={(e) => setTrait(e.target.value)}
+                  width="208px"
+                  autoComplete="off"
+                />
+                <Button onClick={() => listAdd()} interior={"+"} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className={styles.launchSection}>
-        <DeployLaunch />
+        <div className={styles.launchSection}>
+          <DeployLaunch />
 
-        {/* LAUNCH LIST */}
-        <div className={styles.launchList}>
-          <label className={styles.label}>
-            <a className={styles.boxtext}>Launch list</a>
-          </label>
-          <div className={stylesList.listContainer}>
-            <div className={stylesList.listBody}>
-              {launches.map((launch) => (
-                <div className={stylesList.listRow}>
-                  <div className={stylesList.quantity}>{launch.quantity}</div>
-                  <div className={stylesList.trait}>{launch.trait}</div>
-                  <div
-                    className={stylesList.delete}
-                    onClick={() => listRemove(launch.id)} // REMOVE
-                  ></div>
-                </div>
-              ))}
+          {/* LAUNCH LIST */}
+          <div className={styles.launchList}>
+            <label className={styles.label}>
+              <a className={styles.boxtext}>Launch list</a>
+            </label>
+            <div className={stylesList.listContainer}>
+              <div className={stylesList.listBody}>
+                {launches.map((launch) => (
+                  <div className={stylesList.listRow}>
+                    <div className={stylesList.quantity}>{launch.quantity}</div>
+                    <div className={stylesList.trait}>{launch.trait}</div>
+                    <div
+                      className={stylesList.delete}
+                      onClick={() => listRemove(launch.id)} // REMOVE
+                    ></div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

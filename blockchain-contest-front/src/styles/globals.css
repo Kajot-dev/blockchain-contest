@@ -4,11 +4,10 @@
   --bg-color: #fff;
   --bg-color-semi-transparent: rgba(255, 255, 255, 0.6);
   --bg-inv-semi-transparent: rgba(0, 0, 0, 0.2);
-  --shadow-color: 0,0,0;
+  --shadow-color: 0, 0, 0;
   --shadow-alpha: 0.6;
   --border-color: #000;
 }
-
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -26,6 +25,7 @@ body {
   background-color: var(--bg-color);
   min-height: 100vh;
   width: 100vw;
+  overflow-x: hidden;
   color: var(--text_color);
 }
 
@@ -71,11 +71,34 @@ main {
   opacity: 0.3;
   display: block;
   filter: blur(20px);
-  background:
-    radial-gradient(circle at 78% 35%, var(--accent-color) 0%, var(--accent-color) 6%, transparent 25%, transparent),
-    radial-gradient(circle at 17% 63%, var(--accent-color) 0%, var(--accent-color) 3%, transparent 26%, transparent),
-    radial-gradient(circle at 42% 34%, var(--accent-color) 0%, var(--accent-color) 8%, transparent 37%, transparent),
-    radial-gradient(circle at 64% 65%, var(--accent-color) 0%, var(--accent-color) 2%, transparent 28%, transparent);
+  background: radial-gradient(
+      circle at 78% 35%,
+      var(--accent-color) 0%,
+      var(--accent-color) 6%,
+      transparent 25%,
+      transparent
+    ),
+    radial-gradient(
+      circle at 17% 63%,
+      var(--accent-color) 0%,
+      var(--accent-color) 3%,
+      transparent 26%,
+      transparent
+    ),
+    radial-gradient(
+      circle at 42% 34%,
+      var(--accent-color) 0%,
+      var(--accent-color) 8%,
+      transparent 37%,
+      transparent
+    ),
+    radial-gradient(
+      circle at 64% 65%,
+      var(--accent-color) 0%,
+      var(--accent-color) 2%,
+      transparent 28%,
+      transparent
+    );
   animation: magic 60s ease infinite alternate;
 }
 
