@@ -1,7 +1,7 @@
 import styles from "@styles/CreateLaunch/Panel.module.css";
 import stylesList from "@styles/CreateLaunch/List.module.css";
 import stylesBox from "@styles/CreateLaunch/Box.module.css";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { TextField } from "@mui/material";
 import { FormControl, Select, MenuItem } from "@mui/material";
 import { Button } from "./Utils";
@@ -149,41 +149,42 @@ export default function CreateLaunchPanel() {
     <div className={styles.launch}>
       <div className={styles.itemSection}>
         <ItemImage />
+        <div className={styles.itemSectionLeft}>
+          <ItemInfo
+            setName={setName}
+            setAttribute={setAttribute}
+            setSymbol={setSymbol}
+            setIpfs={setIpfs}
+          />
 
-        <ItemInfo
-          setName={setName}
-          setAttribute={setAttribute}
-          setSymbol={setSymbol}
-          setIpfs={setIpfs}
-        />
-
-        {/* ADD ITEM */}
-        <div className={styles.addItem}>
-          <label className={styles.label}>
-            <a className={styles.boxtext}>Add item</a>
-          </label>
-          <div className={stylesBox.addItemBox}>
-            <TextField
-              className={stylesBox.quantity}
-              variant="standard"
-              id="quantity"
-              label="Quantity"
-              placeholder="Quantity"
-              onChange={(e) => setQuantity(e.target.value)}
-              width="208px"
-              autoComplete="off"
-            />
-            <TextField
-              className={stylesBox.trait}
-              variant="standard"
-              id="trait"
-              label="Trait"
-              placeholder="Trait"
-              onChange={(e) => setTrait(e.target.value)}
-              width="208px"
-              autoComplete="off"
-            />
-            <Button onClick={() => listAdd()} interior={"+"} />
+          {/* ADD ITEM */}
+          <div className={styles.addItem}>
+            <label className={styles.label}>
+              <a className={styles.boxtext}>Add item</a>
+            </label>
+            <div className={stylesBox.addItemBox}>
+              <TextField
+                className={stylesBox.quantity}
+                variant="standard"
+                id="quantity"
+                label="Quantity"
+                placeholder="Quantity"
+                onChange={(e) => setQuantity(e.target.value)}
+                width="208px"
+                autoComplete="off"
+              />
+              <TextField
+                className={stylesBox.trait}
+                variant="standard"
+                id="trait"
+                label="Trait"
+                placeholder="Trait"
+                onChange={(e) => setTrait(e.target.value)}
+                width="208px"
+                autoComplete="off"
+              />
+              <Button onClick={() => listAdd()} interior={"+"} />
+            </div>
           </div>
         </div>
       </div>
