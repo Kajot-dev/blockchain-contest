@@ -24,7 +24,7 @@ export function ErrorBox({ text = "" }) {
 export function Button({ interior, onClick }) {
   if (interior == "" || interior == undefined || interior == null) return null;
   return (
-    <button className={styles.formBtn} onClick={onClick}>
+    <button className={styles.btnWrapper} onClick={onClick}>
       <div>{interior}</div>
     </button>
   );

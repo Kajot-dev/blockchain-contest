@@ -17,7 +17,7 @@ export default function NavBar() {
     <header className={styles.header}>
       <div className={styles.logoSection}>
         <Logo />
-        <div className={styles.switchUser}>SWITCH USER</div>
+        <a className={styles.switchUser}>SWITCH USER</a>
       </div>
       <div className={styles.navSection}>
         <Link className={styles.launches} href="/launches">
@@ -27,7 +27,7 @@ export default function NavBar() {
           ZEN
         </Link>
         <div className={styles.navBarButton}>
-          <div className={styles.navBarButtonContent}>CONNECT WALLET</div>
+          <a className={styles.navBarButtonContent}>CONNECT WALLET</a>
         </div>
       </div>
     </header>

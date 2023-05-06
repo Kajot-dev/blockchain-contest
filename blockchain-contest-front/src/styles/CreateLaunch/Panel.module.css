@@ -70,7 +70,7 @@
 .itemInfo {
   width: 606px;
   height: 195px;
-  background: #abbfcb;
+  background: var(--bg-color-semi-transparent);
   border-radius: 32px;
   flex: none;
   order: 0;
@@ -80,7 +80,7 @@
 .itemImage {
   width: 320px;
   height: 320px;
-  background: #abbfcb;
+  background: var(--bg-color-semi-transparent);
   border-radius: 32px;
   flex: none;
   order: 1;
@@ -90,7 +90,7 @@
 .addItem {
   width: 606px;
   height: 93px;
-  background: #abbfcb;
+  background: var(--bg-color-semi-transparent);
   border-radius: 32px;
   flex: none;
   order: 1;
@@ -100,7 +100,7 @@
 .launchList {
   width: 462px;
   height: 320px;
-  background: #abbfcb;
+  background: var(--bg-color-semi-transparent);
   border-radius: 32px;
   flex: none;
   order: 0;
@@ -110,7 +110,7 @@
 .deployLaunch {
   width: 460px;
   height: 320px;
-  background: #abbfcb;
+  background: var(--bg-color-semi-transparent);
   border-radius: 32px;
   flex: none;
   order: 1;
@@ -137,5 +137,5 @@
   font-size: 16px;
   line-height: 16px;
   letter-spacing: 0.4px;
-  color: #000;
+  color: var(--text-color);
 }
