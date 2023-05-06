@@ -1,26 +1,37 @@
+.logoLink {
+  height: inherit;
+  display: inline-block;
+  position: relative;
+}
+
 
 .logo {
-    /* logo animation */
-    animation: animateBg 10s ease-in-out infinite;
-    background: linear-gradient(90deg, var(--text_color) 0%, var(--accent-color) 50%, var(--text_color) 100%);
-    background-size: 200% 200%;
-    mask-image: url('/logo.svg');
-    mask-size: contain;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    width: max-content;
-    height: max-content;
+  /* logo animation */
+  animation: animateBg 10s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    var(--text_color) 0%,
+    var(--accent-color) 50%,
+    var(--text_color) 100%
+  );
+  background-size: 200% 200%;
+  mask-image: url("/logo.svg");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  width: max-content;
+  height: max-content;
 }
 
 @keyframes animateBg {
-    /* animate gradient combined with accent colors*/
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
+  /* animate gradient combined with accent colors*/
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
