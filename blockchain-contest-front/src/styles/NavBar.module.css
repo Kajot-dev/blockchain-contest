@@ -5,9 +5,10 @@
   width: 100%;
   box-sizing: border-box;
   height: 60px;
+  font-size: 105%;
   margin: 0;
   color: var(--text-color);
-  padding: 0.3rem 64px;
+  padding: 0rem 3rem;
   justify-content: space-between;
   align-items: center;
   box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
@@ -22,18 +23,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 64px;
-}
-
-.logo {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 32px;
-}
-
-.logo img {
-  filter: invert(1);
+  height: 100%;
+  gap: 3rem;
 }
 
 .switchUser {
@@ -48,23 +39,22 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 32px;
+  height: 100%;
+  gap: 2rem;
 }
 
-.launches,
-.zen {
-  color: var(--text-color);
-  text-transform: uppercase;
-  letter-spacing: 0.1rem;
-  padding-bottom: 0.1rem;
+a.navLink {
   border-bottom: solid var(--accent-color);
   border-bottom-width: 0px;
-  transition: color 0.2s ease-in-out;
+  padding-bottom: 0.1rem;
+  text-transform:  uppercase;
+  transition: border-bottom-width 0.2s ease-in-out;
+  letter-spacing: 0.1rem;
 }
 
-.launches:hover,
-.zen:hover {
-  color: rgba(var(--text-color), 0.7);
+a.navLink:hover {
+  border-bottom: solid var(--accent-color);
+  border-bottom-width: 2px;
 }
 
 .navBarButton {

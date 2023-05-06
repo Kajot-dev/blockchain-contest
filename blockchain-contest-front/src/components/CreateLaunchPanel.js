@@ -1,9 +1,9 @@
 import styles from "@styles/CreateLaunch/Panel.module.css";
 import stylesList from "@styles/CreateLaunch/List.module.css";
 import stylesBox from "@styles/CreateLaunch/Box.module.css";
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import { TextField } from "@mui/material";
-import { FormControl, Select, MenuItem } from "@mui/material";
+import { TextField, FormControl, Select, MenuItem } from "@mui/material";
 import { Button } from "./Utils";
 
 // TODO: if ipfs provided, update photo
@@ -70,7 +70,7 @@ const ItemImage = () => {
         <a className={styles.boxtext}>Item image</a>
       </label>
       <div className={stylesBox.itemImageBox}>
-        <img className={stylesBox.image} alt="" id="png" src="/png@2x.png" />
+        <Image className={stylesBox.image} alt="" id="png" src="/png@2x.png" />
         <div className={stylesBox.imgButtonBox}>
           <Button interior={"+"} onClick={() => console.log("click")} />
         </div>
@@ -200,7 +200,7 @@ export default function CreateLaunchPanel() {
             <div className={stylesList.listContainer}>
               <div className={stylesList.listBody}>
                 {launches.map((launch) => (
-                  <div className={stylesList.listRow}>
+                  <div className={stylesList.listRow} key={launch}>
                     <div className={stylesList.quantity}>{launch.quantity}</div>
                     <div className={stylesList.trait}>{launch.trait}</div>
                     <div

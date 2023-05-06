@@ -1,4 +1,6 @@
 .walletBtn {
+    font-family: inherit;
+    font-size: inherit;
     text-transform: inherit;
     letter-spacing: inherit;
     background-color: transparent;

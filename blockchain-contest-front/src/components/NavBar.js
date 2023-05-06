@@ -2,33 +2,28 @@ import styles from "@styles/NavBar.module.css";
 import Link from "next/link";
 import ConnectWallet from "./ConnectWallet";
 import Image from "next/image";
-
-const Logo = () => {
-  return (
-    <div className={styles.logo}>
-      <Image src="/logo.svg" height={32} width={100} color="white" />
-    </div>
-  );
-};
+import Logo from "./Logo";
+import { Roboto_Condensed } from "next/font/google";
+const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
 // button = "wallet" | "panel" | "profile" | "none"
 export default function NavBar() {
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${roboto.className}`}>
       <div className={styles.logoSection}>
         <Logo />
-        <a className={styles.switchUser}>SWITCH USER</a>
+        <Link href="/zen" className={styles.navLink}>
+          Switch user
+        </Link>
       </div>
       <div className={styles.navSection}>
-        <Link className={styles.launches} href="/launches">
+        <Link href="/launches" className={styles.navLink}>
           Launches
         </Link>
-        <Link className={styles.zen} href="/zen">
+        <Link href="/zen" className={styles.navLink}>
           ZEN
         </Link>
-        <div className={styles.navBarButton}>
-          <a className={styles.navBarButtonContent}>CONNECT WALLET</a>
-        </div>
+        <ConnectWallet connectLocation="/connect" />
       </div>
     </header>
   );

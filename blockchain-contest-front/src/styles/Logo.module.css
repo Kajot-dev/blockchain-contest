@@ -1,3 +1,10 @@
+.logoLink {
+  height: inherit;
+  display: inline-block;
+  position: relative;
+}
+
+
 .logo {
   /* logo animation */
   animation: animateBg 10s ease-in-out infinite;
