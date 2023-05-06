@@ -1,24 +1,34 @@
 import styles from "@styles/NavBar.module.css";
 import Link from "next/link";
 import ConnectWallet from "./ConnectWallet";
-import Logo from "./Logo";
-import { useState } from "react";
-import { Roboto_Condensed } from "next/font/google";
-const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
+import Image from "next/image";
 
-export default function NavBar({ displayWalletButton = true, displayRetailerPanelLink = true}) {
-
-  //TODO: Move retailer panel link to a separate component
-
+const Logo = () => {
   return (
-    <header className={`${styles.header} ${roboto.className}`}>
-      <Logo width={'100px'}/>
-      <div className={styles.navbarRight}>
-        {displayRetailerPanelLink && <button className={styles.colorful}><Link href="/retailer">Login as retailer</Link></button>}
-        <Link href="/launches">Launches</Link>
-        <Link href="/partners">Partners</Link>
-        <Link href="/about">About Us</Link>
-        {displayWalletButton && <ConnectWallet connectLocation="/connect" />}
+    <div className={styles.logo}>
+      <Image src="/logo.svg" height={32} width={100} color="white" />
+    </div>
+  );
+};
+
+// button = "wallet" | "panel" | "profile" | "none"
+export default function NavBar() {
+  return (
+    <header className={styles.header}>
+      <div className={styles.logoSection}>
+        <Logo />
+        <div className={styles.switchUser}>SWITCH USER</div>
+      </div>
+      <div className={styles.navSection}>
+        <Link className={styles.launches} href="/launches">
+          Launches
+        </Link>
+        <Link className={styles.zen} href="/zen">
+          ZEN
+        </Link>
+        <div className={styles.navBarButton}>
+          <div className={styles.navBarButtonContent}>CONNECT WALLET</div>
+        </div>
       </div>
     </header>
   );
