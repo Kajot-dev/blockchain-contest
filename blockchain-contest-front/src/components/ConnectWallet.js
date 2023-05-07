@@ -1,4 +1,4 @@
-import styles from "@styles/ConnectWallet.module.css";
+import styles from "@styles/Forms.module.css";
 import Link from "next/link";
 import { PulseLoader } from "react-spinners";
 import { useState, useEffect, useTransition } from "react";
@@ -21,7 +21,7 @@ export default function ConnectWallet({ connectLocation }) {
     return (
       <div>
         <Link href={destination}>
-          <button className={styles.walletBtn}>
+          <button className={styles.outlineBtn}>
             {text}
           </button>
         </Link>

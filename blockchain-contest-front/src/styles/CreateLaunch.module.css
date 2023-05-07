@@ -1,0 +1,140 @@
+.launchGrid {  
+  display: grid; 
+  grid-template-columns: 1fr 1.5fr 1fr; 
+  grid-template-rows: 1fr 0.5fr 1fr auto; 
+  gap: 1.5em 1.5em; 
+  grid-template-areas: 
+    "item-info launch-list item-image"
+    "add-item launch-list item-image"
+    ". launch-list deploy-launch"
+    ". launch-list ."; 
+  padding: 1.5rem 1.5rem;
+}
+
+@media only screen and (max-width: 1024px) {
+  .launchGrid {
+    display: grid; 
+    grid-template-columns: 1fr 1.25fr; 
+    grid-template-rows: 1fr 0.75fr auto; 
+    gap: 1.5em 1.5em; 
+    grid-template-areas: 
+      "item-info item-image"
+      "add-item launch-list"
+      "deploy-launch launch-list"; 
+  }
+}
+
+.itemInfo { grid-area: item-info; }
+
+.addItem { 
+  grid-area: add-item; 
+}
+
+.itemImage { grid-area: item-image; }
+
+.launchList { 
+  align-self: self-start;
+  grid-area: launch-list; 
+}
+
+.deployLaunch { 
+  align-self: self-start;
+  grid-area: deploy-launch;
+}
+
+.bottomBtn {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.listContainer::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.listContainer::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+}
+.listContainer::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.listContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+.listContainer::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.listContainer {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.1);
+}
+
+/* For Dark Theme */
+@media (prefers-color-scheme: dark) {
+  .listContainer::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .listContainer::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .listContainer::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+  .listContainer::-webkit-scrollbar-thumb:active {
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  .listContainer {
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.1);
+  }
+
+  .listContainer {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.1);
+  }
+}
+
+.listTable {
+  display: table;
+  color: inherit;
+  width: stretch;
+  overflow: auto;
+}
+
+.listHeader {
+  display: table-header-group;
+}
+
+.listRow {
+  display: table-row;
+}
+
+.listRow:nth-child(odd), .listHeader:nth-child(odd) {
+  background-color: var(--bg-inv-semi-transparent);
+}
+
+.listHeaderCell {
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.listCell {
+  display: table-cell;
+  padding: 0.5rem 0.5rem;
+}
+
+.listRow .listCell:first-child, .listHeaderCell:first-child {
+  border-bottom-left-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+}
+
+.listRow .listCell:last-child, .listHeaderCell:last-child {
+  border-bottom-right-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+
