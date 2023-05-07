@@ -4,7 +4,7 @@ import ConnectForm from "@/components/ConnectForm"
 export default function Connect() {
   return (
     <>
-      <NavBar displayWalletButton={false} />
+      <NavBar displayConnectButton={false} />
       <main className="">
         <div className="fill">
           <div className="fill magic-bg" />

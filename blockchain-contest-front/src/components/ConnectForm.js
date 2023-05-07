@@ -1,16 +1,16 @@
-import styles from "@styles/ConnectForm.module.css";
+import styles from "@styles/Forms.module.css";
 import { useMetaMask } from "metamask-react";
 import { useState } from "react";
 import { Roboto_Condensed } from "next/font/google";
 import { PulseLoader } from "react-spinners";
-import { InfoBox, ErrorBox } from "./Boxes";
-import JazzIcon, { jsNumberForAddress } from 'react-jazzicon'
+import { InfoBox, ErrorBox } from "./Utils";
+import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import Link from "next/link";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
 export default function ConnectForm() {
   return (
-    <div className={`${styles.connectForm} ${roboto.className}`}>
+    <div className={`${styles.form} ${roboto.className} ${styles.formBox}`}>
       <div className={styles.title}>Connect your wallet</div>
       <FormContents />
     </div>
@@ -18,7 +18,6 @@ export default function ConnectForm() {
 }
 
 function FormContents() {
-
   const [errorMsg, setErrorMsg] = useState("");
   const { status, account, chainId, connect, switchChain } = useMetaMask();
 
@@ -44,7 +43,7 @@ function FormContents() {
     } catch (e) {
       setErrorMsg(e.message);
     }
-  }
+  };
 
   switch (status) {
     case "unavailable":
@@ -78,11 +77,15 @@ function FormContents() {
             <ErrorBox text={errorMsg} />
           </div>
           <button className={styles.formBtn} onClick={handleConnectClick}>
-            {status === "connecting" ? (<PulseLoader color="currentColor" size={7} />) : ("Connect")}
+            {status === "connecting" ? (
+              <PulseLoader color="currentColor" size={7} />
+            ) : (
+              "Connect"
+            )}
           </button>
         </>
       );
-    
+
     case "connected":
       if (chainId !== "0x1") {
         return (
@@ -90,27 +93,23 @@ function FormContents() {
             <div className="side-margin">
               <InfoBox text="Our app uses Etherum mainnet" />
             </div>
-            <button className={styles.formBtn} onClick={handleSwitchClick}>Switch to mainnet</button>
+            <button className={styles.formBtn} onClick={handleSwitchClick}>
+              Switch to mainnet
+            </button>
           </>
         );
       } else {
-        return ( 
+        return (
           <>
-          <div className={styles.subTitle}>
-            You&apos;re all set!
-          </div>
-          <JazzIcon diameter={75} seed={jsNumberForAddress(account)} />
-          <div className={styles.subtle}>
-            Welcome
-          </div>
-          <div className={styles.account}>
-            {account}
-          </div>
-          <Link href="/">
-            <button className={styles.formBtn}>Explore</button>
-          </Link>
-        </>
-        )
+            <div className={styles.subTitle}>You&apos;re all set!</div>
+            <JazzIcon diameter={75} seed={jsNumberForAddress(account)} />
+            <div className={styles.subtle}>Welcome</div>
+            <div className={styles.account}>{account}</div>
+            <Link href="/">
+              <button className={styles.formBtn}>Explore</button>
+            </Link>
+          </>
+        );
       }
   }
 }
