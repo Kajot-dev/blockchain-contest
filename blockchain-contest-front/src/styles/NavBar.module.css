@@ -24,7 +24,7 @@
   flex-direction: row;
   align-items: center;
   height: 100%;
-  gap: 3rem;
+  gap: 2rem;
 }
 
 .switchUser {
@@ -95,4 +95,17 @@ a.navLink:hover:after {
   box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
   border-radius: 0.2rem;
   cursor: pointer;
+}
+
+.userText {
+  display: inline-block;
+  font-size: 70%;
+  opacity: 0.5;
+  position: relative;
+  left: -1.5rem;
+}
+
+.userText .userType {
+  color: var(--accent-color);
+  text-transform: capitalize;
 }

@@ -1,20 +1,36 @@
 import styles from "@styles/NavBar.module.css";
 import Link from "next/link";
 import ConnectWallet from "./ConnectWallet";
-import Image from "next/image";
 import Logo from "./Logo";
+import { useContext } from "react";
+import UserContext from "./UserContext";
 import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
 // button = "wallet" | "panel" | "profile" | "none"
 export default function NavBar({ displayConnectButton = true }) {
+
+  const { userType, setUserType } = useContext(UserContext);
+
+  const handleSwitchUser = (e) => {
+    e.preventDefault();
+    if (userType === "consumer") {
+      setUserType("retailer");
+    } else {
+      setUserType("consumer");
+    }
+  };
+
   return (
     <header className={`${styles.header} ${roboto.className}`}>
       <div className={styles.logoSection}>
         <Logo />
-        <Link href="/zen" className={styles.navLink}>
+        <Link href="about:blank" className={styles.navLink} onClick={handleSwitchUser}>
           Switch user
         </Link>
+        <div className={styles.userText}>
+          User type: <span className={styles.userType}>{userType}</span>
+        </div>
       </div>
       <div className={styles.navSection}>
         <Link href="/launches" className={styles.navLink}>
