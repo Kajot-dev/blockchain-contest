@@ -8,12 +8,14 @@ error PriceNotMet(address nftAddress, uint256 tokenId, uint256 price);
 error ItemNotForSale(address nftAddress, uint256 tokenId);
 error NotListed(address nftAddress, uint256 tokenId);
 error AlreadyListed(address nftAddress, uint256 tokenId);
+error NotYetEligible(address nftAddress, uint256 tokenId, uint256 time);
 error NoProceeds();
 error NotOwner();
 error NotApprovedForMarketplace();
 error PriceMustBeAboveZero();
 
 contract Marketplace is ReentrancyGuard {
+
     struct Listing {
         uint256 price;
         address seller;
@@ -42,11 +44,9 @@ contract Marketplace is ReentrancyGuard {
     mapping(address => mapping(uint256 => Listing)) private s_listings;
     mapping(address => uint256) private s_proceeds;
 
-    modifier notListed(
-        address nftAddress,
-        uint256 tokenId
-    ) {
+    modifier notListed(address nftAddress, uint256 tokenId) {
         Listing memory listing = s_listings[nftAddress][tokenId];
+
         if (listing.price > 0) {
             revert AlreadyListed(nftAddress, tokenId);
         }
@@ -55,11 +55,14 @@ contract Marketplace is ReentrancyGuard {
 
     modifier isListed(address nftAddress, uint256 tokenId) {
         Listing memory listing = s_listings[nftAddress][tokenId];
+
         if (listing.price <= 0) {
             revert NotListed(nftAddress, tokenId);
         }
         _;
     }
+
+
 
     modifier isOwner(
         address nftAddress,
@@ -74,13 +77,18 @@ contract Marketplace is ReentrancyGuard {
         _;
     }
 
+    // Time Variables
+    uint16 public constant MINUTES = 60; 
+    uint256 internal activationTime;
+    uint256 public parsedTime;
+
     /*
      * @notice Method for listing NFT
      * @param nftAddress Address of NFT contract
      * @param tokenId Token ID of NFT
      * @param price sale price for each item
      */
-    function listItem(address nftAddress, uint256 tokenId, uint256 price)
+    function listItem(address nftAddress, uint256 tokenId, uint256 price, uint256 startTime)
         external
         notListed(nftAddress, tokenId)
         isOwner(nftAddress, tokenId, msg.sender)
@@ -89,9 +97,19 @@ contract Marketplace is ReentrancyGuard {
             revert PriceMustBeAboveZero();
         }
         IERC721 nft = IERC721(nftAddress);
+
         if (nft.getApproved(tokenId) != address(this)) {
             revert NotApprovedForMarketplace();
         }
+        
+        activationTime = block.timestamp + startTime; //20:16 + 60 = 21:16 -> bool->true
+
+        parsedTime = activationTime - block.timestamp; // 34:50
+
+        if (parsedTime < 0) 
+            parsedTime = 0;
+        
+
         s_listings[nftAddress][tokenId] = Listing(price, msg.sender);
         emit ItemListed(msg.sender, nftAddress, tokenId, price);
     }
@@ -124,9 +142,11 @@ contract Marketplace is ReentrancyGuard {
         nonReentrant
     {
         Listing memory listedItem = s_listings[nftAddress][tokenId];
+
         if (msg.value < listedItem.price) {
             revert PriceNotMet(nftAddress, tokenId, listedItem.price);
         }
+
         s_proceeds[listedItem.seller] += msg.value;
         delete (s_listings[nftAddress][tokenId]);
         // https://fravoll.github.io/solidity-patterns/pull_over_push.html

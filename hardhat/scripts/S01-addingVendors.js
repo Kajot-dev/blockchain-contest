@@ -1,4 +1,5 @@
 const { ethers, run } = require("hardhat")
+require('dotenv').config();
 
 async function main() {
     
@@ -13,22 +14,26 @@ async function main() {
     const currentStoresAmount = await StoreAccessControl.numberOfPartneredStores()
     console.log(`There are currently ${currentStoresAmount} stores.`)
     
-    const [ admin, nike, adidas ] = await ethers.getSigners()
+    let nike = await ethers.getSigner(process.env.NIKE_SHOP_PUB) // Account: 0
+    let rolex = await ethers.getSigner(process.env.ROLEX_SHOP_PUB) //Account: 1
+
     const nikeStore = {
       address: await nike.address,
       name: 'Nike',
     }
-    const adidasStore = {
-      address: await adidas.address,
-      name: 'Adidas',
+    const rolexStore = {
+      address: await rolex.address,
+      name: 'Rolex',
     }
     console.log(nikeStore.address)
-    console.log(nikeStore.name)
+    console.log(rolexStore.address)
 
-    //Making nike and adidas a store
     await StoreAccessControl.markUserAsStore(nikeStore.address, nikeStore.name)
-    await StoreAccessControl.markUserAsStore(adidasStore.address, adidasStore.name)
+    await StoreAccessControl.markUserAsStore(rolexStore.address, rolexStore.name)
     console.log(`There are currently ${await StoreAccessControl.numberOfPartneredStores()} stores.`)
+    
+    const storeCheck = await StoreAccessControl.isAddressPrivileged(nikeStore.address)
+    console.log(storeCheck)
 
         
 }
