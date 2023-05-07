@@ -1,6 +1,8 @@
 import ExternalDatePicker from "react-datepicker";
 
 import styles from "@styles/Forms.module.css";
+import { Unbounded } from "next/font/google";
+const unbounded = Unbounded({ subsets: ["latin"], weight: "400" });
 
 export function TextField({
   className = "",
@@ -92,6 +94,17 @@ export function Select({
           ))}
         </select>
       </div>
+    </div>
+  );
+}
+
+export function Form({ className = "", label = null, children, ...props }) {
+  return (
+    <div className={styles.form + " " + className} {...props}>
+      {label && <div className={`${styles.label} ${unbounded.className}`}>
+        {label}
+        </div>}
+      {children}
     </div>
   );
 }

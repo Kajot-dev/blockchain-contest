@@ -4,17 +4,18 @@ import { useState } from "react";
 import { Roboto_Condensed } from "next/font/google";
 import { PulseLoader } from "react-spinners";
 import { InfoBox, ErrorBox } from "./Utils";
+import { Form } from "./Forms";
 import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import Link from "next/link";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
 export default function ConnectForm() {
+
   return (
-    <div className={`${styles.form} ${roboto.className} ${styles.formBox}`}>
-      <div className={styles.title}>Connect your wallet</div>
+    <Form className={`${roboto.className} ${styles.formBox}`} label="Connect your wallet">
       <FormContents />
-    </div>
-  );
+    </Form>
+  )
 }
 
 function FormContents() {
@@ -49,6 +50,7 @@ function FormContents() {
     case "unavailable":
       return (
         <>
+          <div className={styles.subTitle}>Install metamask</div>
           <div className="side-margin">
             <InfoBox text="Our app requires you to install Metamask extension in your browser" />
           </div>
@@ -70,6 +72,7 @@ function FormContents() {
     case "notConnected":
       return (
         <>
+          <div className={styles.subTitle}>Connect</div>
           <div className="side-margin">
             <InfoBox text="Please connect your wallet using metamask" />
           </div>
@@ -90,6 +93,7 @@ function FormContents() {
       if (chainId !== "0x1") {
         return (
           <>
+            <div className={styles.subTitle}>Switch net</div>
             <div className="side-margin">
               <InfoBox text="Our app uses Etherum mainnet" />
             </div>

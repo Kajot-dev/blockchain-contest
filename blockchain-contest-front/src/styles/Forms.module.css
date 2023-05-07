@@ -4,9 +4,8 @@
   gap: 1rem;
   align-items: center;
   justify-content: flex-start;
-
+  position: relative;
   background-color: var(--bg-color-semi-transparent);
-  backdrop-filter: blur(10px);
   border: 0.75px solid;
   border-color: var(--border-color);
   border-radius: 1rem;
@@ -124,6 +123,22 @@
   top: -0.77em;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
+}
+
+.form .label {
+  position: absolute;
+  align-self: center;
+  color: var(--bg-color);
+  top: -0.75em;
+  text-shadow: -0.5px -0.5px 0 var(--border-color), 0.5px -0.5px 0 var(--border-color), -0.5px 0.5px 0 var(--border-color),
+    0.5px 0.5px 0 var(--border-color), 0 0 8px transparent;
+  transition: text-shadow 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.form:focus-within .label {
+  color: var(--accent-color);
+  text-shadow: 0 0 0 var(--accent-color), 0 0 0 var(--accent-color), 0 0 0 var(--accent-color),
+    0 0 0 var(--accent-color), 0 0 8px var(--accent-color);
 }
 
 .formLabel {

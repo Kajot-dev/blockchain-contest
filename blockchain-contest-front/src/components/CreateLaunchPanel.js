@@ -1,10 +1,14 @@
 import { useState } from "react";
 import Image from "next/image";
 import { v4 as uuidv4 } from "uuid";
-import { TextField, Button, OutlineButton, DatePicker, Select } from "./Forms";
-
-import { Unbounded } from "next/font/google";
-const unbounded = Unbounded({ subsets: ["latin"], weight: "400" });
+import {
+  Form,
+  TextField,
+  Button,
+  OutlineButton,
+  DatePicker,
+  Select,
+} from "./Forms";
 import {
   TextAddFilled,
   NumberSymbolFilled,
@@ -28,10 +32,7 @@ export function ItemInfo({
   ...props
 }) {
   return (
-    <div className={className} {...props}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>
-        Item info
-      </div>
+    <Form className={className} label="Item info" {...props}>
       <TextField
         type="text"
         id="name"
@@ -73,20 +74,17 @@ export function ItemInfo({
         className={stylesForm.basicInput}
         onChange={(e) => setIpfs(e.target.value)}
       />
-    </div>
+    </Form>
   );
 }
 
 // TODO: on click, open file explorer, get png, validate it, and update image
 export function ItemImage({ className = "" }) {
   return (
-    <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>
-        Item image
-      </div>
+    <Form className={className} label="Item image">
       <Image alt="" id="png" src="/png@2x.png" width={250} height={250} />
       <Button onClick={() => console.log("click")}>+</Button>
-    </div>
+    </Form>
   );
 }
 
@@ -126,10 +124,7 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
   }
 
   return (
-    <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>
-        Add item
-      </div>
+    <Form className={className} label="Add item">
       <div
         className="flexRow"
         style={{
@@ -160,7 +155,7 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
           +
         </Button>
       </div>
-    </div>
+    </Form>
   );
 }
 
@@ -170,10 +165,7 @@ export function LaunchList({
   className = "",
 }) {
   return (
-    <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>
-        Launch list
-      </div>
+    <Form className={className} label="Launch list">
       <div
         className={`flexCol ${styles.listContainer}`}
         style={{
@@ -221,17 +213,14 @@ export function LaunchList({
           No items added
         </div>
       )}
-    </div>
+    </Form>
   );
 }
 
 // TODO: on deploy click button, upload photo to ipfs, and integrate launch with smart contract
 export function DeployLaunch({ className = "", date, setDate }) {
   return (
-    <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>
-        Deploy launch
-      </div>
+    <Form className={className} label="Deploy launch">
       <DatePicker
         showTimeInput
         desc="Launch Date"
@@ -251,7 +240,7 @@ export function DeployLaunch({ className = "", date, setDate }) {
       <Button onClick={() => console.log("click")} className={stylesForm.major}>
         Deploy
       </Button>
-    </div>
+    </Form>
   );
 }
 
@@ -297,18 +286,16 @@ export default function CreateLaunchPanel({ className = "" }) {
         className={`${styles.itemImage} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.spaceBetween}`}
       />
 
-      <div className={styles.addItemDeployContainer}>
-        <AddItem
-          className={`${styles.addItem} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
-          onItemAdd={onListAdd}
-        />
+      <AddItem
+        className={`${styles.addItem} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
+        onItemAdd={onListAdd}
+      />
 
-        <DeployLaunch
-          date={date}
-          setDate={setDate}
-          className={`${styles.deployLaunch} ${stylesForm.form} ${stylesForm.thin}`}
-        />
-      </div>
+      <DeployLaunch
+        date={date}
+        setDate={setDate}
+        className={`${styles.deployLaunch} ${stylesForm.form} ${stylesForm.thin}`}
+      />
 
       <LaunchList
         launches={launches}

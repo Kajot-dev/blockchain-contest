@@ -1,58 +1,45 @@
-.launchGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr auto auto;
-  gap: 1.5em 1.5em;
-  grid-template-areas:
-    "item-image add-item-deploy-container launch-list"
-    "item-info add-item-deploy-container launch-list"
-    ". . launch-list"
-    ". . launch-list";
+.launchGrid {  
+  display: grid; 
+  grid-template-columns: 1fr 1.5fr 1fr; 
+  grid-template-rows: 1fr 0.5fr 1fr auto; 
+  gap: 1.5em 1.5em; 
+  grid-template-areas: 
+    "item-info launch-list item-image"
+    "add-item launch-list item-image"
+    ". launch-list deploy-launch"
+    ". launch-list ."; 
   padding: 1.5rem 1.5rem;
 }
 
 @media only screen and (max-width: 1024px) {
   .launchGrid {
-    display: grid;
-    grid-template-columns: 1fr 1.25fr;
-    grid-template-rows: 1fr 0.75fr auto;
-    gap: 1.5em 1.5em;
-    grid-template-areas:
+    display: grid; 
+    grid-template-columns: 1fr 1.25fr; 
+    grid-template-rows: 1fr 0.75fr auto; 
+    gap: 1.5em 1.5em; 
+    grid-template-areas: 
       "item-info item-image"
-      "add-item-deploy-container launch-list"
-      "add-item-deploy-container launch-list";
+      "add-item launch-list"
+      "deploy-launch launch-list"; 
   }
 }
 
-.addItemDeployContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 1.5em 1.5em;
-  grid-area: add-item-deploy-container;
+.itemInfo { grid-area: item-info; }
+
+.addItem { 
+  grid-area: add-item; 
 }
 
-.itemInfo {
-  grid-area: item-info;
+.itemImage { grid-area: item-image; }
+
+.launchList { 
   align-self: self-start;
+  grid-area: launch-list; 
 }
 
-.addItem {
-  grid-area: unset;
-}
-
-.itemImage {
-  grid-area: item-image;
-}
-
-.launchList {
+.deployLaunch { 
   align-self: self-start;
-  grid-area: launch-list;
-}
-
-.deployLaunch {
-  grid-area: unset;
+  grid-area: deploy-launch;
 }
 
 .bottomBtn {
@@ -126,8 +113,7 @@
   display: table-row;
 }
 
-.listRow:nth-child(odd),
-.listHeader:nth-child(odd) {
+.listRow:nth-child(odd), .listHeader:nth-child(odd) {
   background-color: var(--bg-inv-semi-transparent);
 }
 
@@ -136,15 +122,19 @@
   color: var(--accent-color);
 }
 
-.listHeaderCell:first-child {
-  border-top-left-radius: 0.5rem;
-}
-
-.listHeaderCell:last-child {
-  border-top-right-radius: 0.5rem;
-}
-
 .listCell {
   display: table-cell;
   padding: 0.5rem 0.5rem;
 }
+
+.listRow .listCell:first-child, .listHeaderCell:first-child {
+  border-bottom-left-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+}
+
+.listRow .listCell:last-child, .listHeaderCell:last-child {
+  border-bottom-right-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+
