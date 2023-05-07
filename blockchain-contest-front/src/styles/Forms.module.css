@@ -1,220 +1,244 @@
 .form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-    justify-content: flex-start;
-    
-    background-color: var(--bg-color-semi-transparent);
-    backdrop-filter: blur(10px);
-    border: 0.75px solid;
-    border-color: var(--border-color);
-    border-radius: 1rem;
-    padding: 2rem 2rem;
-    transition: border-color 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  background-color: var(--bg-color-semi-transparent);
+  border: 0.75px solid;
+  border-color: var(--border-color);
+  border-radius: 1rem;
+  padding: 2rem 2rem;
+  transition: border-color 0.2s ease-in-out;
 }
 
 .form.left {
-    align-items: flex-start;
+  align-items: flex-start;
 }
 
 .form.thin {
-    padding: 0.75rem 0.75rem;
+  padding: 0.75rem 0.75rem;
 }
 
 .form.spaceBetween {
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
 .formBox {
-    min-width: 450px;
-    max-width: 500px;
-    min-height: 600px;
+  min-width: 450px;
+  max-width: 500px;
+  min-height: 600px;
 }
 
 .form:focus-within {
-    border-color: var(--accent-color);
+  border-color: var(--accent-color);
 }
 
 .title {
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .formBtn {
-    background-color: var(--accent-color);
-    color: var(--bg-color);
-    cursor: pointer;
-    border: none;
-    border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
-    font-size: inherit;
-    font-family: inherit;
-    text-transform: inherit;
-    box-sizing: margin-box;
-    box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, filter 0.2s ease-in-out;
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+  cursor: pointer;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: inherit;
+  font-family: inherit;
+  text-transform: inherit;
+  box-sizing: margin-box;
+  box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+    border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
+    transform 0.2s ease-in-out, filter 0.2s ease-in-out;
 }
 
 .formBtn:hover {
-    box-shadow: 2px 2px 8px rgba(var(--shadow-color), 0);
-    filter: brightness(1.1);
-    transform: scale(1.05);
-    border-radius: 0.2rem;
+  box-shadow: 2px 2px 8px rgba(var(--shadow-color), 0);
+  filter: brightness(1.1);
+  transform: scale(1.05);
+  border-radius: 0.2rem;
 }
 
 .formBtn.major {
-    font-size: 130%;
+  font-size: 130%;
 }
 
 .formBtn.thin {
-    padding: 0.3rem 0.5rem;
+  padding: 0.3rem 0.5rem;
 }
 
 .outlineBtn {
-    font-family: inherit;
-    font-size: inherit;
-    text-transform: inherit;
-    letter-spacing: inherit;
-    background-color: transparent;
-    border: 1.5px solid;
-    border-color: var(--text-color);
-    border-radius: 0.5rem;
-    padding: 0.5rem 0.5rem;
-    box-sizing: margin-box;
-    color: var(--text-color);
-    box-shadow: 2px 2px 8px rgba(var(--shadow-color), 0);
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  font-family: inherit;
+  font-size: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  background-color: transparent;
+  border: 1.5px solid;
+  border-color: var(--text-color);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.5rem;
+  box-sizing: margin-box;
+  color: var(--text-color);
+  box-shadow: 2px 2px 8px rgba(var(--shadow-color), 0);
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+    border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
+    transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
-  
+
 .outlineBtn:hover {
-    box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
-    border-color: var(--accent-color);
-    color: var(--accent-color);
-    transform: scale(1.05);
-    border-radius: 0.2rem;
-    cursor: pointer;
+  box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  transform: scale(1.05);
+  border-radius: 0.2rem;
+  cursor: pointer;
 }
 
 .outlineBtn.thin {
-    padding: 0.3rem 0.5rem;
+  padding: 0.3rem 0.5rem;
 }
 
 .outlineBtn.minor {
-    padding: 0.2rem 0.4rem;
-    font-size: 80%;
+  padding: 0.2rem 0.4rem;
+  font-size: 80%;
 }
 
 .subTitle {
-    font-size: 1.5rem;
-    margin-top: 0.2rem;
+  font-size: 1.5rem;
+  margin-top: 0.2rem;
 }
 
 .label {
-    font-size: 1.2rem;
-    color: var(--accent-color);
-    font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  font-weight: bold;
+  position: absolute;
+  align-self: center;
+  top: -0.77em;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+.form .label {
+  position: absolute;
+  align-self: center;
+  color: var(--bg-color);
+  top: -0.75em;
+  text-shadow: -0.5px -0.5px 0 var(--border-color), 0.5px -0.5px 0 var(--border-color), -0.5px 0.5px 0 var(--border-color),
+    0.5px 0.5px 0 var(--border-color), 0 0 8px transparent;
+  transition: text-shadow 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.form:focus-within .label {
+  color: var(--accent-color);
+  text-shadow: 0 0 0 var(--accent-color), 0 0 0 var(--accent-color), 0 0 0 var(--accent-color),
+    0 0 0 var(--accent-color), 0 0 8px var(--accent-color);
 }
 
 .formLabel {
-    text-align: left;
-    align-self: flex-start;
-    text-transform: capitalize;
-    font-size: 0.9rem;
-    color: var(--accent-color);
+  text-align: left;
+  align-self: flex-start;
+  text-transform: capitalize;
+  font-size: 0.9rem;
+  color: var(--accent-color);
 }
 
 .errorMsg {
-    margin-top: 0.2rem;
-    height: 1em;
-    max-height: 1em;
-    overflow: visible;
-    font-size: 0.7rem;
-    color: red;
-    text-align: left;
-    align-self: flex-start;
+  margin-top: 0.2rem;
+  height: 1em;
+  max-height: 1em;
+  overflow: visible;
+  font-size: 0.7rem;
+  color: red;
+  text-align: left;
+  align-self: flex-start;
 }
 
 .subtle {
-    font-size: 1rem;
-    opacity: 0.7;
+  font-size: 1rem;
+  opacity: 0.7;
 }
 
 .account {
-    color: var(--accent-color);
-    text-shadow: 0px 0px 12px var(--accent-color);
+  color: var(--accent-color);
+  text-shadow: 0px 0px 12px var(--accent-color);
 }
 
 .inputWrapper {
-    display: inline-flex;
-    position: relative;
-    flex-direction: row;
-    align-items: center;
-    justify-content: stretch;
-    width: stretch;
-    border-bottom: 2px solid var(--text-color);
+  display: inline-flex;
+  position: relative;
+  flex-direction: row;
+  align-items: center;
+  justify-content: stretch;
+  width: stretch;
+  border-bottom: 2px solid var(--text-color);
 }
 
 .inputWrapper::after {
-    position: absolute;
-    content: "";
-    display: inline-block;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: var(--accent-color);
-    transform: scaleX(0);
-    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  position: absolute;
+  content: "";
+  display: inline-block;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent-color);
+  transform: scaleX(0);
+  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
 .inputWrapper[data-has-error="true"]::after {
-    background-color: red;
-    transform: scaleX(1);
+  background-color: red;
+  transform: scaleX(1);
 }
 
 .inputWrapper:focus-within::after {
-    background-color: var(--accent-color);
-    transform: scaleX(1);
+  background-color: var(--accent-color);
+  transform: scaleX(1);
 }
 
 .basicInput {
-    background-color: transparent;
-    border: 0;
-    width: inherit;
-    font-family: inherit;
-    font-size: inherit;
-    color: var(--text-color);
-    padding: 0.2rem 0.3rem;
-    overflow: visible;
+  background-color: transparent;
+  border: 0;
+  width: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text-color);
+  padding: 0.2rem 0.3rem;
+  overflow: visible;
 }
 
 .basicInput:focus {
-    outline: none;
+  outline: none;
 }
 
 .basicInput::placeholder {
-    display: inline-block;
-    position: relative;
-    color: var(--text-color);
-    opacity: 0.5;
-    transform-origin: 0 100%;
-    transform: scale(1);
-    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  display: inline-block;
+  position: relative;
+  color: var(--text-color);
+  opacity: 0.5;
+  transform-origin: 0 100%;
+  transform: scale(1);
+  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
 }
 
 .basicInput:focus::placeholder {
-    color: var(--accent-color);
-    transform: scale(0.85);
-    opacity: 0.5;
+  color: var(--accent-color);
+  transform: scale(0.85);
+  opacity: 0.5;
 }
 
 .datePicker {
-    background-color: var(--bg-color);
+  background-color: var(--bg-color);
 }
 
 .datePickerDay {
-    color: var(--text-color);
-    font-family: inherit;
+  color: var(--text-color);
+  font-family: inherit;
 }

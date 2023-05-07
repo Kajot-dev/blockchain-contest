@@ -1,19 +1,23 @@
 import { useState } from "react";
 import Image from "next/image";
 import { v4 as uuidv4 } from "uuid";
-import { TextField, Button, OutlineButton, DatePicker, Select } from "./Forms";
-
-import { Unbounded } from "next/font/google";
-const unbounded = Unbounded({ subsets: ["latin"], weight: "400" });
-import { 
-  TextAddFilled, 
-  NumberSymbolFilled, 
-  TagQuestionMarkFilled, 
+import {
+  Form,
+  TextField,
+  Button,
+  OutlineButton,
+  DatePicker,
+  Select,
+} from "./Forms";
+import {
+  TextAddFilled,
+  NumberSymbolFilled,
+  TagQuestionMarkFilled,
   AddSubtractCircleFilled,
   DataBarVerticalAddFilled,
   ProtocolHandlerFilled,
   CalendarClockFilled,
-  ClockFilled
+  ClockFilled,
 } from "@fluentui/react-icons";
 import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
@@ -28,12 +32,11 @@ export function ItemInfo({
   ...props
 }) {
   return (
-    <div className={className} {...props}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>Item info</div>
+    <Form className={className} label="Item info" {...props}>
       <TextField
         type="text"
         id="name"
-        desc = "NFT Name"
+        desc="NFT Name"
         placeholder="Name"
         FluentIcon={TextAddFilled}
         onChange={(e) => setName(e.target.value)}
@@ -71,18 +74,17 @@ export function ItemInfo({
         className={stylesForm.basicInput}
         onChange={(e) => setIpfs(e.target.value)}
       />
-    </div>
+    </Form>
   );
 }
 
 // TODO: on click, open file explorer, get png, validate it, and update image
 export function ItemImage({ className = "" }) {
   return (
-    <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>Item image</div>
+    <Form className={className} label="Item image">
       <Image alt="" id="png" src="/png@2x.png" width={250} height={250} />
       <Button onClick={() => console.log("click")}>+</Button>
-    </div>
+    </Form>
   );
 }
 
@@ -94,10 +96,8 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
   const [traitError, setTraitError] = useState(null);
 
   function addItem() {
-
     let error = false;
 
-    
     if (Number.isNaN(quantity)) {
       setQuantityError("Invalid number");
       error = true;
@@ -124,8 +124,7 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
   }
 
   return (
-    <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>Add item</div>
+    <Form className={className} label="Add item">
       <div
         className="flexRow"
         style={{
@@ -156,7 +155,7 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
           +
         </Button>
       </div>
-    </div>
+    </Form>
   );
 }
 
@@ -166,18 +165,26 @@ export function LaunchList({
   className = "",
 }) {
   return (
-    <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>Launch list</div>
-      <div className={`flexCol ${styles.listContainer}`} style={{
-        justifyContent: "stretch",
-        maxHeight: "600px",
-        overflowY: "auto"
-      }}>
+    <Form className={className} label="Launch list">
+      <div
+        className={`flexCol ${styles.listContainer}`}
+        style={{
+          justifyContent: "stretch",
+          maxHeight: "600px",
+          overflowY: "auto",
+        }}
+      >
         <div className={styles.listTable}>
           <div className={styles.listHeader}>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>Quantity</div>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>Trait</div>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>Remove</div>
+            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
+              Quantity
+            </div>
+            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
+              Trait
+            </div>
+            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
+              Remove
+            </div>
           </div>
           {launches.map((launch) => (
             <div className={styles.listRow} key={launch.id}>
@@ -187,47 +194,53 @@ export function LaunchList({
                 className={styles.listCell}
                 onClick={() => onListRemove(launch)} // REMOVE
               >
-                <OutlineButton className={stylesForm.minor}>DELETE</OutlineButton>
+                <OutlineButton className={stylesForm.minor}>
+                  DELETE
+                </OutlineButton>
               </div>
             </div>
           ))}
         </div>
-        
       </div>
       {launches.length === 0 && (
-            <div className={stylesForm.subtle} style={{
-              textAlign: "center",
-              width: "100%"
-            }}>No items added</div>
-          )}
-    </div>
+        <div
+          className={stylesForm.subtle}
+          style={{
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          No items added
+        </div>
+      )}
+    </Form>
   );
 }
 
 // TODO: on deploy click button, upload photo to ipfs, and integrate launch with smart contract
 export function DeployLaunch({ className = "", date, setDate }) {
   return (
-    <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>Deploy launch</div>
-        <DatePicker
-          showTimeInput
-          desc="Launch Date"
-          dateFormat="yyyy/MM/dd HH:mm"
-          placeholderText="Date"
-          FluentIcon={CalendarClockFilled}
-          selected={date}
-          onChange={(date) => setDate(date)}
-          minDate={new Date()}
-        />
+    <Form className={className} label="Deploy launch">
+      <DatePicker
+        showTimeInput
+        desc="Launch Date"
+        dateFormat="yyyy/MM/dd HH:mm"
+        placeholderText="Date"
+        FluentIcon={CalendarClockFilled}
+        selected={date}
+        onChange={(date) => setDate(date)}
+        minDate={new Date()}
+      />
 
-      <Select 
-        options={[{ value: "FCFS", label: "FCFS" }]} FluentIcon={ClockFilled} 
+      <Select
+        options={[{ value: "FCFS", label: "FCFS" }]}
+        FluentIcon={ClockFilled}
         desc="Launch Type"
       />
       <Button onClick={() => console.log("click")} className={stylesForm.major}>
         Deploy
       </Button>
-    </div>
+    </Form>
   );
 }
 
@@ -278,16 +291,16 @@ export default function CreateLaunchPanel({ className = "" }) {
         onItemAdd={onListAdd}
       />
 
-      <LaunchList
-        launches={launches}
-        onListRemove={onListRemove}
-        className={`${styles.launchList} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
-      />
-
       <DeployLaunch
         date={date}
         setDate={setDate}
         className={`${styles.deployLaunch} ${stylesForm.form} ${stylesForm.thin}`}
+      />
+
+      <LaunchList
+        launches={launches}
+        onListRemove={onListRemove}
+        className={`${styles.launchList} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
       />
     </div>
   );

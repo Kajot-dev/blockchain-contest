@@ -122,16 +122,19 @@
   color: var(--accent-color);
 }
 
-.listHeaderCell:first-child {
-  border-top-left-radius: 0.5rem;
-}
-
-.listHeaderCell:last-child {
-  border-top-right-radius: 0.5rem;
-}
-
 .listCell {
   display: table-cell;
   padding: 0.5rem 0.5rem;
 }
+
+.listRow .listCell:first-child, .listHeaderCell:first-child {
+  border-bottom-left-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+}
+
+.listRow .listCell:last-child, .listHeaderCell:last-child {
+  border-bottom-right-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
 
