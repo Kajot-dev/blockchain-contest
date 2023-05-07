@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
+import { IpfsImage } from "react-ipfs-image";
 import { v4 as uuidv4 } from "uuid";
 import {
   Form,
@@ -18,6 +19,8 @@ import {
   ProtocolHandlerFilled,
   CalendarClockFilled,
   ClockFilled,
+  ImageRegular,
+  ImageProhibitedRegular
 } from "@fluentui/react-icons";
 import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
@@ -78,12 +81,36 @@ export function ItemInfo({
   );
 }
 
+const ipfsRegex = /^ipfs:\/\/[a-zA-Z0-9]+$/;
+
 // TODO: on click, open file explorer, get png, validate it, and update image
-export function ItemImage({ className = "" }) {
+export function ItemImage({ className = "", ipfs = null, imageData = null, ...props }) {
+
+  let contents = null;
+
+  if (ipfs && ipfs.trim() !== "" && ipfsRegex.test(ipfs.trim())) {
+    contents = (
+      <IpfsImage hash={ipfs} width={250} height={250} />
+    );
+  } else if (imageData) {
+    contents = (
+      <Image src={imageData} width={250} height={250} />
+    );
+  } else {
+    contents = (
+      <ImageRegular style={{
+        opacity: 0.5,
+        width: "250px",
+        height: "250px"
+      }} />
+    );
+  }
   return (
-    <Form className={className} label="Item image">
-      <Image alt="" id="png" src="/png@2x.png" width={250} height={250} />
-      <Button onClick={() => console.log("click")}>+</Button>
+    <Form className={className} label="Item image" style={{
+      justifyContent: "center"
+    }} {...props}>
+      {contents}
+      <Button onClick={() => console.log("click")} disabled={!!ipfs}>+</Button>
     </Form>
   );
 }
@@ -250,6 +277,7 @@ export default function CreateLaunchPanel({ className = "" }) {
   const [attribute, setAttribute] = useState("");
   const [symbol, setSymbol] = useState("");
   const [ipfs, setIpfs] = useState("");
+  const [imageData, setImageData] = useState(null);
 
   // ITEM LIST
   const [launches, setLaunches] = useState([]);
@@ -284,6 +312,8 @@ export default function CreateLaunchPanel({ className = "" }) {
 
       <ItemImage
         className={`${styles.itemImage} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.spaceBetween}`}
+        ipfs={ipfs}
+        imageData={imageData}
       />
 
       <AddItem
