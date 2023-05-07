@@ -20,6 +20,10 @@
   }
 }
 
+html, body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   background-color: var(--bg-color);
@@ -57,9 +61,19 @@ main {
 
 .fill {
   position: absolute;
+  top: 0;
+  left: 0;
   display: block;
-  width: stretch;
-  height: stretch;
+  width: inherit;
+  height: inherit;
+  overflow: hidden;
+}
+
+.fill-bg {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: calc(100% - 60px);
   overflow: hidden;
 }
 

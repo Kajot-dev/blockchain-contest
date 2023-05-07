@@ -8,7 +8,7 @@ export default function CreateLaunch() {
     <>
       <NavBar displayWalletButton={false} />
       <main className="">
-        <div className="fill">
+        <div className="fill-bg">
           <div className="fill magic-bg" />
         </div>
         <CreateLaunchPanel className={roboto.className} />
