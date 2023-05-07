@@ -44,17 +44,33 @@
 }
 
 a.navLink {
-  border-bottom: solid var(--accent-color);
-  border-bottom-width: 0px;
-  padding-bottom: 0.1rem;
-  text-transform:  uppercase;
-  transition: border-bottom-width 0.2s ease-in-out;
+  display: inline-block;
+  position: relative;
+  text-transform: uppercase;
+  transform: translateY(0);
+  transition: transform 0.2s ease-in-out;
   letter-spacing: 0.1rem;
 }
 
 a.navLink:hover {
-  border-bottom: solid var(--accent-color);
-  border-bottom-width: 2px;
+  transform: translateY(-0.05rem);
+}
+
+a.navLink:after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  bottom: -2px;
+  left: 0;
+  height: 2px;
+  background: var(--accent-color);
+  transform: scaleX(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+a.navLink:hover:after {
+  transform: scaleX(1);
 }
 
 .navBarButton {
