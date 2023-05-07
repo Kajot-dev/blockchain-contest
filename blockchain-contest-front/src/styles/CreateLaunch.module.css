@@ -1,0 +1,90 @@
+@import url("https://fonts.googleapis.com/css2?family=Unbounded:wght@700&display=swap");
+
+.launchGrid {  
+  display: grid; 
+  grid-template-columns: 1fr 1.5fr 1fr; 
+  grid-template-rows: 1fr 0.5fr 1fr auto; 
+  gap: 1.5em 1.5em; 
+  grid-template-areas: 
+    "item-info launch-list item-image"
+    "add-item launch-list item-image"
+    ". launch-list deploy-launch"
+    ". launch-list ."; 
+  padding: 1.5rem 1.5rem;
+}
+
+@media only screen and (max-width: 1024px) {
+  .launchGrid {
+    display: grid; 
+    grid-template-columns: 1fr 1.25fr; 
+    grid-template-rows: 1fr 0.75fr auto; 
+    gap: 1.5em 1.5em; 
+    grid-template-areas: 
+      "item-info item-image"
+      "add-item launch-list"
+      "deploy-launch launch-list"; 
+  }
+}
+
+.itemInfo { grid-area: item-info; }
+
+.addItem { 
+  grid-area: add-item; 
+}
+
+.itemImage { grid-area: item-image; }
+
+.launchList { 
+  align-self: self-start;
+  grid-area: launch-list; 
+}
+
+.deployLaunch { 
+  align-self: self-start;
+  grid-area: deploy-launch;
+}
+
+.bottomBtn {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.listTable {
+  display: table;
+  color: inherit;
+  width: stretch;
+  overflow: auto;
+}
+
+.listHeader {
+  display: table-header-group;
+}
+
+.listRow {
+  display: table-row;
+}
+
+.listRow:nth-child(odd), .listHeader:nth-child(odd) {
+  background-color: var(--bg-inv-semi-transparent);
+}
+
+.listHeaderCell {
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.listHeaderCell:first-child {
+  border-top-left-radius: 0.5rem;
+}
+
+.listHeaderCell:last-child {
+  border-top-right-radius: 0.5rem;
+}
+
+.listCell {
+  display: table-cell;
+  padding: 0.5rem 0.5rem;
+}
+

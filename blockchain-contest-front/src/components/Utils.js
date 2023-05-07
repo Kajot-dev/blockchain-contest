@@ -1,11 +1,12 @@
-import styles from "@/styles/Utils.module.css";
-import { Info24Regular, ErrorCircle24Regular } from "@fluentui/react-icons";
+import { Info24Filled, ErrorCircle24Filled } from "@fluentui/react-icons";
+
+import styles from "@styles/Utils.module.css";
 
 export function InfoBox({ text = "" }) {
   if (text === "") return null;
   return (
     <div className={styles.infoBox}>
-      <Info24Regular />
+      <Info24Filled />
       <div>{text}</div>
     </div>
   );
@@ -15,17 +16,8 @@ export function ErrorBox({ text = "" }) {
   if (text === "") return null;
   return (
     <div className={styles.errorBox}>
-      <ErrorCircle24Regular />
+      <ErrorCircle24Filled />
       <div>{text}</div>
     </div>
-  );
-}
-
-export function Button({ interior, onClick }) {
-  if (interior == "" || interior == undefined || interior == null) return null;
-  return (
-    <button className={styles.btnWrapper} onClick={onClick}>
-      <div>{interior}</div>
-    </button>
   );
 }

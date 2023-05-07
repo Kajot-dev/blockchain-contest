@@ -1,16 +1,16 @@
-import styles from "@styles/ConnectForm.module.css";
+import styles from "@styles/Forms.module.css";
 import { useMetaMask } from "metamask-react";
 import { useState } from "react";
 import { Roboto_Condensed } from "next/font/google";
 import { PulseLoader } from "react-spinners";
-import { InfoBox, ErrorBox } from "./Boxes";
+import { InfoBox, ErrorBox } from "./Utils";
 import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import Link from "next/link";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
 export default function ConnectForm() {
   return (
-    <div className={`${styles.connectForm} ${roboto.className}`}>
+    <div className={`${styles.form} ${roboto.className} ${styles.formBox}`}>
       <div className={styles.title}>Connect your wallet</div>
       <FormContents />
     </div>

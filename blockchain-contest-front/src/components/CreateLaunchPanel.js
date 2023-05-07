@@ -1,219 +1,294 @@
-import styles from "@styles/CreateLaunch/Panel.module.css";
-import stylesList from "@styles/CreateLaunch/List.module.css";
-import stylesBox from "@styles/CreateLaunch/Box.module.css";
+import { useState } from "react";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
-import { TextField, FormControl, Select, MenuItem } from "@mui/material";
-import { Button } from "./Utils";
+import { v4 as uuidv4 } from "uuid";
+import { TextField, Button, OutlineButton, DatePicker, Select } from "./Forms";
+
+import { Unbounded } from "next/font/google";
+const unbounded = Unbounded({ subsets: ["latin"], weight: "400" });
+import { 
+  TextAddFilled, 
+  NumberSymbolFilled, 
+  TagQuestionMarkFilled, 
+  AddSubtractCircleFilled,
+  DataBarVerticalAddFilled,
+  ProtocolHandlerFilled,
+  CalendarClockFilled,
+  ClockFilled
+} from "@fluentui/react-icons";
+import styles from "@styles/CreateLaunch.module.css";
+import stylesForm from "@styles/Forms.module.css";
 
 // TODO: if ipfs provided, update photo
-const ItemInfo = ({ setName, setAttribute, setSymbol, setIpfs }) => {
+export function ItemInfo({
+  setName,
+  setAttribute,
+  setSymbol,
+  setIpfs,
+  className = "",
+  ...props
+}) {
   return (
-    <div className={styles.itemInfo}>
-      <label className={styles.label}>
-        <a className={styles.boxtext}>Item info</a>
-      </label>
-      <div className={stylesBox.itemInfoBox}>
-        <div className={stylesBox.line1}>
-          <TextField
-            className={stylesBox.name}
-            variant="standard"
-            id="name"
-            label="Name"
-            placeholder="Name"
-            onChange={(e) => setName(e.target.value)}
-            autoComplete="off"
-          />
-        </div>
-
-        <div className={stylesBox.line2}>
-          <TextField
-            className={stylesBox.symbol}
-            variant="standard"
-            id="symbol"
-            label="Symbol"
-            placeholder="Symbol"
-            onChange={(e) => setSymbol(e.target.value)}
-            autoComplete="off"
-          />
-          <TextField
-            className={stylesBox.attribute}
-            variant="standard"
-            id="attribute"
-            label="Attribute"
-            placeholder="Attribute"
-            onChange={(e) => setAttribute(e.target.value)}
-            autoComplete="off"
-          />
-        </div>
-        <div className={stylesBox.line3}>
-          <TextField
-            className={stylesBox.ipfs}
-            id="ipfs"
-            label="IPFS"
-            placeholder="IPFS (optional)"
-            variant="standard"
-            onChange={(e) => setIpfs(e.target.value)}
-            autoComplete="off"
-          />
-        </div>
+    <div className={className} {...props}>
+      <div className={`${stylesForm.label} ${unbounded.className}`}>Item info</div>
+      <TextField
+        type="text"
+        id="name"
+        desc = "NFT Name"
+        placeholder="Name"
+        FluentIcon={TextAddFilled}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <div
+        className="flexRow"
+        style={{
+          gap: "1rem",
+        }}
+      >
+        <TextField
+          type="text"
+          id="symbol"
+          desc="Symbol"
+          placeholder="Symbol"
+          FluentIcon={NumberSymbolFilled}
+          onChange={(e) => setSymbol(e.target.value)}
+        />
+        <TextField
+          type="text"
+          id="attribute"
+          desc="Attribute"
+          placeholder="Attribute"
+          FluentIcon={TagQuestionMarkFilled}
+          onChange={(e) => setAttribute(e.target.value)}
+        />
       </div>
+      <TextField
+        type="text"
+        id="ipfs"
+        name="ipfs"
+        desc={"IPFS link (optional)"}
+        placeholder="ipfs://"
+        FluentIcon={ProtocolHandlerFilled}
+        className={stylesForm.basicInput}
+        onChange={(e) => setIpfs(e.target.value)}
+      />
     </div>
   );
-};
+}
 
 // TODO: on click, open file explorer, get png, validate it, and update image
-const ItemImage = () => {
+export function ItemImage({ className = "" }) {
   return (
-    <div className={styles.itemImage}>
-      <label className={styles.label}>
-        <a className={styles.boxtext}>Item image</a>
-      </label>
-      <div className={stylesBox.itemImageBox}>
-        <Image className={stylesBox.image} alt="" id="png" src="/png@2x.png" />
-        <div className={stylesBox.imgButtonBox}>
-          <Button interior={"+"} onClick={() => console.log("click")} />
-        </div>
-      </div>
+    <div className={className}>
+      <div className={`${stylesForm.label} ${unbounded.className}`}>Item image</div>
+      <Image alt="" id="png" src="/png@2x.png" width={250} height={250} />
+      <Button onClick={() => console.log("click")}>+</Button>
     </div>
   );
-};
+}
 
-// TODO: on deploy click button, upload photo to ipfs, and integrate launch with smart contract
-const DeployLaunch = () => {
-  return (
-    <div className={styles.deployLaunch}>
-      <label className={styles.label}>
-        <a className={styles.boxtext}>Deploy launch</a>
-      </label>
-      <div className={stylesBox.deployLaunchBoxCenter}>
-        <div className={stylesBox.deployLaunchBox}>
-          <div className={stylesBox.line}>
-            <TextField
-              className={stylesBox.date}
-              variant="standard"
-              id="date"
-              label="Date"
-              placeholder="mm/dd/yyyy"
-              onChange={(e) => setDate(e.target.value)}
-              autoComplete="off"
-            />
-            <TextField
-              className={stylesBox.time}
-              variant="standard"
-              id="time"
-              label="Time"
-              placeholder="hh:mm"
-              // onChange={(e) => setTime(e.target.value)}
-              autoComplete="off"
-            />
-          </div>
-          <div className={stylesBox.line}>
-            <FormControl className={stylesBox.select} variant="standard">
-              <Select label="Type">
-                <MenuItem value={"FCFS"}>FCFS</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <div className={stylesBox.line}>
-            <Button interior={"Deploy"} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default function CreateLaunchPanel() {
-  // ADD ITEM - LIST
-  const [launches, setLaunches] = useState([]);
+export function AddItem({ className = "", onItemAdd = () => {} }) {
   const [quantity, setQuantity] = useState(0);
   const [trait, setTrait] = useState("");
 
+  const [quantityError, setQuantityError] = useState(null);
+  const [traitError, setTraitError] = useState(null);
+
+  function addItem() {
+
+    let error = false;
+
+    
+    if (Number.isNaN(quantity)) {
+      setQuantityError("Invalid number");
+      error = true;
+    } else if (quantity <= 0) {
+      setQuantityError("Quantity must be greater than 0");
+      error = true;
+    } else {
+      setQuantityError(null);
+    }
+
+    if (trait === "") {
+      setTraitError("Trait cannot be empty");
+      error = true;
+    } else {
+      setTraitError(null);
+    }
+
+    if (error) return;
+    // TODO: Validate fields
+    onItemAdd({
+      quantity: quantity,
+      trait: trait,
+    });
+  }
+
+  return (
+    <div className={className}>
+      <div className={`${stylesForm.label} ${unbounded.className}`}>Add item</div>
+      <div
+        className="flexRow"
+        style={{
+          gap: "1rem",
+        }}
+      >
+        <TextField
+          variant="standard"
+          id="quantity"
+          label="Quantity"
+          desc="Quantity"
+          placeholder="Quantity"
+          errorMsg={quantityError}
+          FluentIcon={AddSubtractCircleFilled}
+          onChange={(e) => setQuantity(parseInt(e.target.value.trim()))}
+        />
+        <TextField
+          variant="standard"
+          id="trait"
+          desc="Trait"
+          label="Trait"
+          placeholder="Trait"
+          errorMsg={traitError}
+          FluentIcon={DataBarVerticalAddFilled}
+          onChange={(e) => setTrait(e.target.value.trim())}
+        />
+        <Button onClick={addItem} className={stylesForm.thin}>
+          +
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+export function LaunchList({
+  launches = [],
+  onListRemove = () => {},
+  className = "",
+}) {
+  return (
+    <div className={className}>
+      <div className={`${stylesForm.label} ${unbounded.className}`}>Launch list</div>
+      <div className="flexCol" style={{
+        justifyContent: "stretch",
+        maxHeight: "600px",
+        overflowY: "auto"
+      }}>
+        <div className={styles.listTable}>
+          <div className={styles.listHeader}>
+            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>Quantity</div>
+            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>Trait</div>
+            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>Remove</div>
+          </div>
+          {launches.map((launch) => (
+            <div className={styles.listRow} key={launch.id}>
+              <div className={styles.listCell}>{launch.quantity}</div>
+              <div className={styles.listCell}>{launch.trait}</div>
+              <div
+                className={styles.listCell}
+                onClick={() => onListRemove(launch)} // REMOVE
+              >
+                <OutlineButton className={stylesForm.minor}>DELETE</OutlineButton>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+      </div>
+      {launches.length === 0 && (
+            <div className={stylesForm.subtle} style={{
+              textAlign: "center",
+              width: "100%"
+            }}>No items added</div>
+          )}
+    </div>
+  );
+}
+
+// TODO: on deploy click button, upload photo to ipfs, and integrate launch with smart contract
+export function DeployLaunch({ className = "", date, setDate }) {
+  return (
+    <div className={className}>
+      <div className={`${stylesForm.label} ${unbounded.className}`}>Deploy launch</div>
+        <DatePicker
+          showTimeInput
+          desc="Launch Date"
+          dateFormat="yyyy/MM/dd HH:mm"
+          placeholderText="Date"
+          FluentIcon={CalendarClockFilled}
+          selected={date}
+          onChange={(date) => setDate(date)}
+          minDate={new Date()}
+        />
+
+      <Select 
+        options={[{ value: "FCFS", label: "FCFS" }]} FluentIcon={ClockFilled} 
+        desc="Launch Type"
+      />
+      <Button onClick={() => console.log("click")} className={stylesForm.major}>
+        Deploy
+      </Button>
+    </div>
+  );
+}
+
+export default function CreateLaunchPanel({ className = "" }) {
   // ITEM INFO
   const [name, setName] = useState("");
   const [attribute, setAttribute] = useState("");
   const [symbol, setSymbol] = useState("");
   const [ipfs, setIpfs] = useState("");
 
+  // ITEM LIST
+  const [launches, setLaunches] = useState([]);
+
+  // LAUNCH CONFIG
+  const [date, setDate] = useState(new Date());
+
   // LIST FUNCTIONS
-  const listAdd = () => {
-    if (quantity === 0 || trait === "") return;
-    setLaunches([...launches, { id: Date.now(), quantity, trait }]);
-  };
-  const listRemove = (id) => {
-    setLaunches(launches.filter((launch) => launch.id !== id));
-  };
+  function onListAdd(launch) {
+    console.log(launch);
+    setLaunches(launches.concat({ id: uuidv4(), ...launch }));
+  }
+
+  function onListRemove(launch) {
+    let launchesCopy = launches.concat();
+    let launchIndex = launches.findIndex((l) => l.id === launch.id);
+    if (launchIndex !== -1) {
+      launchesCopy.splice(launchIndex, 1);
+      setLaunches(launchesCopy);
+    }
+  }
 
   return (
-    <div className={styles.main}>
-      <div className={styles.launch}>
-        <div className={styles.itemSection}>
-          <ItemImage />
-          <div className={styles.itemSectionLeft}>
-            <ItemInfo
-              setName={setName}
-              setAttribute={setAttribute}
-              setSymbol={setSymbol}
-              setIpfs={setIpfs}
-            />
+    <div className={`${styles.launchGrid} ${className}`}>
+      <ItemInfo
+        setName={setName}
+        setAttribute={setAttribute}
+        setSymbol={setSymbol}
+        setIpfs={setIpfs}
+        className={`${styles.itemInfo} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
+      />
 
-            {/* ADD ITEM */}
-            <div className={styles.addItem}>
-              <label className={styles.label}>
-                <a className={styles.boxtext}>Add item</a>
-              </label>
-              <div className={stylesBox.addItemBox}>
-                <TextField
-                  className={stylesBox.quantity}
-                  variant="standard"
-                  id="quantity"
-                  label="Quantity"
-                  placeholder="Quantity"
-                  onChange={(e) => setQuantity(e.target.value)}
-                  width="208px"
-                  autoComplete="off"
-                />
-                <TextField
-                  className={stylesBox.trait}
-                  variant="standard"
-                  id="trait"
-                  label="Trait"
-                  placeholder="Trait"
-                  onChange={(e) => setTrait(e.target.value)}
-                  width="208px"
-                  autoComplete="off"
-                />
-                <Button onClick={() => listAdd()} interior={"+"} />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={styles.launchSection}>
-          <DeployLaunch />
+      <ItemImage
+        className={`${styles.itemImage} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.spaceBetween}`}
+      />
 
-          {/* LAUNCH LIST */}
-          <div className={styles.launchList}>
-            <label className={styles.label}>
-              <a className={styles.boxtext}>Launch list</a>
-            </label>
-            <div className={stylesList.listContainer}>
-              <div className={stylesList.listBody}>
-                {launches.map((launch) => (
-                  <div className={stylesList.listRow} key={launch}>
-                    <div className={stylesList.quantity}>{launch.quantity}</div>
-                    <div className={stylesList.trait}>{launch.trait}</div>
-                    <div
-                      className={stylesList.delete}
-                      onClick={() => listRemove(launch.id)} // REMOVE
-                    ></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <AddItem
+        className={`${styles.addItem} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
+        onItemAdd={onListAdd}
+      />
+
+      <LaunchList
+        launches={launches}
+        onListRemove={onListRemove}
+        className={`${styles.launchList} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
+      />
+
+      <DeployLaunch
+        date={date}
+        setDate={setDate}
+        className={`${styles.deployLaunch} ${stylesForm.form} ${stylesForm.thin}`}
+      />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
 // button = "wallet" | "panel" | "profile" | "none"
-export default function NavBar() {
+export default function NavBar({ displayConnectButton = true }) {
   return (
     <header className={`${styles.header} ${roboto.className}`}>
       <div className={styles.logoSection}>
@@ -23,7 +23,7 @@ export default function NavBar() {
         <Link href="/zen" className={styles.navLink}>
           ZEN
         </Link>
-        <ConnectWallet connectLocation="/connect" />
+        {displayConnectButton && <ConnectWallet connectLocation="/connect" />}
       </div>
     </header>
   );
