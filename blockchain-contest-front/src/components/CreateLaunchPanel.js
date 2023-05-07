@@ -5,15 +5,15 @@ import { TextField, Button, OutlineButton, DatePicker, Select } from "./Forms";
 
 import { Unbounded } from "next/font/google";
 const unbounded = Unbounded({ subsets: ["latin"], weight: "400" });
-import { 
-  TextAddFilled, 
-  NumberSymbolFilled, 
-  TagQuestionMarkFilled, 
+import {
+  TextAddFilled,
+  NumberSymbolFilled,
+  TagQuestionMarkFilled,
   AddSubtractCircleFilled,
   DataBarVerticalAddFilled,
   ProtocolHandlerFilled,
   CalendarClockFilled,
-  ClockFilled
+  ClockFilled,
 } from "@fluentui/react-icons";
 import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
@@ -29,11 +29,13 @@ export function ItemInfo({
 }) {
   return (
     <div className={className} {...props}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>Item info</div>
+      <div className={`${stylesForm.label} ${unbounded.className}`}>
+        Item info
+      </div>
       <TextField
         type="text"
         id="name"
-        desc = "NFT Name"
+        desc="NFT Name"
         placeholder="Name"
         FluentIcon={TextAddFilled}
         onChange={(e) => setName(e.target.value)}
@@ -79,7 +81,9 @@ export function ItemInfo({
 export function ItemImage({ className = "" }) {
   return (
     <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>Item image</div>
+      <div className={`${stylesForm.label} ${unbounded.className}`}>
+        Item image
+      </div>
       <Image alt="" id="png" src="/png@2x.png" width={250} height={250} />
       <Button onClick={() => console.log("click")}>+</Button>
     </div>
@@ -94,10 +98,8 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
   const [traitError, setTraitError] = useState(null);
 
   function addItem() {
-
     let error = false;
 
-    
     if (Number.isNaN(quantity)) {
       setQuantityError("Invalid number");
       error = true;
@@ -125,7 +127,9 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
 
   return (
     <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>Add item</div>
+      <div className={`${stylesForm.label} ${unbounded.className}`}>
+        Add item
+      </div>
       <div
         className="flexRow"
         style={{
@@ -167,17 +171,28 @@ export function LaunchList({
 }) {
   return (
     <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>Launch list</div>
-      <div className={`flexCol ${styles.listContainer}`} style={{
-        justifyContent: "stretch",
-        maxHeight: "600px",
-        overflowY: "auto"
-      }}>
+      <div className={`${stylesForm.label} ${unbounded.className}`}>
+        Launch list
+      </div>
+      <div
+        className={`flexCol ${styles.listContainer}`}
+        style={{
+          justifyContent: "stretch",
+          maxHeight: "600px",
+          overflowY: "auto",
+        }}
+      >
         <div className={styles.listTable}>
           <div className={styles.listHeader}>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>Quantity</div>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>Trait</div>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>Remove</div>
+            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
+              Quantity
+            </div>
+            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
+              Trait
+            </div>
+            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
+              Remove
+            </div>
           </div>
           {launches.map((launch) => (
             <div className={styles.listRow} key={launch.id}>
@@ -187,19 +202,25 @@ export function LaunchList({
                 className={styles.listCell}
                 onClick={() => onListRemove(launch)} // REMOVE
               >
-                <OutlineButton className={stylesForm.minor}>DELETE</OutlineButton>
+                <OutlineButton className={stylesForm.minor}>
+                  DELETE
+                </OutlineButton>
               </div>
             </div>
           ))}
         </div>
-        
       </div>
       {launches.length === 0 && (
-            <div className={stylesForm.subtle} style={{
-              textAlign: "center",
-              width: "100%"
-            }}>No items added</div>
-          )}
+        <div
+          className={stylesForm.subtle}
+          style={{
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
+          No items added
+        </div>
+      )}
     </div>
   );
 }
@@ -208,20 +229,23 @@ export function LaunchList({
 export function DeployLaunch({ className = "", date, setDate }) {
   return (
     <div className={className}>
-      <div className={`${stylesForm.label} ${unbounded.className}`}>Deploy launch</div>
-        <DatePicker
-          showTimeInput
-          desc="Launch Date"
-          dateFormat="yyyy/MM/dd HH:mm"
-          placeholderText="Date"
-          FluentIcon={CalendarClockFilled}
-          selected={date}
-          onChange={(date) => setDate(date)}
-          minDate={new Date()}
-        />
+      <div className={`${stylesForm.label} ${unbounded.className}`}>
+        Deploy launch
+      </div>
+      <DatePicker
+        showTimeInput
+        desc="Launch Date"
+        dateFormat="yyyy/MM/dd HH:mm"
+        placeholderText="Date"
+        FluentIcon={CalendarClockFilled}
+        selected={date}
+        onChange={(date) => setDate(date)}
+        minDate={new Date()}
+      />
 
-      <Select 
-        options={[{ value: "FCFS", label: "FCFS" }]} FluentIcon={ClockFilled} 
+      <Select
+        options={[{ value: "FCFS", label: "FCFS" }]}
+        FluentIcon={ClockFilled}
         desc="Launch Type"
       />
       <Button onClick={() => console.log("click")} className={stylesForm.major}>
@@ -273,21 +297,23 @@ export default function CreateLaunchPanel({ className = "" }) {
         className={`${styles.itemImage} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.spaceBetween}`}
       />
 
-      <AddItem
-        className={`${styles.addItem} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
-        onItemAdd={onListAdd}
-      />
+      <div className={styles.addItemDeployContainer}>
+        <AddItem
+          className={`${styles.addItem} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
+          onItemAdd={onListAdd}
+        />
+
+        <DeployLaunch
+          date={date}
+          setDate={setDate}
+          className={`${styles.deployLaunch} ${stylesForm.form} ${stylesForm.thin}`}
+        />
+      </div>
 
       <LaunchList
         launches={launches}
         onListRemove={onListRemove}
         className={`${styles.launchList} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
-      />
-
-      <DeployLaunch
-        date={date}
-        setDate={setDate}
-        className={`${styles.deployLaunch} ${stylesForm.form} ${stylesForm.thin}`}
       />
     </div>
   );
