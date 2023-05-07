@@ -12,7 +12,7 @@ contract StoreAccessControl {
  
     address public admin;
 
-    /// @notice a map showing whether a given address is a store
+    /// @notice a map of all stores, which is showing whether a given address is a store
     mapping(address=>bool) public isVerifiedStore;
 
     event DateMarkedAsShop(address indexed _storeAddr, string _storeName, uint256 timestamp);
@@ -56,7 +56,8 @@ contract StoreAccessControl {
         admin = msg.sender;
     }
  
-    /** @notice Method for marking user as a store
+    /**
+     * @notice Method for marking user as a store
      * @param _storeAddr Address of store
      * @param _storeName Name of store
      */
@@ -71,7 +72,8 @@ contract StoreAccessControl {
         }
     }
     
-    /** @notice Method for removing users privileges
+    /** 
+     * @notice Method for removing users privileges
      * @dev the selected address is moved to the top of the stores array
     and is removed from there in the next step
      * @param _addrToRemove Address to deprivation of store privileges
@@ -89,7 +91,8 @@ contract StoreAccessControl {
         
     }
     
-    /** @notice Method to change privileges owner
+    /**
+     * @notice Method to change privileges owner
      * @param _newAdminAddr Address of new privileges owner
      */
     function moveAdminPrivileges(address _newAdminAddr) public onlyAdmin {
@@ -105,7 +108,8 @@ contract StoreAccessControl {
         
     }
     
-    /** @notice Method to check if an address has store privileges
+    /**
+     * @notice Method to check if an address has store privileges
      * @param _checkAddr Address to check
      * @return true if address has store privileges
      */
@@ -113,7 +117,8 @@ contract StoreAccessControl {
         return(isVerifiedStore[_checkAddr]);
     }
  
-    /** @notice Method to check number of stores 
+    /**
+     * @notice Method to check number of stores 
      * @return number of stores
      */
     function numberOfPartneredStores() public view returns (uint8) {

@@ -9,7 +9,7 @@ contract ERC721Minter is ERC721, ERC721URIStorage {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
 
-    address private owner;
+    address internal owner;
 
     modifier onlyOwner() {
         require(msg.sender==owner, "Not an owner - access denied.");
@@ -37,5 +37,9 @@ contract ERC721Minter is ERC721, ERC721URIStorage {
 
     function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
         return super.tokenURI(tokenId);
+    }
+
+    function getOwnerAddress() internal view returns (address) {
+        return owner;
     }
 }
