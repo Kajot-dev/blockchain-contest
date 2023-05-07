@@ -168,7 +168,7 @@ export function LaunchList({
   return (
     <div className={className}>
       <div className={`${stylesForm.label} ${unbounded.className}`}>Launch list</div>
-      <div className="flexCol" style={{
+      <div className={`flexCol ${styles.listContainer}`} style={{
         justifyContent: "stretch",
         maxHeight: "600px",
         overflowY: "auto"
