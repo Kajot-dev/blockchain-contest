@@ -44,7 +44,6 @@
 }
 
 a.navLink {
-  display: inline-block;
   position: relative;
   text-transform: uppercase;
   transform: translateY(0);
@@ -108,4 +107,34 @@ a.navLink:hover:after {
 .userText .userType {
   color: var(--accent-color);
   text-transform: capitalize;
+}
+
+.accountContainer {
+  display: inline-flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  filter: none;
+  letter-spacing: 0rem !important;
+  transition: transform 0.2s ease-in-out;
+}
+.accountContainer::after {
+  bottom: -6px !important;
+}
+
+.accountContainer:hover {
+  cursor: pointer;
+  filter: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.accountDesc {
+  opacity: 0.6;
+  font-size: 80%;
+}
+
+.accountContainer:hover .accountDesc {
+  opacity: 1;
 }
