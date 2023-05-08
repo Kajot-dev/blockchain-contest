@@ -81,7 +81,7 @@ export function ItemInfo({
   );
 }
 
-const ipfsRegex = /^ipfs:\/\/[a-zA-Z0-9]+$/;
+const ipfsRegex = /^ipfs:\/\/[a-zA-Z0-9/.]+$/;
 
 // TODO: on click, open file explorer, get png, validate it, and update image
 export function ItemImage({ className = "", ipfs = null, imageData = null, ...props }) {
