@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Image from "next/image";
-import { IpfsImage } from "react-ipfs-image";
 import { v4 as uuidv4 } from "uuid";
 import {
   Form,
@@ -94,7 +93,10 @@ export function ItemImage({
   let contents = null;
 
   if (ipfs && ipfs.trim() !== "" && ipfsRegex.test(ipfs.trim())) {
-    contents = <IpfsImage hash={ipfs} width={250} height={250} />;
+    let rawIpfs = ipfs.trim().substring(7);
+    contents = (
+      <Image src={`https://ipfs.io/ipfs/${rawIpfs}`} alt="Image from url" width={250} height={250} />
+    )
   } else if (imageData) {
     contents = (
       <Image src={imageData} alt="Uploaded image" width={250} height={250} />
