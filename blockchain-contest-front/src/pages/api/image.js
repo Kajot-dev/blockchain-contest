@@ -1,11 +1,19 @@
 import ApiError from "@/scripts/ApiError";
-import { NFTStorage } from "nft.storage";
-import { File } from "buffer";
+import { NFTStorage, File } from "nft.storage";
+import { Buffer } from "buffer";
+import getRawBody from "raw-body";
 
 const sizeLimitMegabytes = 15;
 const nftStorageClient = new NFTStorage({
-  token: process.env.NFT_STORAGE_API_KEY,
+  token:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDA0YzczMzNEMmQ2NkNjRTU0OTA0ZUZkNEViM0ZFMTMwZTFDYUUwNzAiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY4MzQ3NDEyOTM2MSwibmFtZSI6ImJsb2NrY2hhaW4tY29udGVzdCJ9.gfu0s7CUmfWI2blu9SZ-TvlLY0Wvt7y7vtd3vV1jqL0",
 });
+
+export const config = {
+  api: {
+    bodyParser: false,
+  }
+}
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -34,67 +42,43 @@ async function postHandler(req, res) {
       );
     return;
   }
-  //check for Content-Length not exceeding 15mb
-  let contentLength = parseInt(req.headers["content-length"]);
 
-  if (Number.isNaN(contentLength)) {
-    res
-      .status(400)
-      .json(new ApiError(400, "Invalid Content-Length header value!"));
-    return;
+  let fileBuffer = await getRawBody(
+    req,
+    {
+      length: req.headers["content-length"],
+      limit: `${sizeLimitMegabytes}mb`,
+    },
+  )
+
+  let fileObj;
+  let fileName;
+  if (contentType === "image/jpeg") {
+    fileName = "nft.jpg";
+    fileObj = new File([fileBuffer], fileName, {
+      type: "image/jpg",
+    });
+  } else {
+    fileName = "nft.png";
+    fileObj = new File([fileBuffer], fileName, {
+      type: "image/png",
+    });
   }
 
-  if (contentLength > sizeLimitMegabytes * 1024 * 1024) {
-    res.status(413).json(new ApiError(413, "Image size exceeds 15mb limit!"));
-    return;
-  }
 
-  //load image from request body to File
-  //req is readable stream
-
-  let data = []
-  let totalBytes = 0;
-  
-  req.on("data", (chunk) => {
-    totalBytes += chunk.length;
-    if (totalBytes > sizeLimitMegabytes * 1024 * 1024) {
-      res.status(413).json(new ApiError(413, "Image size exceeds 15mb limit!"));
-      req.destroy();
-      return;
-    }
-    data.push(chunk);
-  });
-
-  req.on("end", async () => {
-    let fileBuffer = Buffer.concat(data);
-    data = null;
-    //upload to nft.storage
-    let fileObj;
-    if (contentType === "image/jpeg") {
-      fileObj = new File([fileBuffer], "nft.jpg", {
-        type: "image/jpeg",
-      });
-    } else {
-      fileObj = new File([fileBuffer], "nft.png", {
-        type: "image/png",
-      }); 
-    }
-
-    try {
-      let result = await nftStorageClient.store({
-        name: "nft",
-        description: "Nft from Minted",
-        image: fileObj,
-      });
-      res.status(200).json(result);
-    } catch (e) {
-      res.status(500).json(new ApiError(500, "Internal server error"));
-    }
-
-  });
-  
-
-  req.on("error", (err) => {
+  try {
+    let result = await nftStorageClient.store({
+      name: "nft",
+      description: "Nft from Minted",
+      image: fileObj,
+    });
+    res.status(200).json({
+      ...result,
+      imageUrl: `ipfs://${result.ipnft}/image/${fileName}`
+    });
+  } catch (e) {
+    console.log(e);
     res.status(500).json(new ApiError(500, "Internal server error"));
-  });
+  }
+
 }
