@@ -8,7 +8,6 @@ export default function Table({
   noElementsStyle = {},
   ...props
 }) {
-  console.log(data);
   return (
     <>
       <div className={`flexCol ${styles.listContainer}`} {...props}>
