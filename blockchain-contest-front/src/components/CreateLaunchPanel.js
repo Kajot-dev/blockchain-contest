@@ -94,7 +94,7 @@ export function ItemImage({ className = "", ipfs = null, imageData = null, ...pr
     );
   } else if (imageData) {
     contents = (
-      <Image src={imageData} width={250} height={250} />
+      <Image src={imageData} alt="Uploaded image" width={250} height={250} />
     );
   } else {
     contents = (
