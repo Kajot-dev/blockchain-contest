@@ -29,7 +29,7 @@ export default function NavBar({ displayConnectButton = true }) {
           Switch user
         </Link>
         <div className={styles.userText}>
-          User type: <span className={styles.userType}>{userType}</span>
+          User type: <span className={styles.userType}>{userType ? userType : "-"}</span>
         </div>
       </div>
       <div className={styles.navSection}>

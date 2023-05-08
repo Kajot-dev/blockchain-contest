@@ -6,7 +6,7 @@ import { useState, useEffect, useMemo } from "react";
 import UserContext from "@/components/UserContext";
 
 export default function App({ Component, pageProps }) {
-  const [userType, setUserType] = useState("consumer");
+  const [userType, setUserType] = useState(null);
   const userContextData = useMemo(
     () => ({ userType, setUserType }),
     [userType]
@@ -17,12 +17,16 @@ export default function App({ Component, pageProps }) {
   //this useEffect must be run before the one which updates local storage
   useEffect(() => {
     let localUserType = localStorage.getItem("userType");
-    if (localUserType) {
+    console.log(`localUserType: ${localUserType}`)
+    if (localUserType && (localUserType === "retailer" || localUserType === "consumer")) {
       setUserType(localUserType);
+    } else {
+      setUserType("consumer");
     }
   }, []);
 
   useEffect(() => {
+    if (!userType) return;
     localStorage.setItem("userType", userType);
   }, [userType]);
   return (
