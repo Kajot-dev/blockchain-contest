@@ -71,6 +71,7 @@
 
 .formBtn.thin {
   padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
 }
 
 .outlineBtn {
@@ -102,6 +103,7 @@
 
 .outlineBtn.thin {
   padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
 }
 
 .outlineBtn.minor {

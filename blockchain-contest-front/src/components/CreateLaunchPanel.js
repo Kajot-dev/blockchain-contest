@@ -10,6 +10,7 @@ import {
   DatePicker,
   Select,
 } from "./Forms";
+import Table from "./Table";
 import {
   TextAddFilled,
   NumberSymbolFilled,
@@ -20,7 +21,7 @@ import {
   CalendarClockFilled,
   ClockFilled,
   ImageRegular,
-  ImageProhibitedRegular
+  ImageProhibitedRegular,
 } from "@fluentui/react-icons";
 import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
@@ -84,33 +85,44 @@ export function ItemInfo({
 const ipfsRegex = /^ipfs:\/\/[a-zA-Z0-9/.]+$/;
 
 // TODO: on click, open file explorer, get png, validate it, and update image
-export function ItemImage({ className = "", ipfs = null, imageData = null, ...props }) {
-
+export function ItemImage({
+  className = "",
+  ipfs = null,
+  imageData = null,
+  ...props
+}) {
   let contents = null;
 
   if (ipfs && ipfs.trim() !== "" && ipfsRegex.test(ipfs.trim())) {
-    contents = (
-      <IpfsImage hash={ipfs} width={250} height={250} />
-    );
+    contents = <IpfsImage hash={ipfs} width={250} height={250} />;
   } else if (imageData) {
     contents = (
       <Image src={imageData} alt="Uploaded image" width={250} height={250} />
     );
   } else {
     contents = (
-      <ImageRegular style={{
-        opacity: 0.5,
-        width: "250px",
-        height: "250px"
-      }} />
+      <ImageRegular
+        style={{
+          opacity: 0.5,
+          width: "250px",
+          height: "250px",
+        }}
+      />
     );
   }
   return (
-    <Form className={className} label="Item image" style={{
-      justifyContent: "center"
-    }} {...props}>
+    <Form
+      className={className}
+      label="Item image"
+      style={{
+        justifyContent: "center",
+      }}
+      {...props}
+    >
       {contents}
-      <Button onClick={() => console.log("click")} disabled={!!ipfs}>+</Button>
+      <Button onClick={() => console.log("click")} disabled={!!ipfs}>
+        +
+      </Button>
     </Form>
   );
 }
@@ -193,53 +205,32 @@ export function LaunchList({
 }) {
   return (
     <Form className={className} label="Launch list">
-      <div
-        className={`flexCol ${styles.listContainer}`}
+      <Table
         style={{
           justifyContent: "stretch",
           maxHeight: "600px",
           overflowY: "auto",
         }}
-      >
-        <div className={styles.listTable}>
-          <div className={styles.listHeader}>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
-              Quantity
-            </div>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
-              Trait
-            </div>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
-              Remove
-            </div>
-          </div>
-          {launches.map((launch) => (
-            <div className={styles.listRow} key={launch.id}>
-              <div className={styles.listCell}>{launch.quantity}</div>
-              <div className={styles.listCell}>{launch.trait}</div>
-              <div
-                className={styles.listCell}
-                onClick={() => onListRemove(launch)} // REMOVE
-              >
-                <OutlineButton className={stylesForm.minor}>
-                  DELETE
-                </OutlineButton>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      {launches.length === 0 && (
-        <div
-          className={stylesForm.subtle}
-          style={{
-            textAlign: "center",
-            width: "100%",
-          }}
-        >
-          No items added
-        </div>
-      )}
+        headers={["Quantity", "Trait", "Remove"]}
+        data={launches.map((launch) => [
+          launch.quantity,
+          launch.trait,
+          <OutlineButton
+            key={launch.id}
+            onClick={() => onListRemove(launch)}
+            className={stylesForm.thin}
+          >
+            DELETE
+          </OutlineButton>,
+        ])}
+        
+        noElements={"No items added"}
+        noElementsClassName={stylesForm.subtle}
+        noElementsStyle={{
+          textAlign: "center",
+          width: "100%",
+        }}
+      />
     </Form>
   );
 }
