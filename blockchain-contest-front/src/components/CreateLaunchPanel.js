@@ -25,7 +25,6 @@ import {
 import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
 
-// TODO: if ipfs provided, update photo
 export function ItemInfo({
   setName,
   setAttribute,
@@ -253,7 +252,6 @@ export function LaunchList({
           </OutlineButton>,
         ])}
         noElements={"No items added"}
-        noElementsClassName={stylesForm.subtle}
         noElementsStyle={{
           textAlign: "center",
           width: "100%",

@@ -9,6 +9,8 @@
     ". launch-list deploy-launch"
     ". launch-list ."; 
   padding: 1.5rem 1.5rem;
+  width: 100%;
+  min-height: var(--screen-size);
 }
 
 @media only screen and (max-width: 1024px) {
