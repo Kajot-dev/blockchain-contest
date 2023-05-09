@@ -4,7 +4,7 @@
   position: fixed;
   width: 100%;
   box-sizing: border-box;
-  height: 60px;
+  height: var(--navbar-height);
   font-size: 105%;
   margin: 0;
   color: var(--text-color);

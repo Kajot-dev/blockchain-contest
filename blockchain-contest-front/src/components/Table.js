@@ -1,4 +1,5 @@
 import styles from "@/styles/Table.module.css";
+import stylesForm from "@/styles/Forms.module.css";
 
 export default function Table({
   headers = [],
@@ -34,7 +35,7 @@ export default function Table({
         </div>
       </div>
       {data.length === 0 && <div
-            className={noElementsClassName}
+            className={stylesForm.subtle + " " + noElementsClassName}
             style={noElementsStyle}
           >
             {noElements}
