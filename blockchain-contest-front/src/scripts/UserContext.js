@@ -1,10 +1,10 @@
 import { createContext } from "react";
 
-const userContext = createContext({
+const UserContext = createContext({
   userType: "consumer",
   setUserType: () => {},
 });
 
-export default userContext;
+export default UserContext;
 
 

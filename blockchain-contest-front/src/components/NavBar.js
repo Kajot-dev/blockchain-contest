@@ -3,7 +3,7 @@ import Link from "next/link";
 import ConnectWallet from "./ConnectWallet";
 import Logo from "./Logo";
 import { useContext } from "react";
-import UserContext from "./UserContext";
+import UserContext from "../scripts/UserContext";
 import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 

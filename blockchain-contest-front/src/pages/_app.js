@@ -1,9 +1,10 @@
 import "@/styles/globals.css";
+import "@/styles/scrollbar.css";
 import "@/styles/react-datepicker.scss";
 import Head from "next/head";
 import { MetaMaskProvider } from "metamask-react";
 import { useState, useEffect, useMemo } from "react";
-import UserContext from "@/components/UserContext";
+import UserContext from "@/scripts/UserContext";
 
 export default function App({ Component, pageProps }) {
   const [userType, setUserType] = useState(null);

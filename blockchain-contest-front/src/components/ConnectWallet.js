@@ -3,7 +3,7 @@ import { PulseLoader } from "react-spinners";
 import { useState, useEffect, useContext } from "react";
 import { useMetaMask } from "metamask-react";
 import JazzIcon, { jsNumberForAddress } from 'react-jazzicon'
-import UserContext from "./UserContext";
+import UserContext from "../scripts/UserContext";
 
 import styles from "@styles/Forms.module.css";
 import stylesNavBar from "@styles/NavBar.module.css";

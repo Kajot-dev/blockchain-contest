@@ -1,12 +1,12 @@
 .retailerPanel {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 1.5em 1.5em;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "nft-list nft-list new-launch"
-    "block-explorer recent-transactions recent-transactions";
+  display: grid; 
+  grid-template-columns: 1.5fr 1fr 1.5fr; 
+  grid-template-rows: 2fr 1fr 1fr; 
+  gap: var(--grid-gap) var(--grid-gap);
+  grid-template-areas: 
+    "nft-list nft-list account-info"
+    "new-launch recent-transactions recent-transactions"
+    "block-explorer recent-transactions recent-transactions"; 
   padding: 1.5rem 1.5rem;
   width: 100%;
   min-height: var(--screen-size);
@@ -16,18 +16,21 @@
   grid-area: nft-list;
 }
 
+.accountInfo {
+  grid-area: account-info;
+  align-self: start;
+}
+
 .newLaunch {
   grid-area: new-launch;
   align-self: center;
-  justify-self: center;
-}
-
-.recentTransactions {
-  grid-area: recent-transactions;
 }
 
 .blockExplorer {
   grid-area: block-explorer;
   align-self: center;
-  justify-self: center;
+}
+
+.recentTransactions {
+  grid-area: recent-transactions;
 }
