@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Roboto_Condensed } from "next/font/google";
 import { PulseLoader } from "react-spinners";
 import { InfoBox, ErrorBox } from "./Utils";
-import { Form } from "./Forms";
+import { Panel } from "./Forms";
 import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import Link from "next/link";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
@@ -12,9 +12,9 @@ const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 export default function ConnectForm() {
 
   return (
-    <Form className={`${roboto.className} ${styles.formBox}`} label="Connect your wallet">
+    <Panel className={`${roboto.className} ${styles.formBox}`} label="Connect your wallet">
       <FormContents />
-    </Form>
+    </Panel>
   )
 }
 
