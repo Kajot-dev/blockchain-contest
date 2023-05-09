@@ -8,7 +8,8 @@
   --shadow-alpha: 0.6;
   --border-color: #000;
   --navbar-height: 60px;
-  --screen-size: calc(100vh - var(--navbar-height))
+  --screen-size: calc(100vh - var(--navbar-height));
+  --grid-gap: 1.5em
 }
 
 @media (prefers-color-scheme: dark) {

@@ -2,6 +2,7 @@ import { Panel, OutlineButton } from "./Forms";
 import Table from "./Table";
 import Link from "next/link";
 import { InfoBox } from "./Utils";
+import { FormContents as AccountFormContents } from "./ConnectForm";
 
 import { RocketRegular, SearchRegular } from "@fluentui/react-icons";
 import styles from "@styles/Retailer.module.css";
@@ -22,6 +23,17 @@ function CreateLaunch({ ...props }) {
           <RocketRegular/>
         </OutlineButton>
       </Link>
+    </Panel>
+  );
+}
+
+function AccountInfo({ ...props }) {
+  return (
+    <Panel label="Account Info" {...props}>
+      <AccountFormContents
+        displayConnectedGreetings={false}
+        displayExploreButton={false}
+      />
     </Panel>
   );
 }
@@ -71,11 +83,14 @@ function BlockExplorer({ ...props }) {
 export default function RetailerPanel({ className = "", ...props }) {
   return (
     <div className={`${styles.retailerPanel} ${className}`} {...props}>
-      <CreateLaunch
-        className={`${styles.newLaunch} ${stylesForm.form} ${stylesForm.center}`}
+      <AccountInfo
+        className={`${styles.accountInfo} ${stylesForm.form}`}
       />
       <NftList
         className={`${styles.nftList} ${stylesForm.form} ${stylesForm.thin}`}
+      />
+      <CreateLaunch
+        className={`${styles.newLaunch} ${stylesForm.form} ${stylesForm.center}`}
       />
       <BlockExplorer
         className={`${styles.blockExplorer} ${stylesForm.form} ${stylesForm.center}`}

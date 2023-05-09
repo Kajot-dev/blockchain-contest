@@ -1,4 +1,4 @@
-import RetailerPanel from "@/components/RetailerPanel";
+import ConsumerPanel from "@/components/ConsumerPanel";
 import NavBar from "@/components/NavBar";
 import UserContext from "@/scripts/UserContext";
 import { useRouter } from "next/router";
@@ -9,7 +9,7 @@ const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 export default function CreateLaunch() {
   const { userType } = useContext(UserContext);
   const router = useRouter();
-  if (userType !== "retailer" && userType !== null) {
+  if (userType !== "consumer" && userType !== null) {
     router.push(`/panel/${userType}`);
   }
   return (
@@ -19,7 +19,7 @@ export default function CreateLaunch() {
         <div className="fill-bg">
           <div className="fill magic-bg" />
         </div>
-        <RetailerPanel className={roboto.className} />
+        <ConsumerPanel className={roboto.className} />
       </main>
     </>
   );

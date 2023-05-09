@@ -2,7 +2,7 @@
   display: grid; 
   grid-template-columns: 1fr 1.5fr 1fr; 
   grid-template-rows: 1fr 0.5fr 1fr auto; 
-  gap: 1.5em 1.5em; 
+  gap: var(--grid-gap) var(--grid-gap); 
   grid-template-areas: 
     "item-info launch-list item-image"
     "add-item launch-list item-image"
@@ -18,7 +18,7 @@
     display: grid; 
     grid-template-columns: 1fr 1.25fr; 
     grid-template-rows: 1fr 0.75fr auto; 
-    gap: 1.5em 1.5em; 
+    gap: var(--grid-gap) var(--grid-gap); 
     grid-template-areas: 
       "item-info item-image"
       "add-item launch-list"
