@@ -18,7 +18,7 @@ function CreateLaunch({ ...props }) {
           "gap": "0.25rem"
         }} className="flexRow">
           <RocketRegular/>
-          Let's Forge!
+          Let&apos;s Forge!
           <RocketRegular/>
         </OutlineButton>
       </Link>
