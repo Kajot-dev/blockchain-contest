@@ -71,6 +71,7 @@ main {
   width: inherit;
   height: inherit;
   overflow: hidden;
+  z-index: -1;
 }
 
 .fill-bg {
@@ -79,6 +80,7 @@ main {
   width: 100%;
   height: calc(100% - var(--navbar-height));
   overflow: hidden;
+  z-index: -1;
 }
 
 .side-margin {
