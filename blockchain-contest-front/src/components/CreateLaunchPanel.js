@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
-import { IpfsImage } from "react-ipfs-image";
 import { v4 as uuidv4 } from "uuid";
 import {
-  Form,
+  Panel,
   TextField,
   Button,
   OutlineButton,
   DatePicker,
-  Select,
+  CheckBox,
 } from "./Forms";
+import Table from "./Table";
+import { InfoBox } from "./Utils";
 import {
   TextAddFilled,
   NumberSymbolFilled,
@@ -18,14 +19,12 @@ import {
   DataBarVerticalAddFilled,
   ProtocolHandlerFilled,
   CalendarClockFilled,
-  ClockFilled,
   ImageRegular,
-  ImageProhibitedRegular
+  ImageProhibitedRegular,
 } from "@fluentui/react-icons";
 import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
 
-// TODO: if ipfs provided, update photo
 export function ItemInfo({
   setName,
   setAttribute,
@@ -35,7 +34,7 @@ export function ItemInfo({
   ...props
 }) {
   return (
-    <Form className={className} label="Item info" {...props}>
+    <Panel className={className} label="Item info" {...props}>
       <TextField
         type="text"
         id="name"
@@ -77,41 +76,82 @@ export function ItemInfo({
         className={stylesForm.basicInput}
         onChange={(e) => setIpfs(e.target.value)}
       />
-    </Form>
+    </Panel>
   );
 }
 
-const ipfsRegex = /^ipfs:\/\/[a-zA-Z0-9]+$/;
+const ipfsRegex = /^ipfs:\/\/[a-zA-Z0-9/.]+$/;
 
 // TODO: on click, open file explorer, get png, validate it, and update image
-export function ItemImage({ className = "", ipfs = null, imageData = null, ...props }) {
-
+export function ItemImage({ className = "", ipfs = null, ...props }) {
   let contents = null;
 
+  const [imageData, setImageData] = useState(null);
+
+  const fileInput = useRef(null);
+
+  function handleButtonClick() {
+    if (!fileInput.current) return;
+    fileInput.current.click();
+  }
+
+  function handleFileChange(e) {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImageData(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+
   if (ipfs && ipfs.trim() !== "" && ipfsRegex.test(ipfs.trim())) {
+    let rawIpfs = ipfs.trim().substring(7);
     contents = (
-      <IpfsImage hash={ipfs} width={250} height={250} />
+      <Image
+        src={`https://ipfs.io/ipfs/${rawIpfs}`}
+        alt="Image from url"
+        width={250}
+        height={250}
+      />
     );
   } else if (imageData) {
     contents = (
-      <Image src={imageData} width={250} height={250} />
+      <Image src={imageData} alt="Uploaded image" width={250} height={250} />
     );
   } else {
     contents = (
-      <ImageRegular style={{
-        opacity: 0.5,
-        width: "250px",
-        height: "250px"
-      }} />
+      <ImageRegular
+        style={{
+          opacity: 0.5,
+          width: "250px",
+          height: "250px",
+        }}
+      />
     );
   }
   return (
-    <Form className={className} label="Item image" style={{
-      justifyContent: "center"
-    }} {...props}>
+    <Panel
+      className={className}
+      label="Item image"
+      style={{
+        justifyContent: "center",
+      }}
+      {...props}
+    >
       {contents}
-      <Button onClick={() => console.log("click")} disabled={!!ipfs}>+</Button>
-    </Form>
+      <Button onClick={handleButtonClick} disabled={!!ipfs}>
+        +
+      </Button>
+      <input
+        type="file"
+        accept="image/png, image/jpeg"
+        max={1}
+        style={{ display: "none" }}
+        ref={fileInput}
+        onChange={handleFileChange}
+      />
+    </Panel>
   );
 }
 
@@ -151,7 +191,7 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
   }
 
   return (
-    <Form className={className} label="Add item">
+    <Panel className={className} label="Add item">
       <div
         className="flexRow"
         style={{
@@ -182,7 +222,7 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
           +
         </Button>
       </div>
-    </Form>
+    </Panel>
   );
 }
 
@@ -192,62 +232,45 @@ export function LaunchList({
   className = "",
 }) {
   return (
-    <Form className={className} label="Launch list">
-      <div
-        className={`flexCol ${styles.listContainer}`}
+    <Panel className={className} label="Launch list">
+      <Table
         style={{
           justifyContent: "stretch",
           maxHeight: "600px",
           overflowY: "auto",
         }}
-      >
-        <div className={styles.listTable}>
-          <div className={styles.listHeader}>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
-              Quantity
-            </div>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
-              Trait
-            </div>
-            <div className={`${styles.listHeaderCell} ${styles.listCell}`}>
-              Remove
-            </div>
-          </div>
-          {launches.map((launch) => (
-            <div className={styles.listRow} key={launch.id}>
-              <div className={styles.listCell}>{launch.quantity}</div>
-              <div className={styles.listCell}>{launch.trait}</div>
-              <div
-                className={styles.listCell}
-                onClick={() => onListRemove(launch)} // REMOVE
-              >
-                <OutlineButton className={stylesForm.minor}>
-                  DELETE
-                </OutlineButton>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      {launches.length === 0 && (
-        <div
-          className={stylesForm.subtle}
-          style={{
-            textAlign: "center",
-            width: "100%",
-          }}
-        >
-          No items added
-        </div>
-      )}
-    </Form>
+        headers={["Quantity", "Trait", "Remove"]}
+        data={launches.map((launch) => [
+          launch.quantity,
+          launch.trait,
+          <OutlineButton
+            key={launch.id}
+            onClick={() => onListRemove(launch)}
+            className={stylesForm.thin}
+          >
+            DELETE
+          </OutlineButton>,
+        ])}
+        noElements={"No items added"}
+        noElementsStyle={{
+          textAlign: "center",
+          width: "100%",
+        }}
+      />
+    </Panel>
   );
 }
 
 // TODO: on deploy click button, upload photo to ipfs, and integrate launch with smart contract
-export function DeployLaunch({ className = "", date, setDate }) {
+export function DeployLaunch({
+  className = "",
+  date,
+  setDate,
+  releaseNow = false,
+  setReleaseNow = () => {},
+}) {
   return (
-    <Form className={className} label="Deploy launch">
+    <Panel className={className} label="Deploy launch">
       <DatePicker
         showTimeInput
         desc="Launch Date"
@@ -256,18 +279,21 @@ export function DeployLaunch({ className = "", date, setDate }) {
         FluentIcon={CalendarClockFilled}
         selected={date}
         onChange={(date) => setDate(date)}
-        minDate={new Date()}
+        minDate={new Date(Date.now() + 1000 * 60 * 10)}
+        disabled={releaseNow}
       />
 
-      <Select
-        options={[{ value: "FCFS", label: "FCFS" }]}
-        FluentIcon={ClockFilled}
-        desc="Launch Type"
+      <CheckBox
+        label="Release as soon as possible"
+        onChange={(e) => setReleaseNow(e.target.checked)}
       />
+
+      <InfoBox text="The launch will be deployed on First Come First Serve basis. The first person to buy the NFT will get it." />
+
       <Button onClick={() => console.log("click")} className={stylesForm.major}>
         Deploy
       </Button>
-    </Form>
+    </Panel>
   );
 }
 
@@ -284,6 +310,7 @@ export default function CreateLaunchPanel({ className = "" }) {
 
   // LAUNCH CONFIG
   const [date, setDate] = useState(new Date());
+  const [releaseNow, setReleaseNow] = useState(false);
 
   // LIST FUNCTIONS
   function onListAdd(launch) {
@@ -324,6 +351,8 @@ export default function CreateLaunchPanel({ className = "" }) {
       <DeployLaunch
         date={date}
         setDate={setDate}
+        releaseNow={releaseNow}
+        setReleaseNow={setReleaseNow}
         className={`${styles.deployLaunch} ${stylesForm.form} ${stylesForm.thin}`}
       />
 

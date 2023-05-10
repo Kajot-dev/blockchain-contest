@@ -3,7 +3,7 @@ import Link from "next/link";
 import ConnectWallet from "./ConnectWallet";
 import Logo from "./Logo";
 import { useContext } from "react";
-import UserContext from "./UserContext";
+import UserContext from "../scripts/UserContext";
 import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
@@ -29,7 +29,7 @@ export default function NavBar({ displayConnectButton = true }) {
           Switch user
         </Link>
         <div className={styles.userText}>
-          User type: <span className={styles.userType}>{userType}</span>
+          User type: <span className={styles.userType}>{userType ? userType : "-"}</span>
         </div>
       </div>
       <div className={styles.navSection}>

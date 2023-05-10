@@ -1,6 +1,8 @@
 import ExternalDatePicker from "react-datepicker";
+import { useState } from "react";
 
 import styles from "@styles/Forms.module.css";
+import { CheckmarkFilled } from "@fluentui/react-icons";
 import { Unbounded } from "next/font/google";
 const unbounded = Unbounded({ subsets: ["latin"], weight: "400" });
 
@@ -30,6 +32,50 @@ export function TextField({
         />
       </div>
       <div className={styles.errorMsg}>{errorMsg}</div>
+    </div>
+  );
+}
+
+export function CheckBox({
+  className = "",
+  desc = null,
+  label = null,
+  checked = false,
+  ...props
+}) {
+  const [isChecked, setIsChecked] = useState(checked);
+
+  function _changeHandler(e) {
+    setIsChecked(!isChecked);
+    if (props.onChange) props.onChange(e);
+  }
+  return (
+    <div className="flexCol">
+      <div className={styles.formLabel}>
+        <label>{desc}</label>
+      </div>
+      <div className="flexRow">
+        <div
+          className="flexCol"
+          style={{
+            position: "relative",
+            width: "unset"
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={isChecked}
+            className={styles.basicCheckBox + " " + className}
+            {...props}
+            onChange={_changeHandler}
+          />
+          <div className={styles.checkWrapper}>
+            <CheckmarkFilled className={styles.checkIcon} />
+          </div>
+        </div>
+
+        <div>{label}</div>
+      </div>
     </div>
   );
 }
@@ -98,12 +144,12 @@ export function Select({
   );
 }
 
-export function Form({ className = "", label = null, children, ...props }) {
+export function Panel({ className = "", label = null, children, ...props }) {
   return (
     <div className={styles.form + " " + className} {...props}>
-      {label && <div className={`${styles.label} ${unbounded.className}`}>
-        {label}
-        </div>}
+      {label && (
+        <div className={`${styles.label} ${unbounded.className}`}>{label}</div>
+      )}
       {children}
     </div>
   );
