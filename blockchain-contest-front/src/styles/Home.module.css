@@ -1,0 +1,9 @@
+.home {
+  padding-top: 0;
+  justify-content: flex-start;
+}
+
+.heroSection {
+  padding-top: 200px;
+  align-items: flex-start;
+}
