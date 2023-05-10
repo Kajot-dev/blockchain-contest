@@ -6,4 +6,19 @@
 .heroSection {
   padding-top: 200px;
   align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.partners {
+  padding-top: 300px;
+}
+
+.partnersContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
 }

@@ -21,7 +21,7 @@ export default function NavBar({ transparent = false, displayConnectButton = tru
   };
 
   return (
-    <header className={`${styles.header} ${styles.transparent} ${roboto.className}`}>
+    <header className={`${styles.header} ${transparent ? styles.transparent : ""} ${roboto.className}`}>
       <div className={styles.logoSection}>
         <Logo />
         <Link href="about:blank" className={styles.navLink} onClick={handleSwitchUser}>
