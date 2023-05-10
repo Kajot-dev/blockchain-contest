@@ -13,8 +13,14 @@ error NoProceeds();
 error NotOwner();
 error NotApprovedForMarketplace();
 error PriceMustBeAboveZero();
+error AuctionHasNotStared();
 
 contract Marketplace is ReentrancyGuard {
+
+    uint private activationTime; 
+    address private nftAddress;
+    uint256 private tokenId;
+    uint256 private price;
 
     struct Listing {
         uint256 price;
@@ -102,17 +108,19 @@ contract Marketplace is ReentrancyGuard {
             revert NotApprovedForMarketplace();
         }
         
-        activationTime = block.timestamp + startTime; //20:16 + 60 = 21:16 -> bool->true
+        this.activationTime = block.timestamp + startTime; //20:16 + 60 = 21:16 -> bool->true
 
-        parsedTime = activationTime - block.timestamp; // 34:50
+        //parsedTime = activationTime - block.timestamp; // 34:50
 
-        if (parsedTime < 0) 
-            parsedTime = 0;
-        
-
-        s_listings[nftAddress][tokenId] = Listing(price, msg.sender);
-        emit ItemListed(msg.sender, nftAddress, tokenId, price);
+        if (hasTheListingTimePassed(activationTime) = true) {
+            s_listings[nftAddress][tokenId] = Listing(price, msg.sender);
+            emit ItemListed(msg.sender, nftAddress, tokenId, price);
+        } else {
+            revert AuctionHasNotStared();
+        }
     }
+
+
 
     /**
      * @notice Method for cancelling listing
@@ -197,5 +205,9 @@ contract Marketplace is ReentrancyGuard {
 
     function getProceeds(address seller) external view returns (uint256) {
         return s_proceeds[seller];
+    }
+
+    function hasTheListingTimePassed(uint256 activationTime) public view returns (bool) {
+        return (block.timestamp >= activationTime)
     }
 }
