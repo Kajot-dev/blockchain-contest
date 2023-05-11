@@ -1,11 +1,7 @@
-.logoLink {
-  height: inherit;
-  display: inline-block;
-  position: relative;
-}
 
-.logo {
-  /* logo animation */
+
+
+.image {
   animation: animateBg 10s ease-in-out infinite;
   background: linear-gradient(90deg, var(--text-color) 0%, var(--accent-color) 50%, var(--text-color) 100%);
   background-size: 200% 200%;

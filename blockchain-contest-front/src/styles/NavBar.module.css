@@ -77,6 +77,12 @@ a.navLink:hover:after {
   transform: scaleX(1);
 }
 
+.logoLink {
+  height: inherit;
+  display: inline-block;
+  position: relative;
+}
+
 .navBarButton {
   background-color: var(--accent-color);
   color: var(--bg-color);

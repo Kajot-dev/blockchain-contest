@@ -1,7 +1,7 @@
 import styles from "@styles/NavBar.module.css";
 import Link from "next/link";
 import ConnectWallet from "./ConnectWallet";
-import Logo from "./Logo";
+import ShiningImage from "./ShiningImage";
 import { useContext } from "react";
 import UserContext from "../scripts/UserContext";
 import { Roboto_Condensed } from "next/font/google";
@@ -23,7 +23,11 @@ export default function NavBar({ transparent = false, displayConnectButton = tru
   return (
     <header className={`${styles.header} ${transparent ? styles.transparent : ""} ${roboto.className}`}>
       <div className={styles.logoSection}>
-        <Logo />
+        <Link href="/" className={styles.logoLink} style={{
+            width: "100px"
+        }}>
+            <ShiningImage width="auto" height="100%" dataMask="/logo.svg" />
+        </Link>
         <Link href="about:blank" className={styles.navLink} onClick={handleSwitchUser}>
           Switch user
         </Link>
