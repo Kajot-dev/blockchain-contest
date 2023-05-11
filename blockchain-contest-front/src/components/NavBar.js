@@ -8,8 +8,7 @@ import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
 // button = "wallet" | "panel" | "profile" | "none"
-export default function NavBar({ displayConnectButton = true }) {
-
+export default function NavBar({ transparent = false, displayConnectButton = true }) {
   const { userType, setUserType } = useContext(UserContext);
 
   const handleSwitchUser = (e) => {
@@ -22,7 +21,7 @@ export default function NavBar({ displayConnectButton = true }) {
   };
 
   return (
-    <header className={`${styles.header} ${roboto.className}`}>
+    <header className={`${styles.header} ${transparent ? styles.transparent : ""} ${roboto.className}`}>
       <div className={styles.logoSection}>
         <Logo />
         <Link href="about:blank" className={styles.navLink} onClick={handleSwitchUser}>

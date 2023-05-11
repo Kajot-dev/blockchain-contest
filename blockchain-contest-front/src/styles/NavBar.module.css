@@ -15,6 +15,11 @@
   z-index: 10;
 }
 
+.transparent {
+  background-color: transparent;
+  box-shadow: none;
+}
+
 .header a {
   color: var(--text-color);
 }
@@ -82,9 +87,8 @@ a.navLink:hover:after {
   text-transform: inherit;
   box-sizing: margin-box;
   box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
-    border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
-    transform 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-radius 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
   display: flex;
   justify-content: center;
   align-items: center;

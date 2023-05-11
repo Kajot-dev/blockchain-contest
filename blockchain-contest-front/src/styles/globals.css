@@ -9,7 +9,7 @@
   --border-color: #000;
   --navbar-height: 60px;
   --screen-size: calc(100vh - var(--navbar-height));
-  --grid-gap: 1.5em
+  --grid-gap: 1.5em;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,7 +23,8 @@
   }
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -63,21 +64,23 @@ main {
 }
 
 .fill {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   display: block;
   width: inherit;
   height: inherit;
   overflow: hidden;
+  z-index: -1;
 }
 
 .fill-bg {
-  position: absolute;
+  position: fixed;
   display: block;
   width: 100%;
   height: calc(100% - var(--navbar-height));
   overflow: hidden;
+  z-index: -1;
 }
 
 .side-margin {
@@ -88,34 +91,10 @@ main {
   opacity: 0.3;
   display: block;
   filter: blur(20px);
-  background: radial-gradient(
-      circle at 78% 35%,
-      var(--accent-color) 0%,
-      var(--accent-color) 6%,
-      transparent 25%,
-      transparent
-    ),
-    radial-gradient(
-      circle at 17% 63%,
-      var(--accent-color) 0%,
-      var(--accent-color) 3%,
-      transparent 26%,
-      transparent
-    ),
-    radial-gradient(
-      circle at 42% 34%,
-      var(--accent-color) 0%,
-      var(--accent-color) 8%,
-      transparent 37%,
-      transparent
-    ),
-    radial-gradient(
-      circle at 64% 65%,
-      var(--accent-color) 0%,
-      var(--accent-color) 2%,
-      transparent 28%,
-      transparent
-    );
+  background: radial-gradient(circle at 78% 35%, var(--accent-color) 0%, var(--accent-color) 6%, transparent 25%, transparent),
+    radial-gradient(circle at 17% 63%, var(--accent-color) 0%, var(--accent-color) 3%, transparent 26%, transparent),
+    radial-gradient(circle at 42% 34%, var(--accent-color) 0%, var(--accent-color) 8%, transparent 37%, transparent),
+    radial-gradient(circle at 64% 65%, var(--accent-color) 0%, var(--accent-color) 2%, transparent 28%, transparent);
   animation: magic 60s ease infinite alternate;
 }
 
@@ -137,7 +116,6 @@ main {
   }
 }
 
-
 .flexRow {
   display: flex;
   flex-direction: row;
@@ -153,8 +131,6 @@ main {
   justify-content: center;
   width: stretch;
 }
-
-
 
 .stretch {
   align-items: stretch;
