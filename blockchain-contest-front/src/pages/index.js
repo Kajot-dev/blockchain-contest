@@ -3,24 +3,22 @@ import styles from "../styles/Home.module.css";
 import { Unbounded } from "next/font/google";
 import { Roboto_Condensed } from "next/font/google";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
 const roboto4 = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 const unbounded6 = Unbounded({ subsets: ["latin"], weight: "600" });
 
-export default function Home() {
-  const [partnerSvgs, setPartnerSvgs] = useState([]);
+export async function getStaticProps() {
+  const fs = require("fs");
+  const path = require("path");
+  const partnerSvgs = fs.readdirSync(path.join(process.cwd(), "public", "partners"));
+  return {
+    props: {
+      partnerSvgs,
+    },
+  };
+}
 
-  useEffect(() => {
-    async function fetchPartnerSvgs() {
-      const res = await fetch("/api/partnerSvgs");
-      const data = await res.json();
-      setPartnerSvgs(data.partnerSvgs);
-    }
-
-    fetchPartnerSvgs();
-  }, []);
-
+export default function Home({ partnerSvgs }) {
   return (
     <>
       <NavBar transparent={true} />
@@ -36,9 +34,11 @@ export default function Home() {
         </section>
         <section className={`${styles.partners}`}>
           <div className={`${styles.partnersContainer}`}>
-            {partnerSvgs.map((svgName) => (
-              <Image className={`${styles.logo}`} key={svgName} src={`/partners/${svgName}`} width={50} height={50} />
-            ))}
+            {partnerSvgs
+              ? partnerSvgs.map((svgName) => (
+                  <Image className={`${styles.logo}`} key={svgName} src={`/partners/${svgName}`} width={50} height={50} />
+                ))
+              : null}
           </div>
         </section>
       </main>
