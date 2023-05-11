@@ -15,7 +15,7 @@ function CreateLaunch({ ...props }) {
       <Link href="/launches/create">
         <OutlineButton
           style={{
-            "font-size": "1.5rem",
+            fontSize: "1.5rem",
             gap: "0.25rem",
           }}
           className="flexRow"
@@ -71,7 +71,7 @@ function BlockExplorer({ ...props }) {
       <Link href="https://etherscan.io/">
         <OutlineButton
           style={{
-            "font-size": "1.5rem",
+            fontSize: "1.5rem",
             gap: "0.25rem",
           }}
           className="flexRow"

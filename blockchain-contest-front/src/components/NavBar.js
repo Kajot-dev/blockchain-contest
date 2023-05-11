@@ -2,17 +2,41 @@ import styles from "@styles/NavBar.module.css";
 import Link from "next/link";
 import ConnectWallet from "./ConnectWallet";
 import ShiningImage from "./ShiningImage";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import UserContext from "../scripts/UserContext";
 import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
+const navbarTransparentThreshold = 40; // px
 
 // button = "wallet" | "panel" | "profile" | "none"
 export default function NavBar({
-  transparent = false,
+  overrideTransparent = null,
   displayConnectButton = true,
 }) {
   const { userType, setUserType } = useContext(UserContext);
+  const [isTransparent, setIsTransparent] = useState(
+    overrideTransparent ?? true
+  );
+
+  function handleScroll() {
+    if (window.scrollY > navbarTransparentThreshold) {
+      setIsTransparent(false);
+    } else {
+      setIsTransparent(true);
+    }
+  }
+
+  //add event listener for scroll to window
+  useEffect(() => {
+    if (overrideTransparent !== null) {
+      setIsTransparent(overrideTransparent);
+      return;
+    } else {
+      setIsTransparent(window.scrollY <= navbarTransparentThreshold);
+    }
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  });
 
   const handleSwitchUser = (e) => {
     e.preventDefault();
@@ -25,7 +49,7 @@ export default function NavBar({
 
   return (
     <header
-      className={`${styles.header} ${transparent ? styles.transparent : ""} ${
+      className={`${styles.header} ${isTransparent ? styles.transparent : ""} ${
         roboto.className
       }`}
     >

@@ -39,7 +39,7 @@ function LaunchesLink({ ...props }) {
       <Link href="/launches">
         <OutlineButton
           style={{
-            "font-size": "1.5rem",
+            fontSize: "1.5rem",
             gap: "0.25rem",
           }}
           className="flexRow"

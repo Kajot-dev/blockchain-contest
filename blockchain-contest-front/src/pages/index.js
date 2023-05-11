@@ -23,7 +23,7 @@ export async function getStaticProps() {
 export default function Home({ partnerSvgs }) {
   return (
     <>
-      <NavBar transparent={true} />
+      <NavBar />
       <main className={`${styles.home}`}>
         <div className="fill-bg">
           <div className="fill magic-bg" />
