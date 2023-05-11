@@ -11,16 +11,18 @@ import stylesForm from "@styles/Forms.module.css";
 function CreateLaunch({ ...props }) {
   return (
     <Panel label="Create Launch" {...props}>
-      <InfoBox text="Create a new launch to forge your NFTs. You can deploy multiple variants of the same product at once!"/>
+      <InfoBox text="Create a new launch to forge your NFTs. You can deploy multiple variants of the same product at once!" />
       <Link href="/launches/create">
-        
-        <OutlineButton style={{
-          "font-size": "1.5rem",
-          "gap": "0.25rem"
-        }} className="flexRow">
-          <RocketRegular/>
+        <OutlineButton
+          style={{
+            "font-size": "1.5rem",
+            gap: "0.25rem",
+          }}
+          className="flexRow"
+        >
+          <RocketRegular />
           Let&apos;s Forge!
-          <RocketRegular/>
+          <RocketRegular />
         </OutlineButton>
       </Link>
     </Panel>
@@ -41,10 +43,10 @@ function AccountInfo({ ...props }) {
 function RecentTransactions({ ...props }) {
   return (
     <Panel label="Recent transactions" {...props}>
-      <Table 
+      <Table
         headers={["Transaction", "Symbol", "Current Owner", "Price"]}
         noElements={"It looks like there are no transactions yet..."}
-        />
+      />
     </Panel>
   );
 }
@@ -52,9 +54,11 @@ function RecentTransactions({ ...props }) {
 function NftList({ ...props }) {
   return (
     <Panel label="NFT List" {...props}>
-      <Table 
+      <Table
         headers={["Symbol", "Name", "Number of items", "Status"]}
-        noElements={"It seems like you don't have any more NFTs to sell... But you can always create a new launch!"}
+        noElements={
+          "It seems like you don't have any more NFTs to sell... But you can always create a new launch!"
+        }
       />
     </Panel>
   );
@@ -63,19 +67,20 @@ function NftList({ ...props }) {
 function BlockExplorer({ ...props }) {
   return (
     <Panel label="Block Explorer" {...props}>
-      <InfoBox text="Go to block explorer to see the details about transactions!"/>
-        <Link href="https://etherscan.io/">
-          <OutlineButton style={{
+      <InfoBox text="Go to block explorer to see the details about transactions!" />
+      <Link href="https://etherscan.io/">
+        <OutlineButton
+          style={{
             "font-size": "1.5rem",
-            "gap": "0.25rem"
+            gap: "0.25rem",
           }}
-            className="flexRow"  
-          >
-            <SearchRegular/>
-            Go to Block Explorer
-            <SearchRegular/>
-          </OutlineButton>
-        </Link>
+          className="flexRow"
+        >
+          <SearchRegular />
+          Go to Block Explorer
+          <SearchRegular />
+        </OutlineButton>
+      </Link>
     </Panel>
   );
 }
@@ -83,9 +88,7 @@ function BlockExplorer({ ...props }) {
 export default function RetailerPanel({ className = "", ...props }) {
   return (
     <div className={`${styles.retailerPanel} ${className}`} {...props}>
-      <AccountInfo
-        className={`${styles.accountInfo} ${stylesForm.form}`}
-      />
+      <AccountInfo className={`${styles.accountInfo} ${stylesForm.form}`} />
       <NftList
         className={`${styles.nftList} ${stylesForm.form} ${stylesForm.thin}`}
       />

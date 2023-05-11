@@ -18,7 +18,10 @@ export default function App({ Component, pageProps }) {
   //this useEffect must be run before the one which updates local storage
   useEffect(() => {
     let localUserType = localStorage.getItem("userType");
-    if (localUserType && (localUserType === "retailer" || localUserType === "consumer")) {
+    if (
+      localUserType &&
+      (localUserType === "retailer" || localUserType === "consumer")
+    ) {
       setUserType(localUserType);
     } else {
       setUserType("consumer");

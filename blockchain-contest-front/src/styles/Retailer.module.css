@@ -1,12 +1,12 @@
 .retailerPanel {
-  display: grid; 
-  grid-template-columns: 1.5fr 1fr 1.5fr; 
-  grid-template-rows: 2fr 1fr 1fr; 
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.5fr;
+  grid-template-rows: 2fr 1fr 1fr;
   gap: var(--grid-gap) var(--grid-gap);
-  grid-template-areas: 
+  grid-template-areas:
     "nft-list nft-list account-info"
     "new-launch recent-transactions recent-transactions"
-    "block-explorer recent-transactions recent-transactions"; 
+    "block-explorer recent-transactions recent-transactions";
   padding: 1.5rem 1.5rem;
   width: 100%;
   min-height: var(--screen-size);

@@ -1,13 +1,13 @@
-.launchGrid {  
-  display: grid; 
-  grid-template-columns: 1fr 1.5fr 1fr; 
-  grid-template-rows: 1fr 0.5fr 1fr auto; 
-  gap: var(--grid-gap) var(--grid-gap); 
-  grid-template-areas: 
+.launchGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  grid-template-rows: 1fr 0.5fr 1fr auto;
+  gap: var(--grid-gap) var(--grid-gap);
+  grid-template-areas:
     "item-info launch-list item-image"
     "add-item launch-list item-image"
     ". launch-list deploy-launch"
-    ". launch-list ."; 
+    ". launch-list .";
   padding: 1.5rem 1.5rem;
   width: 100%;
   min-height: var(--screen-size);
@@ -15,31 +15,35 @@
 
 @media only screen and (max-width: 1024px) {
   .launchGrid {
-    display: grid; 
-    grid-template-columns: 1fr 1.25fr; 
-    grid-template-rows: 1fr 0.75fr auto; 
-    gap: var(--grid-gap) var(--grid-gap); 
-    grid-template-areas: 
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    grid-template-rows: 1fr 0.75fr auto;
+    gap: var(--grid-gap) var(--grid-gap);
+    grid-template-areas:
       "item-info item-image"
       "add-item launch-list"
-      "deploy-launch launch-list"; 
+      "deploy-launch launch-list";
   }
 }
 
-.itemInfo { grid-area: item-info; }
-
-.addItem { 
-  grid-area: add-item; 
+.itemInfo {
+  grid-area: item-info;
 }
 
-.itemImage { grid-area: item-image; }
+.addItem {
+  grid-area: add-item;
+}
 
-.launchList { 
+.itemImage {
+  grid-area: item-image;
+}
+
+.launchList {
   align-self: self-start;
-  grid-area: launch-list; 
+  grid-area: launch-list;
 }
 
-.deployLaunch { 
+.deployLaunch {
   align-self: self-start;
   grid-area: deploy-launch;
 }
@@ -50,7 +54,3 @@
   left: 50%;
   transform: translateX(-50%);
 }
-
-
-
-

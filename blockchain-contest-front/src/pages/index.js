@@ -10,7 +10,9 @@ const unbounded6 = Unbounded({ subsets: ["latin"], weight: "600" });
 export async function getStaticProps() {
   const fs = require("fs");
   const path = require("path");
-  const partnerSvgs = fs.readdirSync(path.join(process.cwd(), "public", "partners"));
+  const partnerSvgs = fs.readdirSync(
+    path.join(process.cwd(), "public", "partners")
+  );
   return {
     props: {
       partnerSvgs,
@@ -36,7 +38,13 @@ export default function Home({ partnerSvgs }) {
           <div className={`${styles.partnersContainer}`}>
             {partnerSvgs
               ? partnerSvgs.map((svgName) => (
-                  <Image className={`${styles.logo}`} key={svgName} src={`/partners/${svgName}`} width={50} height={50} />
+                  <Image
+                    className={`${styles.logo}`}
+                    key={svgName}
+                    src={`/partners/${svgName}`}
+                    width={50}
+                    height={50}
+                  />
                 ))
               : null}
           </div>

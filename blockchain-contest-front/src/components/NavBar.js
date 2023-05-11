@@ -8,7 +8,10 @@ import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
 // button = "wallet" | "panel" | "profile" | "none"
-export default function NavBar({ transparent = false, displayConnectButton = true }) {
+export default function NavBar({
+  transparent = false,
+  displayConnectButton = true,
+}) {
   const { userType, setUserType } = useContext(UserContext);
 
   const handleSwitchUser = (e) => {
@@ -21,18 +24,31 @@ export default function NavBar({ transparent = false, displayConnectButton = tru
   };
 
   return (
-    <header className={`${styles.header} ${transparent ? styles.transparent : ""} ${roboto.className}`}>
+    <header
+      className={`${styles.header} ${transparent ? styles.transparent : ""} ${
+        roboto.className
+      }`}
+    >
       <div className={styles.logoSection}>
-        <Link href="/" className={styles.logoLink} style={{
-            width: "100px"
-        }}>
-            <ShiningImage width="auto" height="100%" dataMask="/logo.svg" />
+        <Link
+          href="/"
+          className={styles.logoLink}
+          style={{
+            width: "100px",
+          }}
+        >
+          <ShiningImage width="auto" height="100%" dataMask="/logo.svg" />
         </Link>
-        <Link href="about:blank" className={styles.navLink} onClick={handleSwitchUser}>
+        <Link
+          href="about:blank"
+          className={styles.navLink}
+          onClick={handleSwitchUser}
+        >
           Switch user
         </Link>
         <div className={styles.userText}>
-          User type: <span className={styles.userType}>{userType ? userType : "-"}</span>
+          User type:{" "}
+          <span className={styles.userType}>{userType ? userType : "-"}</span>
         </div>
       </div>
       <div className={styles.navSection}>
