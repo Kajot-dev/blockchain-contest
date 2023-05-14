@@ -11,11 +11,12 @@
   },
   "dependencies": {
     "@fluentui/react-icons": "^2.0.200",
+    "connect-busboy": "^1.0.0",
     "ethers": "^6.3.0",
     "metamask-react": "^2.6.0",
     "next": "^13.3.4",
+    "next-connect": "^1.0.0",
     "nft.storage": "^7.0.3",
-    "raw-body": "^2.5.2",
     "react": "^18.2.0",
     "react-datepicker": "^4.11.0",
     "react-dom": "^18.2.0",
