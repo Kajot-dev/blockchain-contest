@@ -5,8 +5,8 @@ export default function Connect() {
   return (
     <>
       <NavBar displayConnectButton={false} />
-      <main className="">
-        <div className="fill">
+      <main>
+        <div className="fill-bg">
           <div className="fill magic-bg" />
         </div>
         <ConnectForm />

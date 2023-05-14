@@ -1,26 +1,34 @@
-import styles from "@styles/Forms.module.css";
 import { useMetaMask } from "metamask-react";
-import { useState } from "react";
-import { Roboto_Condensed } from "next/font/google";
+import { useState, useContext } from "react";
 import { PulseLoader } from "react-spinners";
 import { InfoBox, ErrorBox } from "./Utils";
-import { Form } from "./Forms";
+import { Panel } from "./Forms";
+import UserContext from "@/scripts/UserContext";
 import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import Link from "next/link";
+
+import styles from "@styles/Forms.module.css";
+import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
 export default function ConnectForm() {
-
   return (
-    <Form className={`${roboto.className} ${styles.formBox}`} label="Connect your wallet">
+    <Panel
+      className={`${roboto.className} ${styles.formBox}`}
+      label="Connect your wallet"
+    >
       <FormContents />
-    </Form>
-  )
+    </Panel>
+  );
 }
 
-function FormContents() {
+export function FormContents({
+  displayExploreButton = true,
+  displayConnectedGreetings = true,
+}) {
   const [errorMsg, setErrorMsg] = useState("");
   const { status, account, chainId, connect, switchChain } = useMetaMask();
+  const { userType } = useContext(UserContext);
 
   const handleRefreshClick = (e) => {
     e.preventDefault();
@@ -105,13 +113,28 @@ function FormContents() {
       } else {
         return (
           <>
-            <div className={styles.subTitle}>You&apos;re all set!</div>
+            {displayConnectedGreetings && (
+              <div className={styles.subTitle}>You&apos;re all set!</div>
+            )}
             <JazzIcon diameter={75} seed={jsNumberForAddress(account)} />
             <div className={styles.subtle}>Welcome</div>
             <div className={styles.account}>{account}</div>
-            <Link href="/">
-              <button className={styles.formBtn}>Explore</button>
-            </Link>
+            <div>
+              User type:{" "}
+              <span
+                className={styles.account}
+                style={{
+                  textTransform: "capitalize",
+                }}
+              >
+                {userType}
+              </span>
+            </div>
+            {displayExploreButton && (
+              <Link href="/">
+                <button className={styles.formBtn}>Explore</button>
+              </Link>
+            )}
           </>
         );
       }

@@ -23,3 +23,8 @@
   background-color: rgb(255, 0, 0, 0.2);
   border-radius: 0.5rem;
 }
+
+.icon {
+  min-height: 1.2rem;
+  min-width: 1.2rem;
+}
