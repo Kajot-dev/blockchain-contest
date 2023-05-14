@@ -1,4 +1,5 @@
 const { network } = require("hardhat")
+//const { developmentChains } = require("../helper-hardhat-config.js")
 
 module.exports = async function ({ getNamedAccounts, deployments }) {
 
@@ -7,7 +8,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
 
     log("----------------------------")
     const args = []
-    const Marketplace = await deploy("Marketplace", {
+    const StoreAccessControl = await deploy("StoreAccessControl", {
         from: admin,
         args: args,
         log: true,
@@ -20,4 +21,4 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
 
 }
 
-module.exports.tags = ["all", "marketplace"]
+module.exports.tags = ["all", "storeac"]

@@ -1,4 +1,6 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("@nomiclabs/hardhat-ethers");
+require("hardhat-deploy")
 require("./tasks/block-number")
 require('dotenv').config()
 
@@ -8,17 +10,25 @@ module.exports = {
   solidity: "0.8.18",
 
   namedAccounts: {
-    deployingStoreOwner: {
+    admin: {
       default: 0,
       localhost: 0,
     },
-    diffStoreOwner: {
+    randomRetailer: {
       default: 1,
       localhost: 1,
     },
     normalUser: {
       default: 2,
       localhost: 2,
+    },
+    nikeRetailer: {
+      default: 11,
+      localhost: 11,
+    },
+    rolexRetailer: {
+      default: 12,
+      localhost: 12,
     },
   },
 
