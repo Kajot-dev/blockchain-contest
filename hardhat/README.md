@@ -1,13 +1,25 @@
-# Sample Hardhat Project
+# 2Forge Backend Section
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+## Komendy
 
-Try running some of the following tasks:
+Po zainstalowaniu modułów, należy wykonać następujące komendy startowe:
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
 ```
+yarn hardhat node
+```
+Pozostaw terminal otwarty. Na osobnym terminalu wpisz, aby uruchomić pierwszy etap scenariusza:
+
+```
+yarn run-base
+```
+W tym momencie mamy do dyspozycji dwa konta pełniące role sklepów, 4 wybite NFT spośród których 2 są wystawione na sprzedaż. 
+
+Teraz pozostaje dokończyć scenariusz jedną z opcji:
+```
+yarn mp-cancel //Usuwa ofertę
+yarn mp-buy //Konto zwykłego użytkownika nabywa NFT za eter
+yarn mp-update //Cena i czas stanu "zamrożenia" oferty ulegają zmianie.
+
+```
+## Uwagi
+W przypadku awarii, należy zatrzymać proces `node`, uruchomić go ponownie i powtórzyć `run-base`.
