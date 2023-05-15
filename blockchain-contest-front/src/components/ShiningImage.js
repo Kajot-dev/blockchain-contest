@@ -2,7 +2,6 @@ import styles from "@styles/ShiningImage.module.css";
 import Link from "next/link";
 
 export default function ShiningImage({ width, height, dataMask }) {
-  console.log(`url(${dataMask})`);
   return (
     <div
       className={styles.image}

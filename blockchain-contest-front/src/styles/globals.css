@@ -1,12 +1,13 @@
 :root {
   --accent-color: #00b981;
+  --accent-color-semi-transparent: #00b98184;
   --text-color: #000000;
   --bg-color: #fff;
   --bg-color-semi-transparent: rgba(255, 255, 255, 0.6);
   --bg-inv-semi-transparent: rgba(0, 0, 0, 0.2);
   --shadow-color: 0, 0, 0;
   --shadow-alpha: 0.6;
-  --border-color: #000;
+  --border-color: #2d2d2d;
   --navbar-height: 60px;
   --screen-size: calc(100vh - var(--navbar-height));
   --grid-gap: 1.5em;
@@ -18,7 +19,7 @@
     --bg-color: #000;
     --bg-color-semi-transparent: rgba(0, 0, 0, 0.6);
     --bg-inv-semi-transparent: rgba(255, 255, 255, 0.2);
-    --border-color: #fff;
+    --border-color: #cccccc;
   }
 }
 

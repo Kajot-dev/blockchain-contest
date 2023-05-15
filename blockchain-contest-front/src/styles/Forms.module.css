@@ -6,7 +6,7 @@
   justify-content: flex-start;
   position: relative;
   background-color: var(--bg-color-semi-transparent);
-  border: 0.75px solid;
+  border: 1.25px solid;
   border-color: var(--border-color);
   border-radius: 1rem;
   padding: 2rem 2rem;
@@ -56,7 +56,6 @@
   font-family: inherit;
   text-transform: inherit;
   box-sizing: margin-box;
-  box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
     border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
     transform 0.2s ease-in-out, filter 0.2s ease-in-out,
@@ -91,15 +90,13 @@
   padding: 0.5rem 0.5rem;
   box-sizing: margin-box;
   color: var(--text-color);
-  box-shadow: 2px 2px 8px rgba(var(--shadow-color), 0);
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
-    border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
+    border-radius 0.2s ease-in-out,
     transform 0.2s ease-in-out, border-color 0.2s ease-in-out,
     opacity 0.2s ease-in-out;
 }
 
 .outlineBtn:hover {
-  box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
   border-color: var(--accent-color);
   color: var(--accent-color);
   transform: scale(1.05);

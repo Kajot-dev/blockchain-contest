@@ -14,11 +14,30 @@ export default function Home() {
           <div className={`fill ${styles.gradientBg}`} />
         </div>
         <div className={`${styles.zenText} ${unbounded4.className}`}>
-          A <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>Product</span>
-          {" for "} <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>Target Customer</span>
-          {" that "} <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>Key Value</span>
-          {" enabling "} <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>Primary Benefits</span>
-          {" unlike "} <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>Alternatives</span>
+          <div>
+            A <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>Platform with NFTs Launches</span>
+          </div>
+          <div>
+            {" for "}
+          </div>
+          <div>
+            <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>Unique Physical Collectibles Enthusiasts, Traders and Investors</span>
+          </div>
+          <div>
+            {" that "}
+          </div>
+          <div>
+            <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>Undertakes Partnerships with Stores and Retailers assuring Authenticity</span>
+          </div>
+          <div>
+            {" enabling, "}
+          </div>
+          <div>
+            <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>Pre-release trading, and providing broader B2B Services</span>
+          </div>
+          <div>
+            {" unlike "} <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>RTFKT</span>
+          </div>
         </div>
       </main>
     </>
