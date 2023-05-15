@@ -1,6 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
- 
+
 contract StoreAccessControl {
  
     address public admin;
@@ -65,5 +65,9 @@ contract StoreAccessControl {
     function numberOfPartneredStores() public view returns (uint8) {
         return (indexStoreEnumerator);
     }
- 
+
+    function getStoreByIndex(uint256 index) public view returns(Store memory specifiedStore) {
+        return stores[index];
+    }
+
 }

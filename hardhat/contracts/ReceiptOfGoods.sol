@@ -1,18 +1,25 @@
 //SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.0;
-import "./CustomIPFSNFT.sol";
-import "./Marketplace.sol";
- 
 
-abstract contract ReceiptOfGoods is Marketplace, CustomIPFSNFT {
+import "./CustomIPFSNFT.sol";
+import "./StoreAccessControl.sol";
+
+abstract contract ReceiptOfGoods is CustomIPFSNFT, StoreAccessControl {
 
     address internal customer;
     mapping(uint256=>bool) internal tokensBurned;
 
     event nftBurned(address indexed _from, address indexed nftAddress, uint256 indexed tokenId, uint256 date);
 
-    function passNFTToBurn (address nftAddress, uint256 tokenId) external notListed(nftAddress, tokenId) isOwner(nftAddress, tokenId, customer) 
+    error NotACustomer();
+
+    modifier isCustomer() {
+        if(isAddressPrivileged(msg.sender))
+            revert NotACustomer();
+        _;
+    }
+
+    function passNFTToBurn (address nftAddress, uint256 tokenId) external isCustomer
     {
         _burn(tokenId);
         tokensBurned[tokenId] = true;

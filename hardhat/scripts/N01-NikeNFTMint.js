@@ -1,51 +1,30 @@
-const { network, ethers } = require("hardhat")
-require('dotenv').config();
+const { ethers, getNamedAccounts } = require("hardhat")
+require('dotenv').config()
 
-let PROTOCOL_PREFIX = "ipfs://"
-
-let jsonCIDs = [
-    process.env.NIKE_CID1,
-    process.env.NIKE_CID2,
-    process.env.NIKE_CID3,
-    process.env.NIKE_CID4,
-]
-
-const tokenInfo = {
-    name: "Nike Air Collection",
-    symbol: "NC",
-}
+const TOTAL_NFTS = 4
 
 async function main() {
 
-    let tokenUris = []
-
-    for (i in jsonCIDs) {
-        iteratedFullURI = PROTOCOL_PREFIX + jsonCIDs[i]
-        tokenUris.push(iteratedFullURI)
-    }
-
     console.log("Assigning user roles...")
 
-    let deployerNike = await ethers.getSigner(process.env.NIKE_SHOP_PUB)
-    let storeOwnerRolex = await ethers.getSigner(process.env.ROLEX_SHOP_PUB)
-    
-    console.log(`Owner address is: ${deployerNike.address}`)
+    const { nikeRetailer } = await getNamedAccounts()
+    const deployer = await ethers.getSigner(nikeRetailer)
 
-    console.log("Deploying contract...")
-
-    const CustomIPFSNFTFactory = await ethers.getContractFactory("CustomIPFSNFT")
-    console.log("Contract is being deployed..")
-    const CustomIPFSNFT = await (await CustomIPFSNFTFactory.deploy(tokenInfo.name, tokenInfo.symbol, tokenUris)).connect(deployerNike)
-    await CustomIPFSNFT.deployed()
-    console.log(`Contract was deployed at: ${CustomIPFSNFT.address}`)
+    const CustomIPFSNFT = await ethers.getContract("CustomIPFSNFT")
+    const Marketplace = await ethers.getContract("Marketplace")
 
     console.log("Token URIs uploaded! They are:")
 
-    for (i in tokenUris) {
-        const NFTMinter = await CustomIPFSNFT.mintRequestedNFT()
+    for (let i = 0; i < TOTAL_NFTS; i++) {
+
+        const NFTMinter = await CustomIPFSNFT.connect(deployer).mintRequestedNFT()
         await NFTMinter.wait(1)
+
         const tokenUriByIndex = await CustomIPFSNFT.getTokenUri(i)
         console.log(`URI of token #${i} is ${tokenUriByIndex}`)
+
+        const approvalTx = await CustomIPFSNFT.connect(deployer).approve(Marketplace.address, i)
+        console.log(`Token #${i} got approved!`)
     }
 
 }
