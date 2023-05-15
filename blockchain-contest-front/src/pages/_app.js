@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Minted</title>
+        <title>2Forge</title>
         <meta name="description" content="You best site for minting nfts!" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
