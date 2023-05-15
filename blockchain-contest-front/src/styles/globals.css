@@ -37,6 +37,10 @@ body {
   color: var(--text-color);
 }
 
+::selection {
+  background-color: var(--accent-color-semi-transparent);
+}
+
 * {
   box-sizing: border-box;
 }

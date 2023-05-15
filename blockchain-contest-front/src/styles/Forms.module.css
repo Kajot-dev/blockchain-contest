@@ -125,25 +125,14 @@
   margin-top: 0.2rem;
 }
 
-.label {
-  font-size: 1.2rem;
-  color: var(--accent-color);
-  font-weight: bold;
-  position: absolute;
-  align-self: center;
-  top: -0.77em;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
-    1px 1px 0 #000;
-}
-
 .form .label {
   position: absolute;
   align-self: center;
   color: var(--bg-color);
   top: -0.75em;
-  text-shadow: -0.5px -0.5px 0 var(--border-color),
-    0.5px -0.5px 0 var(--border-color), -0.5px 0.5px 0 var(--border-color),
-    0.5px 0.5px 0 var(--border-color), 0 0 8px transparent;
+  text-shadow: -1px -1px 0 var(--border-color),
+    1px -1px 0 var(--border-color), -1px 1px 0 var(--border-color),
+    1px 1px 0 var(--border-color), 0 0 8px transparent;
   transition: text-shadow 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
