@@ -3,6 +3,7 @@ import styles from "../styles/Home.module.css";
 import { Unbounded } from "next/font/google";
 import { Roboto_Condensed } from "next/font/google";
 import Image from "next/image";
+import ShiningImage from "@/components/ShiningImage";
 
 const roboto4 = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 const unbounded6 = Unbounded({ subsets: ["latin"], weight: "600" });
@@ -38,12 +39,11 @@ export default function Home({ partnerSvgs }) {
           <div className={`${styles.partnersContainer}`}>
             {partnerSvgs
               ? partnerSvgs.map((svgName) => (
-                  <Image
-                    className={`${styles.logo}`}
+                  <ShiningImage
                     key={svgName}
-                    src={`/partners/${svgName}`}
-                    width={50}
-                    height={50}
+                    dataMask={`/partners/${svgName}`}
+                    width="50px"
+                    height="50px"
                   />
                 ))
               : null}

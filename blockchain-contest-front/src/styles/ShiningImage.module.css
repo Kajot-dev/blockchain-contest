@@ -1,8 +1,12 @@
 .image {
   animation: animateBg 10s ease-in-out infinite;
-  background: linear-gradient(90deg, var(--text-color) 0%, var(--accent-color) 50%, var(--text-color) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--text-color) 0%,
+    var(--accent-color) 50%,
+    var(--text-color) 100%
+  );
   background-size: 200% 200%;
-  mask-image: url("/2forge.svg");
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
