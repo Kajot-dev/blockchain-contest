@@ -91,9 +91,8 @@
   box-sizing: margin-box;
   color: var(--text-color);
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
-    border-radius 0.2s ease-in-out,
-    transform 0.2s ease-in-out, border-color 0.2s ease-in-out,
-    opacity 0.2s ease-in-out;
+    border-radius 0.2s ease-in-out, transform 0.2s ease-in-out,
+    border-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
 }
 
 .outlineBtn:hover {
@@ -130,9 +129,9 @@
   align-self: center;
   color: var(--bg-color);
   top: -0.75em;
-  text-shadow: -1px -1px 0 var(--border-color),
-    1px -1px 0 var(--border-color), -1px 1px 0 var(--border-color),
-    1px 1px 0 var(--border-color), 0 0 8px transparent;
+  text-shadow: -1px -1px 0 var(--border-color), 1px -1px 0 var(--border-color),
+    -1px 1px 0 var(--border-color), 1px 1px 0 var(--border-color),
+    0 0 8px transparent;
   transition: text-shadow 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
