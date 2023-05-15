@@ -18,7 +18,7 @@ export default function Panel() {
           <div className="fill magic-bg" />
         </div>
         <div>
-            <PulseLoader color="var(--accent-color)" size={50} />
+          <PulseLoader color="var(--accent-color)" size={50} />
         </div>
       </main>
     </>

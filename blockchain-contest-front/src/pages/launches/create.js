@@ -1,5 +1,5 @@
-import CreateLaunchPanel from "@/components/CreateLaunchPanel"
-import NavBar from "@/components/NavBar"
+import CreateLaunchPanel from "@/components/CreateLaunchPanel";
+import NavBar from "@/components/NavBar";
 import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
@@ -14,5 +14,5 @@ export default function CreateLaunch() {
         <CreateLaunchPanel className={roboto.className} />
       </main>
     </>
-  )
+  );
 }

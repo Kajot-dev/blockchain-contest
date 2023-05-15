@@ -9,7 +9,7 @@
   --border-color: #000;
   --navbar-height: 60px;
   --screen-size: calc(100vh - var(--navbar-height));
-  --grid-gap: 1.5em
+  --grid-gap: 1.5em;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,7 +23,8 @@
   }
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -63,21 +64,23 @@ main {
 }
 
 .fill {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   display: block;
   width: inherit;
   height: inherit;
   overflow: hidden;
+  z-index: -1;
 }
 
 .fill-bg {
-  position: absolute;
+  position: fixed;
   display: block;
   width: 100%;
   height: calc(100% - var(--navbar-height));
   overflow: hidden;
+  z-index: -1;
 }
 
 .side-margin {
@@ -137,7 +140,6 @@ main {
   }
 }
 
-
 .flexRow {
   display: flex;
   flex-direction: row;
@@ -153,8 +155,6 @@ main {
   justify-content: center;
   width: stretch;
 }
-
-
 
 .stretch {
   align-items: stretch;

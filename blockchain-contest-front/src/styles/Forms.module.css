@@ -59,7 +59,8 @@
   box-shadow: 2px 2px 8px rgba(var(--shadow-color), var(--shadow-alpha));
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
     border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
-    transform 0.2s ease-in-out, filter 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    transform 0.2s ease-in-out, filter 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
 }
 
 .formBtn:hover {
@@ -93,7 +94,8 @@
   box-shadow: 2px 2px 8px rgba(var(--shadow-color), 0);
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
     border-radius 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
-    transform 0.2s ease-in-out, border-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    transform 0.2s ease-in-out, border-color 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
 }
 
 .outlineBtn:hover {
@@ -115,7 +117,8 @@
   font-size: 80%;
 }
 
-.formBtn[disabled], .outlineBtn[disabled] {
+.formBtn[disabled],
+.outlineBtn[disabled] {
   pointer-events: none;
   opacity: 0.5;
 }
@@ -141,15 +144,17 @@
   align-self: center;
   color: var(--bg-color);
   top: -0.75em;
-  text-shadow: -0.5px -0.5px 0 var(--border-color), 0.5px -0.5px 0 var(--border-color), -0.5px 0.5px 0 var(--border-color),
+  text-shadow: -0.5px -0.5px 0 var(--border-color),
+    0.5px -0.5px 0 var(--border-color), -0.5px 0.5px 0 var(--border-color),
     0.5px 0.5px 0 var(--border-color), 0 0 8px transparent;
   transition: text-shadow 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .form:focus-within .label {
   color: var(--accent-color);
-  text-shadow: 0 0 0 var(--accent-color), 0 0 0 var(--accent-color), 0 0 0 var(--accent-color),
-    0 0 0 var(--accent-color), 0 0 8px var(--accent-color);
+  text-shadow: 0 0 0 var(--accent-color), 0 0 0 var(--accent-color),
+    0 0 0 var(--accent-color), 0 0 0 var(--accent-color),
+    0 0 8px var(--accent-color);
 }
 
 .formLabel {
@@ -261,7 +266,8 @@
   border-radius: 0.2rem;
   background-color: transparent;
   filter: brightness(1);
-  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, filter 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
+    filter 0.2s ease-in-out;
 }
 
 .basicCheckBox + .checkWrapper {
@@ -286,7 +292,7 @@
   pointer-events: none;
 }
 
-.basicCheckBox:checked + .checkWrapper  .checkIcon {
+.basicCheckBox:checked + .checkWrapper .checkIcon {
   opacity: 1;
 }
 

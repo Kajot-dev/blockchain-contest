@@ -59,7 +59,7 @@ export function CheckBox({
           className="flexCol"
           style={{
             position: "relative",
-            width: "unset"
+            width: "unset",
           }}
         >
           <input

@@ -57,13 +57,13 @@
 }
 
 input.react-datepicker-time__input {
-    border: 1.5px solid var(--accent-color);
-    padding: 0.2rem 0.5rem;
-    color-scheme: light;
+  border: 1.5px solid var(--accent-color);
+  padding: 0.2rem 0.5rem;
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
-    input.react-datepicker-time__input {
-        color-scheme: dark;
-    }
+  input.react-datepicker-time__input {
+    color-scheme: dark;
+  }
 }
