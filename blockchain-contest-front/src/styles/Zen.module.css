@@ -1,56 +1,62 @@
 .gradientBg {
-    background: linear-gradient(
-        transparent 0%,
-        transparent 15%,
-        var(--accent-color-semi-transparent) 50%,
-        transparent 85%,
-        transparent 100%
-    );
-    opacity: 0.7;
-    
+  background: linear-gradient(
+    transparent 0%,
+    transparent 15%,
+    var(--accent-color-semi-transparent) 50%,
+    transparent 85%,
+    transparent 100%
+  );
+  opacity: 0.7;
 }
 
 @media (prefers-color-scheme: dark) {
-    .gradientBg {
-        background: linear-gradient(
-            transparent 0%,
-            transparent 15%,
-            var(--accent-color-semi-transparent) 50%,
-            transparent 85%,
-            transparent 100%
-        );
-        opacity: 0.5;
-        
-    }
+  .gradientBg {
+    background: linear-gradient(
+      transparent 0%,
+      transparent 15%,
+      var(--accent-color-semi-transparent) 50%,
+      transparent 85%,
+      transparent 100%
+    );
+    opacity: 0.5;
+  }
 }
 
 .zenText {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4rem;
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: var(--text-color);
-    text-align: center;
-    margin: 0;
-    padding-top: calc(50vh - 1em - var(--navbar-height));
-    padding-bottom: calc(50vh - 1em);
-    padding-left: 4rem;
-    padding-right: 4rem;
-    user-select: none;
-    
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  text-align: center;
+  margin: 0;
+  padding-top: calc(50vh - 1em - var(--navbar-height));
+  padding-bottom: calc(50vh - 1em);
+  padding-left: 4rem;
+  padding-right: 4rem;
+  user-select: none;
+  scroll-snap-type: y mandatory;
 }
 
 .zenEmphasize {
-    display: inline-block;
-    margin-block-start: 0.5rem;
-    margin-block-end: 0.5rem;
-    font-size: 3rem;
-    mix-blend-mode: overlay;
-    color: var(--text-color);
-    
-    filter: contrast(1.2);
-    transition: color 0.2s ease-in-out;
-    text-shadow: 4px 4px 10px rgba(0,0,0, var(--shadow-alpha));
+  display: inline-block;
+  margin-block-start: 0.5rem;
+  margin-block-end: 0.5rem;
+  font-size: 3rem;
+  mix-blend-mode: overlay;
+  color: var(--text-color);
+  filter: contrast(1.2);
+  transition: color 0.2s ease-in-out;
+  text-shadow: 4px 4px 10px rgba(0, 0, 0, var(--shadow-alpha));
+}
+
+.scrollType {
+  scroll-snap-type: y mandatory;
+}
+
+.scrollStop {
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
 }
