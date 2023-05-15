@@ -1,87 +1,90 @@
 .listContainer::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
+  width: 6px;
+  height: 6px;
+}
+.listContainer::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+}
+.listContainer::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.listContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+.listContainer::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.listContainer {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.1);
+}
+
+/* For Dark Theme */
+@media (prefers-color-scheme: dark) {
   .listContainer::-webkit-scrollbar-track {
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.1);
   }
   .listContainer::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.2);
   }
   .listContainer::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.4);
   }
   .listContainer::-webkit-scrollbar-thumb:active {
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(255, 255, 255, 0.9);
   }
-  
+
+  .listContainer {
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.1);
+  }
+
   .listContainer {
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.1);
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.1);
   }
-  
-  /* For Dark Theme */
-  @media (prefers-color-scheme: dark) {
-    .listContainer::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.1);
-    }
-    .listContainer::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-    }
-    .listContainer::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.4);
-    }
-    .listContainer::-webkit-scrollbar-thumb:active {
-      background: rgba(255, 255, 255, 0.9);
-    }
-  
-    .listContainer {
-      scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.1);
-    }
-  
-    .listContainer {
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.1);
-    }
-  }
-  
-  .listTable {
-    display: table;
-    color: inherit;
-    width: stretch;
-    overflow: auto;
-  }
-  
-  .listHeader {
-    display: table-header-group;
-  }
-  
-  .listRow {
-    display: table-row;
-  }
-  
-  .listRow:nth-child(odd), .listHeader:nth-child(odd) {
-    background-color: var(--bg-inv-semi-transparent);
-  }
-  
-  .listHeaderCell {
-    font-weight: bold;
-    color: var(--accent-color);
-  }
-  
-  .listCell {
-    display: table-cell;
-    padding: 0.5rem 0.5rem;
-  }
-  
-  .listRow .listCell:first-child, .listHeaderCell:first-child {
-    border-bottom-left-radius: 0.5rem;
-    border-top-left-radius: 0.5rem;
-  }
-  
-  .listRow .listCell:last-child, .listHeaderCell:last-child {
-    border-bottom-right-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
-  }
+}
+
+.listTable {
+  display: table;
+  color: inherit;
+  width: stretch;
+  overflow: auto;
+}
+
+.listHeader {
+  display: table-header-group;
+}
+
+.listRow {
+  display: table-row;
+}
+
+.listRow:nth-child(odd),
+.listHeader:nth-child(odd) {
+  background-color: var(--bg-inv-semi-transparent);
+}
+
+.listHeaderCell {
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.listCell {
+  display: table-cell;
+  padding: 0.5rem 0.5rem;
+}
+
+.listRow .listCell:first-child,
+.listHeaderCell:first-child {
+  border-bottom-left-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+}
+
+.listRow .listCell:last-child,
+.listHeaderCell:last-child {
+  border-bottom-right-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}

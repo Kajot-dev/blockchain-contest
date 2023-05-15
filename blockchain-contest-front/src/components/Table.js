@@ -34,12 +34,14 @@ export default function Table({
           ))}
         </div>
       </div>
-      {data.length === 0 && <div
-            className={stylesForm.subtle + " " + noElementsClassName}
-            style={noElementsStyle}
-          >
-            {noElements}
-          </div>}
+      {data.length === 0 && (
+        <div
+          className={stylesForm.subtle + " " + noElementsClassName}
+          style={noElementsStyle}
+        >
+          {noElements}
+        </div>
+      )}
     </>
   );
 }

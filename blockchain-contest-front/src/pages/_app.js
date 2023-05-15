@@ -18,7 +18,10 @@ export default function App({ Component, pageProps }) {
   //this useEffect must be run before the one which updates local storage
   useEffect(() => {
     let localUserType = localStorage.getItem("userType");
-    if (localUserType && (localUserType === "retailer" || localUserType === "consumer")) {
+    if (
+      localUserType &&
+      (localUserType === "retailer" || localUserType === "consumer")
+    ) {
       setUserType(localUserType);
     } else {
       setUserType("consumer");
@@ -32,7 +35,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Minted</title>
+        <title>2Forge</title>
         <meta name="description" content="You best site for minting nfts!" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
