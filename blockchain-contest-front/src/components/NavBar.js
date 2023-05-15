@@ -9,9 +9,14 @@ const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 const navbarTransparentThreshold = 40; // px
 
 // button = "wallet" | "panel" | "profile" | "none"
-export default function NavBar({ overrideTransparent = null, displayConnectButton = true }) {
+export default function NavBar({
+  overrideTransparent = null,
+  displayConnectButton = true,
+}) {
   const { userType, setUserType } = useContext(UserContext);
-  const [isTransparent, setIsTransparent] = useState(overrideTransparent ?? true);
+  const [isTransparent, setIsTransparent] = useState(
+    overrideTransparent ?? true
+  );
 
   function handleScroll() {
     if (window.scrollY > navbarTransparentThreshold) {
@@ -31,7 +36,7 @@ export default function NavBar({ overrideTransparent = null, displayConnectButto
     }
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  });
+  }, [overrideTransparent]);
 
   const handleSwitchUser = (e) => {
     e.preventDefault();
@@ -43,7 +48,11 @@ export default function NavBar({ overrideTransparent = null, displayConnectButto
   };
 
   return (
-    <header className={`${styles.header} ${isTransparent ? styles.transparent : ""} ${roboto.className}`}>
+    <header
+      className={`${styles.header} ${isTransparent ? styles.transparent : ""} ${
+        roboto.className
+      }`}
+    >
       <div className={styles.logoSection}>
         <Link
           href="/"
@@ -54,11 +63,16 @@ export default function NavBar({ overrideTransparent = null, displayConnectButto
         >
           <ShiningImage width="auto" height="100%" dataMask="/2forge.svg" />
         </Link>
-        <Link href="about:blank" className={styles.navLink} onClick={handleSwitchUser}>
+        <Link
+          href="about:blank"
+          className={styles.navLink}
+          onClick={handleSwitchUser}
+        >
           Switch user
         </Link>
         <div className={styles.userText}>
-          User type: <span className={styles.userType}>{userType ? userType : "-"}</span>
+          User type:{" "}
+          <span className={styles.userType}>{userType ? userType : "-"}</span>
         </div>
       </div>
       <div className={styles.navSection}>

@@ -1,9 +1,8 @@
 import ApiError from "./ApiError";
 
 export default class FormError extends ApiError {
-
-  field=""
-  multerCode=""
+  field = "";
+  multerCode = "";
   constructor(message, multerError) {
     super(400, message);
     if (typeof multerError === "string") {
@@ -15,11 +14,10 @@ export default class FormError extends ApiError {
   }
 
   toJSON() {
-
     let errObj = {
       code: this.code,
       message: this.message,
-      field: this.field
+      field: this.field,
     };
 
     if (this.multerCode) {

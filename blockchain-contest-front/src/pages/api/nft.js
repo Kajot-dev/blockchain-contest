@@ -1,7 +1,7 @@
 import ApiError from "@/scripts/ApiError";
 import FormError from "@/scripts/FormError";
 import { NFTStorage, File } from "nft.storage";
-import multer, { MulterError} from "multer";
+import multer, { MulterError } from "multer";
 import { createRouter, expressWrapper } from "next-connect";
 
 const acceptedMimeTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
@@ -59,24 +59,27 @@ router.post(async (req, res) => {
     } else if (req.body[fieldName].length < 2) {
       throw new FormError("Field too short", fieldName);
     }
-
   }
 
   //we have checked that no other fields than the ones we want are present
   //se we can only check for total number of fields
   if (Object.keys(req.body).length !== validTextFields.length) {
-    throw new ApiError(400, `Some text fields are missing. Valid fields are: ${validTextFields.join(", ")}`);
+    throw new ApiError(
+      400,
+      `Some text fields are missing. Valid fields are: ${validTextFields.join(
+        ", "
+      )}`
+    );
   }
   //determine image extension based on mimetype
   const imageExtension = req.file.mimetype.split("/")[1];
-  
 
   const metadata = await nftStorageClient.store({
     name: req.body.symbol,
     description: req.body.name,
     image: new File([req.file.buffer], `nft.${imageExtension}`, {
       type: req.file.mimetype,
-    })
+    }),
   });
 
   let resObj = {
@@ -101,7 +104,9 @@ export default router.handler({
     } else if (err instanceof ApiError) {
       res.status(err.code).json(err);
     } else {
-      res.status(err.code || 500).json(new ApiError(err.code || 500, err.message));
+      res
+        .status(err.code || 500)
+        .json(new ApiError(err.code || 500, err.message));
     }
-  }
+  },
 });
