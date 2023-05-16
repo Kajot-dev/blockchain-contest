@@ -1,6 +1,6 @@
-import { useState, useRef } from "react";
-import Image from "next/image";
+import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { PulseLoader } from "react-spinners";
 import {
   Panel,
   TextField,
@@ -18,6 +18,7 @@ import {
   AddSubtractCircleFilled,
   DataBarVerticalAddFilled,
   ProtocolHandlerFilled,
+  MoneyRegular,
   CalendarClockFilled,
   ImageRegular,
   ImageProhibitedRegular,
@@ -26,10 +27,11 @@ import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
 
 export function ItemInfo({
-  setName,
-  setAttribute,
-  setSymbol,
-  setIpfs,
+  onNameChange = () => {},
+  onSymbolChange = () => {},
+  onAttributeChange = () => {},
+  onIpfsChange = () => {},
+  onPriceChange = () => {},
   className = "",
   ...props
 }) {
@@ -41,7 +43,7 @@ export function ItemInfo({
         desc="NFT Name"
         placeholder="Name"
         FluentIcon={TextAddFilled}
-        onChange={(e) => setName(e.target.value)}
+        onChange={onNameChange}
       />
       <div
         className="flexRow"
@@ -55,7 +57,7 @@ export function ItemInfo({
           desc="Symbol"
           placeholder="Symbol"
           FluentIcon={NumberSymbolFilled}
-          onChange={(e) => setSymbol(e.target.value)}
+          onChange={onSymbolChange}
         />
         <TextField
           type="text"
@@ -63,7 +65,7 @@ export function ItemInfo({
           desc="Attribute"
           placeholder="Attribute"
           FluentIcon={TagQuestionMarkFilled}
-          onChange={(e) => setAttribute(e.target.value)}
+          onChange={onAttributeChange}
         />
       </div>
       <TextField
@@ -74,7 +76,17 @@ export function ItemInfo({
         placeholder="ipfs://"
         FluentIcon={ProtocolHandlerFilled}
         className={stylesForm.basicInput}
-        onChange={(e) => setIpfs(e.target.value)}
+        onChange={onIpfsChange}
+      />
+      <TextField
+        type="text"
+        id="price"
+        name="price"
+        desc={"Price in ETH"}
+        placeholder="0.0012 ETH"
+        FluentIcon={MoneyRegular}
+        className={stylesForm.basicInput}
+        onChange={onPriceChange}
       />
     </Panel>
   );
@@ -82,54 +94,117 @@ export function ItemInfo({
 
 const ipfsRegex = /^ipfs:\/\/[a-zA-Z0-9/.]+$/;
 
-// TODO: on click, open file explorer, get png, validate it, and update image
-export function ItemImage({ className = "", ipfs = null, ...props }) {
-  let contents = null;
+export function ItemImage({ className = "", ipfs = null, onRawImageData = () => {}, ...props }) {
 
-  const [imageData, setImageData] = useState(null);
+  const [ipfsImageData, setIpfsImageData] = useState(null);
+  const [fileImageData, setFileImageData] = useState(null);
+  const [imageState, setImageState] = useState("blank"); // ["blank", "loading", "loaded", "error"]
 
   const fileInput = useRef(null);
 
-  function handleButtonClick() {
+  const handleButtonClick = useCallback(() => {
     if (!fileInput.current) return;
     fileInput.current.click();
-  }
+  }, []);
 
-  function handleFileChange(e) {
+  const handleFileChange = useCallback((e) => {
     if (!e.target.files || e.target.files.length === 0) return;
     const file = e.target.files[0];
     const reader = new FileReader();
+    setImageState("loading");
     reader.onload = (e) => {
-      setImageData(e.target.result);
+      setFileImageData(e.target.result);
+      setImageState("loaded");
+    };
+    reader.onerror = (e) => {
+      setFileImageData(null);
+      setImageState("error");
     };
     reader.readAsDataURL(file);
-  }
+  }, []);
 
-  if (ipfs && ipfs.trim() !== "" && ipfsRegex.test(ipfs.trim())) {
-    let rawIpfs = ipfs.trim().substring(7);
-    contents = (
-      <Image
-        src={`https://ipfs.io/ipfs/${rawIpfs}`}
-        alt="Image from url"
-        width={250}
-        height={250}
-      />
+  //handle ipfs
+  useEffect(() => {
+    if (ipfs && ipfs.trim() !== "" && ipfsRegex.test(ipfs.trim())) {
+      const abortController = new AbortController();
+      let rawIpfs = ipfs.trim().substring(7);
+      let ipfsUrl = `https://ipfs.io/ipfs/${rawIpfs}`
+      setImageState("loading");
+      fetch(ipfsUrl, {
+        signal: abortController.signal,
+      })
+        .then((res) => res.blob())
+        .then((blob) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            setIpfsImageData(e.target.result);
+            setImageState("loaded");
+          };
+          reader.readAsDataURL(blob);
+        }).catch((err) => {
+          setIpfsImageData(null);
+          setImageState("error");
+        });
+
+      return () => {
+        abortController.abort();
+      }
+    } else {
+      setIpfsImageData(null);
+    }
+  }, [ipfs]);
+
+  //check for blank image
+  useEffect(() => {
+    if (!fileImageData && (!ipfs || ipfs.trim() !== "")) {
+      setImageState("blank");
+    }
+  }, [fileImageData, ipfs]);
+
+  const renderReadyImage = useCallback(() => {
+    let imageData = ipfsImageData || fileImageData;
+    return (
+      <img src={imageData} alt="Uploaded image" width={250} height={250} />
     );
-  } else if (imageData) {
-    contents = (
-      <Image src={imageData} alt="Uploaded image" width={250} height={250} />
-    );
-  } else {
-    contents = (
-      <ImageRegular
-        style={{
-          opacity: 0.5,
-          width: "250px",
-          height: "250px",
-        }}
-      />
-    );
-  }
+  }, [imageState, ipfsImageData, fileImageData]);
+
+
+  const renderImage = useCallback(() => {
+    switch (imageState) {
+      case "blank":
+        return (
+          <ImageRegular
+            style={{
+              opacity: 0.5,
+              width: "250px",
+              height: "250px",
+            }}
+          />
+        )
+      case "loading":
+        return (
+          <PulseLoader
+            size={10}
+          />
+        )
+      case "loaded":
+        return renderReadyImage();
+      case "error":
+        return (
+          <ImageProhibitedRegular
+            style={{
+              opacity: 0.5,
+              width: "250px",
+              height: "250px",
+            }}
+          />
+        )
+      default:
+        return null;
+    }
+  }, [imageState, ipfsImageData, fileImageData]);
+
+
   return (
     <Panel
       className={className}
@@ -139,13 +214,13 @@ export function ItemImage({ className = "", ipfs = null, ...props }) {
       }}
       {...props}
     >
-      {contents}
+      {renderImage()}
       <Button onClick={handleButtonClick} disabled={!!ipfs}>
         +
       </Button>
       <input
         type="file"
-        accept="image/png, image/jpeg"
+        accept="image/png, image/jpeg, image/gif"
         max={1}
         style={{ display: "none" }}
         ref={fileInput}
@@ -156,26 +231,26 @@ export function ItemImage({ className = "", ipfs = null, ...props }) {
 }
 
 export function AddItem({ className = "", onItemAdd = () => {} }) {
-  const [quantity, setQuantity] = useState(0);
-  const [trait, setTrait] = useState("");
+  const quantity = useRef(0);
+  const trait = useRef("");
 
   const [quantityError, setQuantityError] = useState(null);
   const [traitError, setTraitError] = useState(null);
 
-  function addItem() {
+  const addItem = useCallback(() => {
     let error = false;
 
-    if (Number.isNaN(quantity)) {
+    if (Number.isNaN(quantity.current)) {
       setQuantityError("Invalid number");
       error = true;
-    } else if (quantity <= 0) {
+    } else if (quantity.current <= 0) {
       setQuantityError("Quantity must be greater than 0");
       error = true;
     } else {
       setQuantityError(null);
     }
 
-    if (trait === "") {
+    if (trait.current === "") {
       setTraitError("Trait cannot be empty");
       error = true;
     } else {
@@ -183,12 +258,12 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
     }
 
     if (error) return;
-    // TODO: Validate fields
+
     onItemAdd({
-      quantity: quantity,
-      trait: trait,
+      quantity: quantity.current,
+      trait: trait.current,
     });
-  }
+  }, [onItemAdd]);
 
   return (
     <Panel className={className} label="Add item">
@@ -206,7 +281,7 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
           placeholder="Quantity"
           errorMsg={quantityError}
           FluentIcon={AddSubtractCircleFilled}
-          onChange={(e) => setQuantity(parseInt(e.target.value.trim()))}
+          onChange={(e) => quantity.current = parseInt(e.target.value.trim())}
         />
         <TextField
           variant="standard"
@@ -216,7 +291,7 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
           placeholder="Trait"
           errorMsg={traitError}
           FluentIcon={DataBarVerticalAddFilled}
-          onChange={(e) => setTrait(e.target.value.trim())}
+          onChange={(e) => trait.current = e.target.value.trim()}
         />
         <Button onClick={addItem} className={stylesForm.thin}>
           +
@@ -231,6 +306,9 @@ export function LaunchList({
   onListRemove = () => {},
   className = "",
 }) {
+  const headers = useMemo(() => ["Quantity", "Trait", "Remove"], []);
+  const noElements = useMemo(() => "No items added", []);
+
   return (
     <Panel className={className} label="Launch list">
       <Table
@@ -239,7 +317,7 @@ export function LaunchList({
           maxHeight: "600px",
           overflowY: "auto",
         }}
-        headers={["Quantity", "Trait", "Remove"]}
+        headers={headers}
         data={launches.map((launch) => [
           launch.quantity,
           launch.trait,
@@ -251,7 +329,7 @@ export function LaunchList({
             DELETE
           </OutlineButton>,
         ])}
-        noElements={"No items added"}
+        noElements={noElements}
         noElementsStyle={{
           textAlign: "center",
           width: "100%",
@@ -264,11 +342,26 @@ export function LaunchList({
 // TODO: on deploy click button, upload photo to ipfs, and integrate launch with smart contract
 export function DeployLaunch({
   className = "",
-  date,
-  setDate,
-  releaseNow = false,
-  setReleaseNow = () => {},
+  initialDate = new Date(Date.now() + 1000 * 60 * 10),
+  initialReleaseNow = false,
+  onDateChange = () => {},
+  onReleaseNowChange = () => {},
 }) {
+
+  const [date, setDate] = useState(initialDate);
+  const [releaseNow, setReleaseNow] = useState(initialReleaseNow);
+
+
+  const dateChangeHandler = useCallback((date) => {
+    setDate(date);
+    onDateChange(date);
+  }, [onDateChange]);
+
+  const releaseNowChangeHandler = useCallback((e) => {
+    setReleaseNow(e.target.checked);
+    onReleaseNowChange(e.target.checked);
+  }, [onReleaseNowChange]);
+
   return (
     <Panel className={className} label="Deploy launch">
       <DatePicker
@@ -278,14 +371,14 @@ export function DeployLaunch({
         placeholderText="Date"
         FluentIcon={CalendarClockFilled}
         selected={date}
-        onChange={(date) => setDate(date)}
+        onChange={dateChangeHandler}
         minDate={new Date(Date.now() + 1000 * 60 * 10)}
         disabled={releaseNow}
       />
 
       <CheckBox
         label="Release as soon as possible"
-        onChange={(e) => setReleaseNow(e.target.checked)}
+        onChange={releaseNowChangeHandler}
       />
 
       <InfoBox text="The launch will be deployed on First Come First Serve basis. The first person to buy the NFT will get it." />
@@ -299,48 +392,75 @@ export function DeployLaunch({
 
 export default function CreateLaunchPanel({ className = "" }) {
   // ITEM INFO
-  const [name, setName] = useState("");
-  const [attribute, setAttribute] = useState("");
-  const [symbol, setSymbol] = useState("");
+  const name = useRef("");
+  const attribute = useRef("");
+  const symbol = useRef("");
   const [ipfs, setIpfs] = useState("");
-  const [imageData, setImageData] = useState(null);
+  const rawImageData = useRef("");
+
+  const nameChangeHandler = useCallback((e) => {
+    name.current = e.target.value.trim();
+  }, []);
+
+  const attributeChangeHandler = useCallback((e) => {
+    attribute.current = e.target.value.trim();
+  }, []);
+
+  const symbolChangeHandler = useCallback((e) => {
+    symbol.current = e.target.value.trim();
+  }, []);
+
+  const ipfsChangeHandler = useCallback((e) => {
+    setIpfs(e.target.value.trim());
+  }, []);  
+
+  const rawImageDataChangeHandler = useCallback((imageData) => {
+    rawImageData.current = imageData
+  }, []);
 
   // ITEM LIST
   const [launches, setLaunches] = useState([]);
 
   // LAUNCH CONFIG
-  const [date, setDate] = useState(new Date());
-  const [releaseNow, setReleaseNow] = useState(false);
+  const date = useRef(new Date(Date.now() + 1000 * 60 * 10));
+  const releaseNow = useRef(false);
+
+  const dateChangeHandler = useCallback((date) => {
+    date.current = date;
+  }, []);
+
+  const releaseNowChangeHandler = useCallback((state) => {
+    releaseNow.current = state;
+  }, []);
 
   // LIST FUNCTIONS
-  function onListAdd(launch) {
-    console.log(launch);
+  const onListAdd = useCallback((launch) => {
     setLaunches(launches.concat({ id: uuidv4(), ...launch }));
-  }
+  }, [launches]);
 
-  function onListRemove(launch) {
+  const onListRemove = useCallback((launch) => {
     let launchesCopy = launches.concat();
     let launchIndex = launches.findIndex((l) => l.id === launch.id);
     if (launchIndex !== -1) {
       launchesCopy.splice(launchIndex, 1);
       setLaunches(launchesCopy);
     }
-  }
+  }, [launches]);
 
   return (
     <div className={`${styles.launchGrid} ${className}`}>
       <ItemInfo
-        setName={setName}
-        setAttribute={setAttribute}
-        setSymbol={setSymbol}
-        setIpfs={setIpfs}
+        onNameChange={nameChangeHandler}
+        onAttributeChange={attributeChangeHandler}
+        onSymbolChange={symbolChangeHandler}
+        onIpfsChange={ipfsChangeHandler}
         className={`${styles.itemInfo} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
       />
 
       <ItemImage
         className={`${styles.itemImage} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.spaceBetween}`}
         ipfs={ipfs}
-        imageData={imageData}
+        onRawImageData={rawImageDataChangeHandler}
       />
 
       <AddItem
@@ -349,10 +469,10 @@ export default function CreateLaunchPanel({ className = "" }) {
       />
 
       <DeployLaunch
-        date={date}
-        setDate={setDate}
-        releaseNow={releaseNow}
-        setReleaseNow={setReleaseNow}
+        initialDate={date.current}
+        onDateChange={dateChangeHandler}
+        initialReleaseNow={releaseNow.current}
+        onReleaseNowChange={releaseNowChangeHandler}
         className={`${styles.deployLaunch} ${stylesForm.form} ${stylesForm.thin}`}
       />
 
