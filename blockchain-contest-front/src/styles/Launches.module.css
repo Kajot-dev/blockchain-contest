@@ -1,0 +1,17 @@
+.mainContainer {
+    padding: 3rem;
+}
+
+.cardContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: 1;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.card {
+    height: 400px;
+    width: 250px;
+}
