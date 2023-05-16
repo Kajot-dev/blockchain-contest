@@ -48,7 +48,9 @@ export function ConsumerContractProvider({ ...props }) {
   return <ConsumerContractContext.Provider value={value} {...props} />;
 }
 
-export default {
+const exports = {
   ConsumerContractContext,
   ConsumerContractProvider,
-};
+}
+
+export default exports;

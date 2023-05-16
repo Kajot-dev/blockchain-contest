@@ -5,7 +5,7 @@ const contractAddress = process.env.MARKETPLACE_CONTRACT_ADDRESS;
 
 const abi = ["TODO"];
 
-const RetailerContractContext = createContext(undefined);
+export const RetailerContractContext = createContext(undefined);
 
 //set of functions for retailer panel
 export function RetailerContractProvider({ ...props }) {
@@ -74,4 +74,9 @@ export function RetailerContractProvider({ ...props }) {
   return <RetailerContractContext.Provider value={value} {...props} />;
 }
 
-export { RetailerContractContext, RetailerContractProvider };
+const exports = { 
+  RetailerContractContext, 
+  RetailerContractProvider 
+}
+
+export default exports;

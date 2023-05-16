@@ -47,7 +47,9 @@ export function AnonymousContractProvider({ ...props }) {
   return <AnonymousContractContext.Provider value={value} {...props} />;
 }
 
-export default {
+const exports = {
   AnonymousContractContext,
   AnonymousContractProvider,
-};
+}
+
+export default exports;
