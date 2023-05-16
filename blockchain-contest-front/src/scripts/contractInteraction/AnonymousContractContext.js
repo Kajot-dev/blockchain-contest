@@ -6,7 +6,7 @@ import { createContext } from 'react';
 const contractAddress = process.env.READ_CONTRACT_ADDRESS;
 
 const abi = [
-    "TODO"
+    "function getAllListings() public view returns (uint256[] memory)",
 ];
 
 //use metamask provider
@@ -18,11 +18,11 @@ const contract = new ethers.Contract(contractAddress, abi, provider);
 //for purposes of /launches page - only read access
 const AnonymousContractContext = createContext({
     //it will get NFTs that are available for sale
-    getAvailableListings: (start = 0, amount = 30) => {},
+    getAvailableListings: (start = 0, amount = 30) => {}, //TODO (prototype ready)
     //it will get the amount of NFTs that are available for sale
-    getAvailableListingsCount: () => {},
+    getAvailableListingsCount: () => {}, //TODO (only if getting SOME listing is possible)
     //it will get details about an NFT that is available for sale
-    getListing: (listingId) => {},
+    getListing: (nftContractAddress, tokenId) => {}, //READY
 });
 
 export default AnonymousContractContext;
