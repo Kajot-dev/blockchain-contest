@@ -3,49 +3,27 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 
-contract MyToken is ERC1155, Ownable, Pausable, ERC1155Burnable, ERC1155Supply {
+contract ERC1155Minter is ERC1155, Ownable {
     
-    
+    mapping (uint256 => string) private _uris;
 
-    constructor() ERC1155("") {}
+    constructor(string memory _uri) ERC1155 (_uri) {}
 
-    function setURI(string memory newuri) public onlyOwner {
-        _setURI(newuri);
+    function uri(uint256 tokenId) override public view returns (string memory) {
+        return(_uris[tokenId]);
     }
 
-    function pause() public onlyOwner {
-        _pause();
+    function setTokenUri(uint256 tokenId, string memory Uri) public onlyOwner {
+        require(bytes(_uris[tokenId]).length == 0, "Cannot set uri twice");
+        _uris[tokenId] = Uri;
     }
 
-    function unpause() public onlyOwner {
-        _unpause();
-    }
-
-    function mint(address account, uint256 id, uint256 amount)
-        public
-        payable 
-        onlyOwner
-    {
-        require(msg.value == publicPrice, "Wrong! Not enough money sent")
-        _mint(msg.sender, id, amount, "");
-    }
-
-    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
+    function mint(address to, uint256 id, uint256 amount, bytes memory data)
         public
         onlyOwner
     {
-        _mintBatch(to, ids, amounts, data);
+        _mint(to, id, amount, data);
     }
 
-    function _beforeTokenTransfer(address operator, address from, address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
-        internal
-        whenNotPaused
-        override(ERC1155, ERC1155Supply)
-    {
-        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
-    }
 }
