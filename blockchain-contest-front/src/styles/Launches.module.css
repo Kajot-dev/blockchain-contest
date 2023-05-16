@@ -1,17 +1,85 @@
 .mainContainer {
-    padding: 3rem;
+  width: 100%;
+  height: var(--screen-size);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 2rem;
+  gap: 1.5rem;
+}
+
+.motto {
+  font-size: 200%;
+  justify-self: flex-start;
+  align-self: flex-start;
+}
+
+.motto .emphasize {
+  color: var(--accent-color);
+  text-shadow: 0px 0px 8px var(--accent-color);
+}
+
+.contentContainer {
+  background-color: var(--bg-color-semi-transparent);
+  border: var(--borderWidth) solid;
+  border-color: var(--border-color);
+  border-radius: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  overflow: hidden;
+}
+
+.contentHeader {
+  background-color: var(--bg-color-semi-transparent);
+  border-bottom: var(--borderWidth) solid var(--border-color);
+  padding: 1em;
+  gap: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .cardContainer {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    flex-wrap: 1;
-    justify-content: center;
-    align-items: flex-start;
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-wrap: 1;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2rem;
 }
 
 .card {
-    height: 400px;
-    width: 250px;
+  height: 450px;
+  width: 300px;
+}
+
+.cardImage {
+  max-width: 100%;
+  max-height: 55%;
+}
+
+.cardPrice {
+  color: var(--accent-color);
+  text-shadow: 0px 0px 8px var(--accent-color);
+}
+
+.priceRange {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.wideField {
+  width: 200px;
+}
+
+.narrowField {
+  width: 100px;
 }

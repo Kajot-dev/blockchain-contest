@@ -49,7 +49,8 @@ export default function Home() {
             </span>
           </div>
           <div className={styles.scrollStop}>
-            {" unlike "}<span className={`${unbounded6.className} ${styles.zenEmphasize}`}>
+            {" unlike "}
+            <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>
               RTFKT
             </span>
           </div>

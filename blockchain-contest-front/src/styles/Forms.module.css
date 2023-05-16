@@ -6,7 +6,7 @@
   justify-content: flex-start;
   position: relative;
   background-color: var(--bg-color-semi-transparent);
-  border: 1.25px solid;
+  border: var(--borderWidth) solid;
   border-color: var(--border-color);
   border-radius: 1rem;
   padding: 2rem 2rem;
@@ -42,7 +42,6 @@
 .title {
   font-size: 2rem;
   font-weight: 600;
-  margin-bottom: 1rem;
 }
 
 .formBtn {
