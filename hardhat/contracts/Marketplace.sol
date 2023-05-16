@@ -15,7 +15,6 @@ error NotApprovedForMarketplace();
 error PriceMustBeAboveZero();
 
 contract Marketplace is ReentrancyGuard {
-
     struct Listing {
         uint256 price;
         address seller;
@@ -43,6 +42,13 @@ contract Marketplace is ReentrancyGuard {
         uint256 price
     );
 
+    struct NFTListing {
+        address nftAddress;
+        uint256 tokenId;
+    }
+
+    NFTListing[] public activeListings;
+
     mapping(address => mapping(uint256 => Listing)) private s_listings;
     mapping(address => uint256) private s_proceeds;
 
@@ -64,7 +70,11 @@ contract Marketplace is ReentrancyGuard {
         _;
     }
 
-    modifier isOwner(address nftAddress, uint256 tokenId, address spender) {
+    modifier isOwner(
+        address nftAddress,
+        uint256 tokenId,
+        address spender
+    ) {
         IERC721 nft = IERC721(nftAddress);
         address owner = nft.ownerOf(tokenId);
         if (spender != owner) {
@@ -82,7 +92,12 @@ contract Marketplace is ReentrancyGuard {
      * @param tokenId Token ID of NFT
      * @param price sale price for each item
      */
-    function listItem(address nftAddress, uint256 tokenId, uint256 price, uint256 startTime)
+    function listItem(
+        address nftAddress,
+        uint256 tokenId,
+        uint256 price,
+        uint256 startTime
+    )
         external
         notListed(nftAddress, tokenId)
         isOwner(nftAddress, tokenId, msg.sender)
@@ -95,13 +110,32 @@ contract Marketplace is ReentrancyGuard {
         if (nft.getApproved(tokenId) != address(this)) {
             revert NotApprovedForMarketplace();
         }
-        
+
         activationTime = block.timestamp + startTime;
 
-        activeOffersCount++;
+        activeListings.push(NFTListing(nftAddress, tokenId));
 
-        s_listings[nftAddress][tokenId] = Listing(price, msg.sender, activationTime);
+        s_listings[nftAddress][tokenId] = Listing(
+            price,
+            msg.sender,
+            activationTime
+        );
+
         emit ItemListed(msg.sender, nftAddress, tokenId, price, activationTime);
+    }
+
+    // REMOVE LISTING FROM ACTIVE LISTINGS
+    function removeListing(address nftAddress, uint256 tokenId) private {
+        for (uint256 i = 0; i < activeListings.length; i++) {
+            if (
+                activeListings[i].nftAddress == nftAddress &&
+                activeListings[i].tokenId == tokenId
+            ) {
+                activeListings[i] = activeListings[activeListings.length - 1];
+                activeListings.pop();
+                break;
+            }
+        }
     }
 
     /**
@@ -109,12 +143,15 @@ contract Marketplace is ReentrancyGuard {
      * @param nftAddress Address of NFT contract
      * @param tokenId Token ID of NFT
      */
-    function cancelListing(address nftAddress, uint256 tokenId)
+    function cancelListing(
+        address nftAddress,
+        uint256 tokenId
+    )
         external
         isOwner(nftAddress, tokenId, msg.sender)
         isListed(nftAddress, tokenId)
-    {   
-        activeOffersCount--;
+    {
+        removeListing(nftAddress, tokenId);
 
         delete (s_listings[nftAddress][tokenId]);
         emit ItemCanceled(msg.sender, nftAddress, tokenId);
@@ -127,28 +164,29 @@ contract Marketplace is ReentrancyGuard {
      * @param nftAddress Address of NFT contract
      * @param tokenId Token ID of NFT
      */
-    function buyItem(address nftAddress, uint256 tokenId)
-        external
-        payable
-        isListed(nftAddress, tokenId)
-        nonReentrant
-    {
+    function buyItem(
+        address nftAddress,
+        uint256 tokenId
+    ) external payable isListed(nftAddress, tokenId) nonReentrant {
         Listing memory listedItem = s_listings[nftAddress][tokenId];
 
-        if(block.timestamp < listedItem.time)
+        if (block.timestamp < listedItem.time)
             revert NotWithinTimeframe(nftAddress, tokenId, listedItem.time);
 
         if (msg.value < listedItem.price) {
             revert PriceNotMet(nftAddress, tokenId, listedItem.price);
         }
 
-
         s_proceeds[listedItem.seller] += msg.value;
         delete (s_listings[nftAddress][tokenId]);
 
-        activeOffersCount--;
+        removeListing(nftAddress, tokenId);
 
-        IERC721(nftAddress).safeTransferFrom(listedItem.seller, msg.sender, tokenId);
+        IERC721(nftAddress).safeTransferFrom(
+            listedItem.seller,
+            msg.sender,
+            tokenId
+        );
         emit ItemBought(msg.sender, nftAddress, tokenId, listedItem.price);
     }
 
@@ -158,15 +196,18 @@ contract Marketplace is ReentrancyGuard {
      * @param tokenId Token ID of NFT
      * @param newPrice Price in Wei of the item
      */
-    function updateListing(address nftAddress, uint256 tokenId, uint256 newPrice, uint256 newTime)
+    function updateListing(
+        address nftAddress,
+        uint256 tokenId,
+        uint256 newPrice,
+        uint256 newTime
+    )
         external
         isListed(nftAddress, tokenId)
         nonReentrant
         isOwner(nftAddress, tokenId, msg.sender)
     {
-   
-        if (newPrice <= 0)
-            revert PriceMustBeAboveZero();
+        if (newPrice <= 0) revert PriceMustBeAboveZero();
 
         // if(block.timestamp >= s_listings[nftAddress][tokenId].time)
         //     revert NotWithinTimeframe(nftAddress, tokenId, s_listings[nftAddress][tokenId].time );
@@ -190,19 +231,25 @@ contract Marketplace is ReentrancyGuard {
         require(success, "Transfer failed");
     }
 
-    function getListing(address nftAddress, uint256 tokenId)
-        external
-        view
-        returns (Listing memory)
-    {
+    function getAllListings() external view returns (NFTListing[] memory) {
+        return activeListings;
+    }
+
+    function getListing(
+        address nftAddress,
+        uint256 tokenId
+    ) external view returns (Listing memory) {
         return s_listings[nftAddress][tokenId];
     }
 
-    function getListingTime(address nftAddress, uint256 tokenId) external view returns (uint256) {
+    function getListingTime(
+        address nftAddress,
+        uint256 tokenId
+    ) external view returns (uint256) {
         return s_listings[nftAddress][tokenId].time;
     }
 
-    function getAmountOfActiveListings() external view returns(uint256) {
+    function getAmountOfActiveListings() external view returns (uint256) {
         return activeOffersCount;
     }
 
