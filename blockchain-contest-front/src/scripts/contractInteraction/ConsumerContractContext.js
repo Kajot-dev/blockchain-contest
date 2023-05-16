@@ -1,27 +1,54 @@
-import ethers from 'ethers';
-import { createContext } from 'react';
+import ethers from "ethers";
+import { createContext, useEffect, useCallback, useRef, useMemo } from "react";
 
-const contractAddress = process.env.CONSUMER_CONTRACT_ADDRESS;
+const contractAddress = process.env.MARKETPLACE_CONTRACT_ADDRESS;
 
-const abi = [
-    "TODO"
-];
+const abi = ["TODO"];
 
-//use metamask provider
-//we are assuming that the user is on the correct chain
-//and that user is logged in
-const provider = new ethers.providers.Web3Provider(window.ethereum);
+export const ConsumerContractContext = createContext(undefined);
 
 //for purposes of customer panel and /launches page - write access
-const ConsumerContractContext = createContext({
-    //it will get NFTs that belong to given user
-    getConsumerNfts: (start = 0, amount = 30) => {}, //TODO - may be replaced with recent transaction (na koniec)
-    //it will get details about an NFT that belongs to given user
-    getConsumerNft: (nftContractAddress, tokenId) => {}, //READY
-    //it will buy an NFT from retailer
-    buyNft: (nftContractAddress, tokenId) => {}, //READY
-    //it will transfer an NFT to another user
-    transferNft: (listingId, toChainId, toAddress) => {}, //READY - proposal (no UI is ready)
-});
+export function ConsumerContractProvider({ ...props }) {
+  const provider = useRef(null);
+  const contract = useRef(null);
 
-export default ConsumerContractContext;
+  useEffect(() => {
+    provider.current = new ethers.providers.Web3Provider(window.ethereum);
+    contract.current = new ethers.Contract(
+      contractAddress,
+      abi,
+      provider.current
+    );
+  }, []);
+
+  //it will get NFTs that belong to given user
+  const getConsumerNfts = useCallback(async (start = 0, amount = 30) => {}, []); //TODO - may be replaced with recent transaction (na koniec)
+
+  //it will get details about an NFT that belongs to given user
+  const getConsumerNft = useCallback(async (nftContractAddress, tokenId) => {},
+  []); //READY
+
+  //it will buy an NFT from retailer
+  const buyNft = useCallback(async (nftContractAddress, tokenId) => {}, []); //READY
+
+  //it will transfer an NFT to another user
+  const transferNft = useCallback(async (listingId, toChainId, toAddress) => {},
+  []); //READY - proposal (no UI is ready)
+
+  const value = useMemo(
+    () => ({
+      getConsumerNfts,
+      getConsumerNft,
+      buyNft,
+      transferNft,
+    }),
+    [getConsumerNfts, getConsumerNft, buyNft, transferNft]
+  );
+
+  return <ConsumerContractContext.Provider value={value} {...props} />;
+}
+
+export default {
+  ConsumerContractContext,
+  ConsumerContractProvider,
+};
