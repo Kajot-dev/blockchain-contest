@@ -25,7 +25,7 @@ export function TextField({
       }
       onChange(e);
     },
-    [input, replaceRegex]
+    [input, replaceRegex, onChange]
   );
 
   return (

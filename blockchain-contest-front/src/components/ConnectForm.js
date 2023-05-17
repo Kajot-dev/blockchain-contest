@@ -3,6 +3,7 @@ import { useState, useContext } from "react";
 import { PulseLoader } from "react-spinners";
 import { InfoBox, ErrorBox } from "./Utils";
 import { Panel } from "./Forms";
+import { desiredChainId } from "@/scripts/contractInteraction/contractInfo";
 import UserContext from "@/scripts/UserContext";
 import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import Link from "next/link";
@@ -38,7 +39,7 @@ export function FormContents({
   const handleSwitchClick = async (e) => {
     e.preventDefault();
     try {
-      await switchChain({ chainId: "0x1" });
+      await switchChain(desiredChainId);
     } catch (e) {
       setErrorMsg(e.message);
     }
@@ -98,15 +99,15 @@ export function FormContents({
       );
 
     case "connected":
-      if (chainId !== "0x1") {
+      if (chainId !== desiredChainId) {
         return (
           <>
             <div className={styles.subTitle}>Switch net</div>
             <div className="side-margin">
-              <InfoBox text="Our app uses Etherum mainnet" />
+              <InfoBox text="Our app uses Local net" />
             </div>
             <button className={styles.formBtn} onClick={handleSwitchClick}>
-              Switch to mainnet
+              Switch to local net
             </button>
           </>
         );
