@@ -75,7 +75,14 @@ export function ConsumerContractProvider({ ...props }) {
       isReady,
       contractProviderRef: provider,
     }),
-    [getConsumerNfts, getConsumerNftIPFSUri, buyNft, transferNft, provider, isReady]
+    [
+      getConsumerNfts,
+      getConsumerNftIPFSUri,
+      buyNft,
+      transferNft,
+      provider,
+      isReady,
+    ]
   );
 
   return <ConsumerContractContext.Provider value={value} {...props} />;

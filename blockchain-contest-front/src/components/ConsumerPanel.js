@@ -33,7 +33,6 @@ function NftList({ ...props }) {
   }, [contractProviderRef, getConsumerNfts]);
 
   useEffect(() => {
-    console.log("isReady", isReady);
     if (!isReady) {
       return;
     }
