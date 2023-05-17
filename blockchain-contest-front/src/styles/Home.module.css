@@ -1,16 +1,50 @@
 .home {
-  justify-content: space-around;
+  justify-content: flex-start;
+  display: flex;
+  flex-direction: column;
 }
 
 .heroSection {
-  align-items: flex-start;
   align-items: center;
   justify-content: center;
   text-align: center;
 }
 
-.partners {
-  /* nothing here yet */
+.container {
+  padding-top: 108px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  width: 100vw;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    padding-top: 72px;
+  }
+}
+
+.heroSection h1 {
+  font-size: 5rem;
+  margin-block-end: 0em;
+  margin-block-start: auto;
+  line-height: 1.2em;
+  padding-bottom: 0.2em;
+}
+
+@media screen and (max-width: 768px) {
+  .heroSection h1 {
+    font-size: 3rem;
+  }
+}
+
+.heroSection {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .partnersContainer {
@@ -18,5 +52,26 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 2.5rem;
+}
+
+.logoBg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-image: url("/logo.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  mix-blend-mode: overlay;
+  height: 128%;
+  width: 128%;
+  z-index: -1;
+}
+
+@media (prefers-color-scheme: dark) {
+  .logoBg {
+    filter: invert(1);
+  }
 }
