@@ -6,10 +6,7 @@ import { FormContents as AccountFormContents } from "./ConnectForm";
 import { useCallback, useContext, useState, useEffect } from "react";
 import { RetailerContractContext } from "@/scripts/contractInteraction/RetailerContractContext";
 
-import {
-  RocketRegular,
-  MoneyRegular,
-} from "@fluentui/react-icons";
+import { RocketRegular, MoneyRegular } from "@fluentui/react-icons";
 import styles from "@styles/Retailer.module.css";
 import stylesForm from "@styles/Forms.module.css";
 
@@ -70,9 +67,7 @@ function NftList({ ...props }) {
 }
 
 function WithdrawBox({ ...props }) {
-
   const [balanceETH, setBalanceETH] = useState(0n);
-
 
   const { isReady, cashOut, getBalance } = useContext(RetailerContractContext);
 
@@ -94,18 +89,20 @@ function WithdrawBox({ ...props }) {
     handleBalance();
   }, [isReady, handleBalance]);
 
-
   return (
     <Panel label="Block Explorer" {...props}>
       <InfoBox text="You can withdraw the ETH that you made selling your NFTs here!" />
       <div>
-        Current balance: <span className={stylesForm.emphasize}>{balanceETH.toString()} ETH</span>
+        Current balance:{" "}
+        <span className={stylesForm.emphasize}>
+          {balanceETH.toString()} ETH
+        </span>
       </div>
       <OutlineButton
         style={{
           fontSize: "1.5rem",
           gap: "0.25rem",
-          width: "auto"
+          width: "auto",
         }}
         className="flexRow"
         disabled={balanceETH === 0n}
