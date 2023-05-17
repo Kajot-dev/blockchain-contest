@@ -1,5 +1,5 @@
 import { useMetaMask } from "metamask-react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { PulseLoader } from "react-spinners";
 import { InfoBox, ErrorBox } from "./Utils";
 import { Panel } from "./Forms";
@@ -11,6 +11,8 @@ import Link from "next/link";
 import styles from "@styles/Forms.module.css";
 import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
+
+const finalLocationRegex = /^\/(?:\w+\/)*(?:\w+\/?)?$/;
 
 export default function ConnectForm() {
   return (
@@ -28,8 +30,18 @@ export function FormContents({
   displayConnectedGreetings = true,
 }) {
   const [errorMsg, setErrorMsg] = useState("");
+  const [destination, setDestination] = useState("/");
   const { status, account, chainId, connect, switchChain } = useMetaMask();
   const { userType } = useContext(UserContext);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    let finalLocation = urlParams.get("redirect");
+    // validate that final location is valid pathname
+    if (finalLocation && finalLocationRegex.test(finalLocation)) {
+      setDestination(finalLocation);
+    }
+  }, []);
 
   const handleRefreshClick = (e) => {
     e.preventDefault();
@@ -132,7 +144,7 @@ export function FormContents({
               </span>
             </div>
             {displayExploreButton && (
-              <Link href="/">
+              <Link href={destination}>
                 <button className={styles.formBtn}>Explore</button>
               </Link>
             )}
