@@ -1,212 +1,259 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.7;
+pragma solidity ^0.8.8;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-
-error PriceNotMet(address nftAddress, uint256 tokenId, uint256 price);
-error ItemNotForSale(address nftAddress, uint256 tokenId);
-error NotListed(address nftAddress, uint256 tokenId);
-error AlreadyListed(address nftAddress, uint256 tokenId);
-error NotWithinTimeframe(address nftAddress, uint256 tokenId, uint256 time);
-error NoProceeds();
-error NotOwner();
-error NotApprovedForMarketplace();
-error PriceMustBeAboveZero();
 
 contract Marketplace is ReentrancyGuard {
 
-    struct Listing {
-        uint256 price;
-        address seller;
-        uint256 time;
+    using Counters for Counters.Counter;
+    Counters.Counter private _listingsCounter;
+    Counters.Counter private _soldCounter;
+
+    enum State {
+        Inactive,
+        Active
     }
 
+    struct Listing {
+        uint256 id;
+        address nftContract;
+        uint256 tokenId;
+        address payable seller;
+        address payable buyer;
+        uint256 price;
+        uint256 time;
+        State state;
+    }
+
+    mapping(uint256 => Listing) private allListings;
+    mapping(address => uint256) private sellerBalance;
+    uint256 public activationTime;
+
     event ItemListed(
-        address indexed seller,
-        address indexed nftAddress,
+        uint256 indexed id,
+        address indexed nftContract,
         uint256 indexed tokenId,
+        address seller,
+        address buyer,
+        uint256 price,
+        uint256 time,
+        State state
+    );
+
+     event ItemCancelled(
+        uint256 indexed id,
+        address indexed nftContract,
+        uint256 indexed tokenId,
+        address seller,
+        State state
+    );
+
+    event ItemBought(
+        uint256 indexed id,
+        address indexed nftContract,
+        uint256 indexed tokenId,
+        address seller,
+        address buyer,
+        uint256 price,
+        State state
+    );
+
+    event ItemUpdated(
+        uint256 indexed id,
+        address seller,
         uint256 price,
         uint256 time
     );
 
-    event ItemCanceled(
-        address indexed seller,
-        address indexed nftAddress,
-        uint256 indexed tokenId
-    );
-
-    event ItemBought(
-        address indexed buyer,
-        address indexed nftAddress,
-        uint256 indexed tokenId,
-        uint256 price
-    );
-
-    mapping(address => mapping(uint256 => Listing)) private s_listings;
-    mapping(address => uint256) private s_proceeds;
-
-    modifier notListed(address nftAddress, uint256 tokenId) {
-        Listing memory listing = s_listings[nftAddress][tokenId];
-
-        if (listing.price > 0) {
-            revert AlreadyListed(nftAddress, tokenId);
-        }
-        _;
-    }
-
-    modifier isListed(address nftAddress, uint256 tokenId) {
-        Listing memory listing = s_listings[nftAddress][tokenId];
-
-        if (listing.price <= 0) {
-            revert NotListed(nftAddress, tokenId);
-        }
-        _;
-    }
-
-    modifier isOwner(address nftAddress, uint256 tokenId, address spender) {
-        IERC721 nft = IERC721(nftAddress);
-        address owner = nft.ownerOf(tokenId);
-        if (spender != owner) {
-            revert NotOwner();
-        }
-        _;
-    }
-
-    uint256 public activationTime;
-    uint256 private activeOffersCount;
-
-    /*
-     * @notice Method for listing NFT
-     * @param nftAddress Address of NFT contract
-     * @param tokenId Token ID of NFT
-     * @param price sale price for each item
-     */
-    function listItem(address nftAddress, uint256 tokenId, uint256 price, uint256 startTime)
-        external
-        notListed(nftAddress, tokenId)
-        isOwner(nftAddress, tokenId, msg.sender)
-    {
-        if (price <= 0) {
-            revert PriceMustBeAboveZero();
-        }
-        IERC721 nft = IERC721(nftAddress);
-
-        if (nft.getApproved(tokenId) != address(this)) {
-            revert NotApprovedForMarketplace();
-        }
+    function listItem(address nftContract, uint256 tokenId, uint256 price, uint256 time) public nonReentrant {
         
-        activationTime = block.timestamp + startTime;
+        require(price > 0, "[Marketplace] Price must be more than 0!");
+        require(IERC721(nftContract).getApproved(tokenId) == address(this), "[Marketplace] NFT must be approved to market.");
 
-        activeOffersCount++;
+        _listingsCounter.increment();
+        uint256 id = _listingsCounter.current();
 
-        s_listings[nftAddress][tokenId] = Listing(price, msg.sender, activationTime);
-        emit ItemListed(msg.sender, nftAddress, tokenId, price, activationTime);
+        activationTime = block.timestamp + time;
+
+        allListings[id] = Listing(
+            id,
+            nftContract,
+            tokenId,
+            payable(msg.sender),
+            payable(address(0)),
+            price,
+            activationTime,
+            State.Active
+        );
+
+        emit ItemListed(
+            id,
+            nftContract,
+            tokenId,
+            msg.sender,
+            address(0),
+            price,
+            time,
+            State.Active
+        );
     }
 
-    /**
-     * @notice Method for cancelling listing
-     * @param nftAddress Address of NFT contract
-     * @param tokenId Token ID of NFT
-     */
-    function cancelListing(address nftAddress, uint256 tokenId)
-        external
-        isOwner(nftAddress, tokenId, msg.sender)
-        isListed(nftAddress, tokenId)
-    {   
-        activeOffersCount--;
+    function cancelListing(uint256 listingId) public nonReentrant {
 
-        delete (s_listings[nftAddress][tokenId]);
-        emit ItemCanceled(msg.sender, nftAddress, tokenId);
+        require(listingId <= _listingsCounter.current(), "[Marketplace] Listing ID is out of bounds! Try smaller number.");
+
+        Listing storage listing = allListings[listingId]; //Must use storage (more gas consumption)
+
+        require(listing.state == State.Active, "[Marketplace] Listing must be active in order to be cancelled.");
+        require(IERC721(listing.nftContract).ownerOf(listing.tokenId) == msg.sender, "[Marketplace] You must be the owner.");
+        require(IERC721(listing.nftContract).getApproved(listing.tokenId) == address(this), "[Marketplace] NFT must be approved to market.");
+
+        listing.state = State.Inactive;
+
+        emit ItemCancelled(
+            listingId,
+            listing.nftContract,
+            listing.tokenId,
+            listing.seller,
+            State.Inactive
+        );
     }
 
-    /**
-     * @notice Method for buying listing
-     * @notice The owner of an NFT could unapprove the marketplace,
-     * which would cause this function to fail.
-     * @param nftAddress Address of NFT contract
-     * @param tokenId Token ID of NFT
-     */
-    function buyItem(address nftAddress, uint256 tokenId)
-        external
-        payable
-        isListed(nftAddress, tokenId)
-        nonReentrant
-    {
-        Listing memory listedItem = s_listings[nftAddress][tokenId];
+    function buyItem(uint256 listingId) public payable nonReentrant {
 
-        if(block.timestamp < listedItem.time)
-            revert NotWithinTimeframe(nftAddress, tokenId, listedItem.time);
+        Listing storage listing = allListings[listingId]; //Must use storage (more gas consumption)
 
-        if (msg.value < listedItem.price) {
-            revert PriceNotMet(nftAddress, tokenId, listedItem.price);
-        }
+        address nftContract = listing.nftContract;
+        uint256 tokenId = listing.tokenId;
+        uint256 price = listing.price;
 
+        require(block.timestamp > listing.time, "[Marketplace] Offer is pending, wait until protection time expires.");
+        require(listing.state == State.Active, "[Marketplace] Offer is not active.");
+        require(msg.value == price, "[Marketplace] Please submit the asking price");
+        require(IERC721(nftContract).getApproved(tokenId) == address(this), "[Marketplace] NFT must be approved to market.");
 
-        s_proceeds[listedItem.seller] += msg.value;
-        delete (s_listings[nftAddress][tokenId]);
+        listing.buyer = payable(msg.sender);
+        _soldCounter.increment();
+        IERC721(nftContract).transferFrom(listing.seller, msg.sender, tokenId);
+        sellerBalance[listing.seller]+=msg.value;
 
-        activeOffersCount--;
+        listing.state = State.Inactive;
 
-        IERC721(nftAddress).safeTransferFrom(listedItem.seller, msg.sender, tokenId);
-        emit ItemBought(msg.sender, nftAddress, tokenId, listedItem.price);
+        emit ItemBought(
+            listingId,
+            nftContract,
+            tokenId,
+            listing.seller,
+            msg.sender,
+            price,
+            State.Inactive
+        );
     }
 
-    /**
-     * @notice Method for updating listing
-     * @param nftAddress Address of NFT contract
-     * @param tokenId Token ID of NFT
-     * @param newPrice Price in Wei of the item
-     */
-    function updateListing(address nftAddress, uint256 tokenId, uint256 newPrice, uint256 newTime)
-        external
-        isListed(nftAddress, tokenId)
-        nonReentrant
-        isOwner(nftAddress, tokenId, msg.sender)
-    {
-   
-        if (newPrice <= 0)
-            revert PriceMustBeAboveZero();
+    function updateListing(uint256 listingId, uint256 newPrice, uint256 newTime) public nonReentrant {
 
-        // if(block.timestamp >= s_listings[nftAddress][tokenId].time)
-        //     revert NotWithinTimeframe(nftAddress, tokenId, s_listings[nftAddress][tokenId].time );
+        require(listingId <= _listingsCounter.current(), "[Marketplace] Listing ID is out of bounds! Try smaller number.");
 
-        s_listings[nftAddress][tokenId].price = newPrice;
-        s_listings[nftAddress][tokenId].time = block.timestamp + newTime;
+        Listing storage listing = allListings[listingId]; //Must use storage (more gas consumption)
 
-        emit ItemListed(msg.sender, nftAddress, tokenId, newPrice, newTime);
+        require(listing.state == State.Active, "[Marketplace] Listing must be active in order to be updated");
+        require(IERC721(listing.nftContract).ownerOf(listing.tokenId) == msg.sender, "[Marketplace] You must be the owner.");
+
+        listing.price = newPrice;
+        listing.time = block.timestamp + newTime;
+
+        emit ItemUpdated(listingId, msg.sender, newPrice, newTime);
+
     }
 
-    /**
-     * @notice Method for withdrawing proceeds from sales
-     */
-    function withdrawProceeds() external {
-        uint256 proceeds = s_proceeds[msg.sender];
-        if (proceeds <= 0) {
-            revert NoProceeds();
-        }
-        s_proceeds[msg.sender] = 0;
-        (bool success, ) = payable(msg.sender).call{value: proceeds}("");
+     function withdraw() external {
+        uint256 totalEth = sellerBalance[msg.sender];
+        require(sellerBalance[msg.sender] > 0, "[Marketplace] Your current balance is 0, reverting..");
+
+        sellerBalance[msg.sender] = 0;
+        (bool success, ) = payable(msg.sender).call{value: totalEth}("");
         require(success, "Transfer failed");
     }
 
-    function getListing(address nftAddress, uint256 tokenId)
-        external
+    function getListingById(uint256 listingId) public view returns (Listing memory) {
+        return allListings[listingId];
+    }
+
+    function getTotalListings() public view returns (uint256) {
+        return _listingsCounter.current();
+    }
+
+    function getMyBalance() public view returns (uint256) {
+        return sellerBalance[msg.sender];
+    }
+
+    function fetchActiveItems() public view returns (Listing[] memory) {
+        return fetchHepler(FetchOperator.ActiveListings);
+    }
+
+    function fetchMyPurchasedItems() public view returns (Listing[] memory) {
+        return fetchHepler(FetchOperator.MyPurchasedItems);
+    }
+
+    function fetchMyCreatedItems() public view returns (Listing[] memory) {
+        return fetchHepler(FetchOperator.MyCreatedListings);
+    }
+
+    enum FetchOperator {
+        ActiveListings,
+        MyCreatedListings,
+        MyPurchasedItems
+    }
+
+    function fetchHepler(FetchOperator _op)
+        private
         view
-        returns (Listing memory)
+        returns (Listing[] memory)
     {
-        return s_listings[nftAddress][tokenId];
+        uint256 total = _listingsCounter.current();
+
+        uint256 itemCount = 0;
+        for (uint256 i = 1; i <= total; i++) {
+            if (isCondition(allListings[i], _op)) {
+                itemCount++;
+            }
+        }
+
+        uint256 index = 0;
+        Listing[] memory items = new Listing[](itemCount);
+        for (uint256 i = 1; i <= total; i++) {
+            if (isCondition(allListings[i], _op)) {
+                items[index] = allListings[i];
+                index++;
+            }
+        }
+        return items;
     }
 
-    function getListingTime(address nftAddress, uint256 tokenId) external view returns (uint256) {
-        return s_listings[nftAddress][tokenId].time;
-    }
-
-    function getAmountOfActiveListings() external view returns(uint256) {
-        return activeOffersCount;
-    }
-
-    function getProceeds(address seller) external view returns (uint256) {
-        return s_proceeds[seller];
+    function isCondition(Listing memory listing, FetchOperator _op)
+        private
+        view
+        returns (bool)
+    {
+        if (_op == FetchOperator.MyCreatedListings) {
+            return
+                (listing.seller == msg.sender && listing.state != State.Inactive)
+                    ? true
+                    : false;
+        } else if (_op == FetchOperator.MyPurchasedItems) {
+            return (listing.buyer == msg.sender) ? true : false;
+        } else if (_op == FetchOperator.ActiveListings) {
+            return
+                (listing.buyer == address(0) &&
+                    listing.state == State.Active &&
+                    (IERC721(listing.nftContract).getApproved(listing.tokenId) ==
+                        address(this)))
+                    ? true
+                    : false;
+        } else {
+            return false;
+        }
     }
 }

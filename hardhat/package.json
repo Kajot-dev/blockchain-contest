@@ -4,13 +4,13 @@
   "scripts": {
     "block": "hardhat block-number --network localhost",
     "add-stores": "hardhat run scripts/S01-addingVendors.js --network localhost",
-    "mint-nfts": "hardhat run scripts/N01-NikeNFTMint.js --network localhost",
-    "mp-list": "hardhat run scripts/M01-Listing.js --network localhost",
-    "mp-buy": "hardhat run scripts/M02-Buying.js --network localhost",
-    "mp-cancel": "hardhat run scripts/M03-Cancel.js --network localhost",
-    "mp-update": "hardhat run scripts/M04-Updating.js --network localhost",
-    "run-base": "yarn add-stores && yarn mint-nfts && yarn mp-list && yarn block",
-    "run-withdraw": "yarn run-base && yarn mp-buy && && yarn mp-withdraw yarn block"
+    "mint-nfts": "hardhat run scripts/NFTs/N01-Mint.js --network localhost",
+    "mp-list": "hardhat run scripts/Marketplace/M01-List.js --network localhost",
+    "mp-buy": "hardhat run scripts/Marketplace/M02-Buy.js --network localhost",
+    "mp-cancel": "hardhat run scripts/Marketplace/M03-Cancel.js --network localhost",
+    "mp-update": "hardhat run scripts/Marketplace/M04-Update.js --network localhost",
+    "mp-withdraw": "hardhat run scripts/Marketplace/M05-Withdraw.js --network localhost",
+    "run-base": "yarn add-stores && yarn mint-nfts && yarn mp-list && yarn block"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",
