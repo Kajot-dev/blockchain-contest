@@ -1,5 +1,5 @@
 import ExternalDatePicker from "react-datepicker";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import styles from "@styles/Forms.module.css";
 import { CheckmarkFilled } from "@fluentui/react-icons";
@@ -12,10 +12,23 @@ export function TextField({
   desc = null,
   errorMsg = null,
   FluentIcon = null,
+  replaceRegex = null,
+  onChange = () => {},
   ...props
 }) {
+  const input = useRef(null);
+
+  const changeHandler = useCallback(
+    (e) => {
+      if (replaceRegex) {
+        input.current.value = input.current.value.replace(replaceRegex, "");
+      }
+      onChange(e);
+    },
+    [input, replaceRegex]
+  );
+
   return (
-    //todo add fluent icons
     <div className="flexCol">
       <div className={styles.formLabel}>
         <label htmlFor={id}>{desc}</label>
@@ -25,9 +38,11 @@ export function TextField({
         <input
           type="text"
           id={id}
+          ref={input}
           name={id}
           className={styles.basicInput + " " + className}
           data-has-icon={!!FluentIcon}
+          onChange={changeHandler}
           {...props}
         />
       </div>

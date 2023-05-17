@@ -15,7 +15,7 @@ export default function CreateLaunch() {
   return (
     <>
       <NavBar displayConnectButton={false} />
-      <main className="">
+      <main>
         <div className="fill-bg">
           <div className="fill magic-bg" />
         </div>

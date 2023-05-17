@@ -11,6 +11,7 @@
   --navbar-height: 60px;
   --screen-size: calc(100vh - var(--navbar-height));
   --grid-gap: 1.5em;
+  --borderWidth: 1.25px;
 }
 
 @media (prefers-color-scheme: dark) {
