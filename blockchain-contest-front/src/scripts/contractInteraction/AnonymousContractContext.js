@@ -28,7 +28,6 @@ export function AnonymousContractProvider({ ...props }) {
         Marketplace.abiString,
         provider.current
       );
-      window.contractRef = contract;
       setIsReady(true);
     } else {
       setIsReady(false);
@@ -44,8 +43,6 @@ export function AnonymousContractProvider({ ...props }) {
 
   //it will get the amount of NFTs that are available for sale
   const getAvailableListingsCount = useCallback(async () => {
-    console.log("Trying to get total listings");
-    console.log(contract.current);
     return contract.current.getTotalListings();
   }, []);
 
@@ -66,12 +63,14 @@ export function AnonymousContractProvider({ ...props }) {
       getAvailableListingsCount,
       getListingIPFSUri,
       isReady,
+      contractProviderRef: provider,
     }),
     [
       getAvailableListings,
       getAvailableListingsCount,
       getListingIPFSUri,
       isReady,
+      provider,
     ]
   );
 

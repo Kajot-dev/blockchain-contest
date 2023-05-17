@@ -4,6 +4,7 @@ import { SearchRegular, ImageProhibitedRegular } from "@fluentui/react-icons";
 import { Unbounded } from "next/font/google";
 import { useEffect, useState, useContext, useCallback } from "react";
 import { AnonymousContractContext } from "@/scripts/contractInteraction/AnonymousContractContext";
+import { getNFTInfoGenerator } from "@/scripts/contractInteraction/contractUtils";
 
 import styles from "../styles/Launches.module.css";
 import stylesForm from "../styles/Forms.module.css";
@@ -11,30 +12,27 @@ import stylesForm from "../styles/Forms.module.css";
 const unbounded6 = Unbounded({ subsets: ["latin"], weight: "600" });
 
 function ListingCard({ listing }) {
-  const { symbol, name, imageIpfsUrl, priceETH } = listing;
+  const { name, description, image, priceETH } = listing;
 
-  const [imageError, setImageError] = useState(imageIpfsUrl === null);
+  const [imageError, setImageError] = useState(image === null);
 
   const imageErrorHandler = useCallback((e) => {
     setImageError(true);
   }, []);
 
   let realImageUrl = null;
-  if (imageIpfsUrl) {
-    if (imageIpfsUrl.startsWith("ipfs://")) {
-      realImageUrl = "https://ipfs.io/ipfs/" + imageIpfsUrl.slice(7);
-    } else if (
-      imageIpfsUrl.startsWith("http://") ||
-      imageIpfsUrl.startsWith("https://")
-    ) {
-      realImageUrl = imageIpfsUrl;
+  if (image) {
+    if (image.startsWith("ipfs://")) {
+      realImageUrl = "https://ipfs.io/ipfs/" + image.slice(7);
+    } else if (image.startsWith("http://") || image.startsWith("https://")) {
+      realImageUrl = image;
     }
   }
 
   return (
     <Panel className={`${styles.card} ${stylesForm.thin}`}>
       <div className={`${stylesForm.title} ${unbounded6.className}`}>
-        {symbol}
+        {name}
       </div>
       {imageError ? (
         <div className={styles.cardImage}>
@@ -43,13 +41,13 @@ function ListingCard({ listing }) {
       ) : (
         <img
           src={realImageUrl}
-          alt={name}
+          alt={description}
           className={styles.cardImage}
           onError={imageErrorHandler}
         />
       )}
       <div className={styles.cardPrice}>{priceETH} ETH</div>
-      <div className={stylesForm.subtle}>{name}</div>
+      <div className={stylesForm.subtle}>{description}</div>
       <OutlineButton>Buy</OutlineButton>
     </Panel>
   );
@@ -70,47 +68,24 @@ function CardGrid({ listings = [], placeholder = null }) {
 export default function LaunchesPanel({ className = "" }) {
   const [listings, setListings] = useState({});
 
-  const { getAvailableListings, getListingIPFSUri, isReady } = useContext(
+  const { getAvailableListings, isReady, contractProviderRef } = useContext(
     AnonymousContractContext
   );
 
   const prepareListings = useCallback(async () => {
     let activeListings = await getAvailableListings();
-    for (const listingInfo of activeListings) {
-      const nftContractAddress = listingInfo.nftContract;
-      const tokenId = listingInfo.tokenId;
-      const ipfsUri = await getListingIPFSUri(nftContractAddress, tokenId - 1n);
-      console.log(listingInfo, ipfsUri);
-      let priceWei = listingInfo.price;
-      let priceETH = priceWei / 10n ** 18n;
 
-      let listingObj = {
-        symbol: "--",
-        name: "Not available",
-        imageIpfsUrl: null,
-        priceETH: priceETH.toString(),
-      };
-
-      //fetch data from ipfs
-      console.log(ipfsUri);
-      try {
-        let res = await fetch(`https://ipfs.io/ipfs/${ipfsUri.slice(7)}`);
-        let data = await res.json();
-        let { name, description, image } = data;
-        listingObj.symbol = name;
-        listingObj.name = description;
-        listingObj.imageIpfsUrl = image;
-      } catch (e) {
-        console.error(e);
-      }
-
+    for await (const listing of getNFTInfoGenerator(
+      activeListings,
+      contractProviderRef.current
+    )) {
       setListings((listings) =>
         Object.assign({}, listings, {
-          [listingInfo.id]: listingObj,
+          [listing.id]: listing,
         })
       );
     }
-  }, [getAvailableListings, getListingIPFSUri]);
+  }, [getAvailableListings, contractProviderRef]);
 
   useEffect(() => {
     if (!isReady) {
@@ -121,11 +96,8 @@ export default function LaunchesPanel({ className = "" }) {
 
   let listingsArray = [];
 
-  for (const [id, listing] of Object.entries(listings)) {
-    listingsArray.push({
-      id,
-      ...listing,
-    });
+  for (const tokenId in listings) {
+    listingsArray.push(listings[tokenId]);
   }
 
   return (
