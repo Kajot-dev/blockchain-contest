@@ -3,6 +3,8 @@ import NavBar from "@/components/NavBar";
 import UserContext from "@/scripts/UserContext";
 import { useRouter } from "next/router";
 import { useContext } from "react";
+import { RetailerContractProvider } from "@/scripts/contractInteraction/RetailerContractContext";
+
 import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
 
@@ -19,7 +21,9 @@ export default function CreateLaunch() {
         <div className="fill-bg">
           <div className="fill magic-bg" />
         </div>
-        <RetailerPanel className={roboto.className} />
+        <RetailerContractProvider>
+          <RetailerPanel className={roboto.className} />
+        </RetailerContractProvider>
       </main>
     </>
   );
