@@ -39,7 +39,7 @@ router.post(expressWrapper(multerUpload.single("image")));
  * - symbol -> text
  * - image -> file
  */
-const validTextFields = ["name", "symbol"];
+const validTextFields = ["name", "symbol", "variant"];
 
 router.post(async (req, res) => {
   if (!req.file) {
@@ -80,6 +80,9 @@ router.post(async (req, res) => {
     image: new File([req.file.buffer], `nft.${imageExtension}`, {
       type: req.file.mimetype,
     }),
+    properties: {
+      variant: req.body.variant,
+    },
   });
 
   let resObj = {

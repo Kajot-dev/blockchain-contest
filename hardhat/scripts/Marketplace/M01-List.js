@@ -8,7 +8,7 @@ const firstOffer = {
 
   const secondOffer = {
     price: ethers.utils.parseEther("0.05"),
-    tokenId: 2,
+    tokenId: 3,
     time: 5,
   }
 
@@ -30,12 +30,9 @@ async function main() {
     await secondTx.wait(1)
     console.log("NFT #2 Listed!")
 
-    console.log("Confirming the listings...")
+    console.log(`Current number of listings: ${await Marketplace.getTotalListings()}`)
 
-    // const L1 = 
-
-    console.log(await Marketplace.getListing(CustomIPFSNFT.address, firstOffer.tokenId))
-    console.log(await Marketplace.getListing(CustomIPFSNFT.address, secondOffer.tokenId))
+    console.log(await Marketplace.fetchActiveItems())
 
 }
 
