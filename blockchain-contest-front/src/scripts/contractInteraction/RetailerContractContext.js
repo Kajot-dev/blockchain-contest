@@ -74,9 +74,9 @@ export function RetailerContractProvider({ ...props }) {
   return <RetailerContractContext.Provider value={value} {...props} />;
 }
 
-const exports = { 
-  RetailerContractContext, 
-  RetailerContractProvider 
-}
+const exports = {
+  RetailerContractContext,
+  RetailerContractProvider,
+};
 
 export default exports;

@@ -94,8 +94,12 @@ export function ItemInfo({
 
 const ipfsRegex = /^ipfs:\/\/[a-zA-Z0-9/.]+$/;
 
-export function ItemImage({ className = "", ipfs = null, onRawImageData = () => {}, ...props }) {
-
+export function ItemImage({
+  className = "",
+  ipfs = null,
+  onRawImageData = () => {},
+  ...props
+}) {
   const [ipfsImageData, setIpfsImageData] = useState(null);
   const [fileImageData, setFileImageData] = useState(null);
   const [imageState, setImageState] = useState("blank"); // ["blank", "loading", "loaded", "error"]
@@ -128,7 +132,7 @@ export function ItemImage({ className = "", ipfs = null, onRawImageData = () => 
     if (ipfs && ipfs.trim() !== "" && ipfsRegex.test(ipfs.trim())) {
       const abortController = new AbortController();
       let rawIpfs = ipfs.trim().substring(7);
-      let ipfsUrl = `https://ipfs.io/ipfs/${rawIpfs}`
+      let ipfsUrl = `https://ipfs.io/ipfs/${rawIpfs}`;
       setImageState("loading");
       fetch(ipfsUrl, {
         signal: abortController.signal,
@@ -141,14 +145,15 @@ export function ItemImage({ className = "", ipfs = null, onRawImageData = () => 
             setImageState("loaded");
           };
           reader.readAsDataURL(blob);
-        }).catch((err) => {
+        })
+        .catch((err) => {
           setIpfsImageData(null);
           setImageState("error");
         });
 
       return () => {
         abortController.abort();
-      }
+      };
     } else {
       setIpfsImageData(null);
     }
@@ -166,8 +171,7 @@ export function ItemImage({ className = "", ipfs = null, onRawImageData = () => 
     return (
       <img src={imageData} alt="Uploaded image" width={250} height={250} />
     );
-  }, [imageState, ipfsImageData, fileImageData]);
-
+  }, [ipfsImageData, fileImageData]);
 
   const renderImage = useCallback(() => {
     switch (imageState) {
@@ -180,13 +184,9 @@ export function ItemImage({ className = "", ipfs = null, onRawImageData = () => 
               height: "250px",
             }}
           />
-        )
+        );
       case "loading":
-        return (
-          <PulseLoader
-            size={10}
-          />
-        )
+        return <PulseLoader size={10} />;
       case "loaded":
         return renderReadyImage();
       case "error":
@@ -198,12 +198,11 @@ export function ItemImage({ className = "", ipfs = null, onRawImageData = () => 
               height: "250px",
             }}
           />
-        )
+        );
       default:
         return null;
     }
-  }, [imageState, ipfsImageData, fileImageData]);
-
+  }, [imageState, renderReadyImage]);
 
   return (
     <Panel
@@ -281,7 +280,7 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
           placeholder="Quantity"
           errorMsg={quantityError}
           FluentIcon={AddSubtractCircleFilled}
-          onChange={(e) => quantity.current = parseInt(e.target.value.trim())}
+          onChange={(e) => (quantity.current = parseInt(e.target.value.trim()))}
         />
         <TextField
           variant="standard"
@@ -291,7 +290,7 @@ export function AddItem({ className = "", onItemAdd = () => {} }) {
           placeholder="Trait"
           errorMsg={traitError}
           FluentIcon={DataBarVerticalAddFilled}
-          onChange={(e) => trait.current = e.target.value.trim()}
+          onChange={(e) => (trait.current = e.target.value.trim())}
         />
         <Button onClick={addItem} className={stylesForm.thin}>
           +
@@ -347,20 +346,24 @@ export function DeployLaunch({
   onDateChange = () => {},
   onReleaseNowChange = () => {},
 }) {
-
   const [date, setDate] = useState(initialDate);
   const [releaseNow, setReleaseNow] = useState(initialReleaseNow);
 
+  const dateChangeHandler = useCallback(
+    (date) => {
+      setDate(date);
+      onDateChange(date);
+    },
+    [onDateChange]
+  );
 
-  const dateChangeHandler = useCallback((date) => {
-    setDate(date);
-    onDateChange(date);
-  }, [onDateChange]);
-
-  const releaseNowChangeHandler = useCallback((e) => {
-    setReleaseNow(e.target.checked);
-    onReleaseNowChange(e.target.checked);
-  }, [onReleaseNowChange]);
+  const releaseNowChangeHandler = useCallback(
+    (e) => {
+      setReleaseNow(e.target.checked);
+      onReleaseNowChange(e.target.checked);
+    },
+    [onReleaseNowChange]
+  );
 
   return (
     <Panel className={className} label="Deploy launch">
@@ -412,10 +415,10 @@ export default function CreateLaunchPanel({ className = "" }) {
 
   const ipfsChangeHandler = useCallback((e) => {
     setIpfs(e.target.value.trim());
-  }, []);  
+  }, []);
 
   const rawImageDataChangeHandler = useCallback((imageData) => {
-    rawImageData.current = imageData
+    rawImageData.current = imageData;
   }, []);
 
   // ITEM LIST
@@ -434,18 +437,24 @@ export default function CreateLaunchPanel({ className = "" }) {
   }, []);
 
   // LIST FUNCTIONS
-  const onListAdd = useCallback((launch) => {
-    setLaunches(launches.concat({ id: uuidv4(), ...launch }));
-  }, [launches]);
+  const onListAdd = useCallback(
+    (launch) => {
+      setLaunches(launches.concat({ id: uuidv4(), ...launch }));
+    },
+    [launches]
+  );
 
-  const onListRemove = useCallback((launch) => {
-    let launchesCopy = launches.concat();
-    let launchIndex = launches.findIndex((l) => l.id === launch.id);
-    if (launchIndex !== -1) {
-      launchesCopy.splice(launchIndex, 1);
-      setLaunches(launchesCopy);
-    }
-  }, [launches]);
+  const onListRemove = useCallback(
+    (launch) => {
+      let launchesCopy = launches.concat();
+      let launchIndex = launches.findIndex((l) => l.id === launch.id);
+      if (launchIndex !== -1) {
+        launchesCopy.splice(launchIndex, 1);
+        setLaunches(launchesCopy);
+      }
+    },
+    [launches]
+  );
 
   return (
     <div className={`${styles.launchGrid} ${className}`}>

@@ -9,6 +9,9 @@ export const ConsumerContractContext = createContext(undefined);
 
 //for purposes of customer panel and /launches page - write access
 export function ConsumerContractProvider({ ...props }) {
+  const { status } = useMetaMask();
+  const [isReady, setIsReady] = useState(false);
+
   const provider = useRef(null);
   const contract = useRef(null);
 
@@ -51,6 +54,6 @@ export function ConsumerContractProvider({ ...props }) {
 const exports = {
   ConsumerContractContext,
   ConsumerContractProvider,
-}
+};
 
 export default exports;
