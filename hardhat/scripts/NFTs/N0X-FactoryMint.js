@@ -11,7 +11,7 @@ const tokenInfo = {
 };
 
 async function main() {
-    
+
     console.log("Assigning user roles...");
 
     const { nikeRetailer } = await getNamedAccounts();
@@ -30,12 +30,11 @@ async function main() {
 
         const NFTMinter = await NFTFactory.connect(nikeDP).mintNFT(0, iteratedFullURI);
         await NFTMinter.wait(1);
-        console.log("NFT Minted..")
 
-        const tokenUriByIndex = await NFTFactory.showTokenUri(1, i);
+        const tokenUriByIndex = await NFTFactory.showTokenUri(0, i);
         console.log(`URI of token #${i} is ${tokenUriByIndex}`);
 
-        const approvalTx = await NFTFactory.connect(nikeDP).approve(Marketplace.address, i)
+        const approvalTx = await NFTFactory.connect(nikeDP).approve(Marketplace.address, 0, i)
         console.log(`Token #${i} got approved!`)
     }
 }
