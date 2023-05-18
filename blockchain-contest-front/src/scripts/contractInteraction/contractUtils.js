@@ -1,6 +1,9 @@
 import { Contract } from "ethers";
 import { CustomIPFSNFT } from "./contractInfo";
 
+const conversionPrecision = 100000000n;
+const conversionPrecisionNumber = 100000000;
+
 const promiseWrapper = async (id, func, ...args) => {
   try {
     let result = await func(...args);
@@ -29,7 +32,9 @@ export async function* getNFTInfoGenerator(listings, contractRunner) {
     );
 
     let priceWei = listing.price;
-    let priceETH = priceWei / 10n ** 18n;
+    let priceETH =
+      Number((priceWei * conversionPrecision) / 10n ** 18n) /
+      conversionPrecisionNumber;
 
     let ipfsUri = await contract.getTokenUri(listing.tokenId - 1n);
     if (!ipfsUri.startsWith("ipfs://")) {
@@ -44,6 +49,7 @@ export async function* getNFTInfoGenerator(listings, contractRunner) {
       nftAddress: listing.nftAddress,
       tokenId: listing.tokenId,
       id: listing.id,
+      time: listing.time,
     };
   };
 

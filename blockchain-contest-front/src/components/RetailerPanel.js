@@ -5,6 +5,7 @@ import { InfoBox } from "./Utils";
 import { FormContents as AccountFormContents } from "./ConnectForm";
 import { useCallback, useContext, useState, useEffect } from "react";
 import { RetailerContractContext } from "@/scripts/contractInteraction/RetailerContractContext";
+import { getNFTInfoGenerator } from "@/scripts/contractInteraction/contractUtils";
 
 import { RocketRegular, MoneyRegular } from "@fluentui/react-icons";
 import styles from "@styles/Retailer.module.css";
@@ -43,6 +44,34 @@ function AccountInfo({ ...props }) {
 }
 
 function RecentTransactions({ ...props }) {
+  const [mintedListings, setMintedListings] = useState({});
+
+  const { isReady, getMintedListings, contractProviderRef } = useContext(
+    RetailerContractContext
+  );
+
+  const handleMintedListings = useCallback(async () => {
+    let listings = await getMintedListings();
+    for await (const listingInfo of getNFTInfoGenerator(
+      listings,
+      contractProviderRef
+    )) {
+      setMintedListings((prev) => {
+        return {
+          ...prev,
+          [listingInfo.id]: listingInfo,
+        };
+      });
+    }
+  }, [getMintedListings, contractProviderRef]);
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+    handleMintedListings();
+  }, [isReady, handleMintedListings]);
+
   return (
     <Panel label="Recent transactions" {...props}>
       <Table
