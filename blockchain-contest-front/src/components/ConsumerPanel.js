@@ -19,7 +19,7 @@ function NftList({ ...props }) {
 
   const prepareNFTList = useCallback(async () => {
     let ownedNFTs = await getConsumerNfts();
-    console.log("ownedNFTs", ownedNFTs)
+    console.log("ownedNFTs", ownedNFTs);
     for await (const listing of getNFTInfoGenerator(
       ownedNFTs,
       contractProviderRef.current

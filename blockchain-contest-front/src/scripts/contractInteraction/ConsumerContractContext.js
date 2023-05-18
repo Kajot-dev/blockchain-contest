@@ -38,7 +38,7 @@ export function ConsumerContractProvider({ ...props }) {
 
   //it will get NFTs that belong to given user
   const getConsumerNfts = useCallback(async () => {
-    console.log("calling Marketplace.fetchMyPurchasedItems()")
+    console.log("calling Marketplace.fetchMyPurchasedItems()");
     return contract.current.fetchMyPurchasedItems();
   }, []);
 
@@ -68,13 +68,7 @@ export function ConsumerContractProvider({ ...props }) {
       isReady,
       contractProviderRef: provider,
     }),
-    [
-      getConsumerNfts,
-      getConsumerNftIPFSUri,
-      transferNft,
-      provider,
-      isReady,
-    ]
+    [getConsumerNfts, getConsumerNftIPFSUri, transferNft, provider, isReady]
   );
 
   return <ConsumerContractContext.Provider value={value} {...props} />;

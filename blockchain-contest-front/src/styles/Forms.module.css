@@ -164,7 +164,8 @@
   opacity: 0.7;
 }
 
-.account, .emphasize {
+.account,
+.emphasize {
   color: var(--accent-color);
   text-shadow: 0px 0px var(--glow-radius) var(--accent-color);
 }

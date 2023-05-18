@@ -38,8 +38,6 @@ export function PopupContextProvider({ children }) {
     setPopup(null);
   }, []);
 
-  
-
   const createPopup = useCallback((headerText, jsxContent, footerElements) => {
     setPopup(
       <PopupRenderer
@@ -49,7 +47,7 @@ export function PopupContextProvider({ children }) {
         closeCallback={closePopup}
       />
     );
-  }, []);
+  }, [closePopup]);
 
   const contextValue = useMemo(() => {
     return {
