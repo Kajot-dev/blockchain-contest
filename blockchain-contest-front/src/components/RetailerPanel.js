@@ -70,20 +70,21 @@ function NftList({ ...props }) {
       contractProviderRef
     )) {
       let listingIdentifier = `${listingInfo.id}-${listingInfo.name}`;
-      let singeListingList;
-      if (listingIdentifier in mintedListings) {
-        singeListingList = mintedListings[listingIdentifier];
-      } else {
-        singeListingList = [];
-      }
+
       singeListingList.push(listingInfo);
-      setMintedListings((listings) =>
+      setMintedListings((listings) => {
+        let singeListingList;
+        if (listingIdentifier in listings) {
+          singeListingList = listings[listingIdentifier];
+        } else {
+          singeListingList = [];
+        }
         Object.assign({}, listings, {
           [listingIdentifier]: singeListingList,
-        })
-      );
+        });
+      });
     }
-  }, [getMintedListings, contractProviderRef, mintedListings]);
+  }, [getMintedListings, contractProviderRef]);
 
   useEffect(() => {
     if (!isReady) {
