@@ -52,7 +52,7 @@ router.post(async (req, res) => {
 
   //validate form fields
   for (const fieldName in req.body) {
-    console.log(fieldName, validTextFields)
+    console.log(fieldName, validTextFields);
     if (!validTextFields.includes(fieldName)) {
       throw new FormError("Invalid field", fieldName);
     } else if (req.body[fieldName].length > 100) {
@@ -82,8 +82,8 @@ router.post(async (req, res) => {
       type: req.file.mimetype,
     }),
     properties: {
-      "trait_type": req.body.attribute,
-      "value": req.body.trait,
+      trait_type: req.body.attribute,
+      value: req.body.trait,
     },
   });
 

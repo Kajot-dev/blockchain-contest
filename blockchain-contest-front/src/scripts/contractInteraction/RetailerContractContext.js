@@ -39,7 +39,7 @@ export function RetailerContractProvider({ ...props }) {
   //this should give us all the listings that given retailer has
   //event the ones that are not yet available for sale
   const getMintedListings = useCallback(async () => {
-    console.log("calling Marketplace.fetchMyCreatedItems()")
+    console.log("calling Marketplace.fetchMyCreatedItems()");
     return contract.current.fetchMyCreatedItems();
   }, []);
 

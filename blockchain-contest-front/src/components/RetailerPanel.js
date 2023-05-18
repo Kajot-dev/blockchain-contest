@@ -44,7 +44,6 @@ function AccountInfo({ ...props }) {
 }
 
 function RecentTransactions({ ...props }) {
-
   return (
     <Panel label="Recent transactions" {...props}>
       <Table
@@ -65,7 +64,7 @@ function NftList({ ...props }) {
   const handleMintedListings = useCallback(async () => {
     setMintedListings({});
     let listings = await getMintedListings();
-    console.log("got listings", listings)
+    console.log("got listings", listings);
     for await (const listingInfo of getNFTInfoGenerator(
       listings,
       contractProviderRef
@@ -84,7 +83,7 @@ function NftList({ ...props }) {
         })
       );
     }
-  }, [getMintedListings, contractProviderRef]);
+  }, [getMintedListings, contractProviderRef, mintedListings]);
 
   useEffect(() => {
     if (!isReady) {
@@ -93,7 +92,6 @@ function NftList({ ...props }) {
     console.log("reading listings");
     handleMintedListings();
   }, [isReady, handleMintedListings]);
-
 
   let listingsArray = [];
 
@@ -105,9 +103,14 @@ function NftList({ ...props }) {
       while (i < listingsArray.length && listingsArray[i].id < listing.id) {
         i++;
       }
-      listingsArray.splice(i, 0, [listing.name, listing.description, listing.parameters["trait_type"], listing.parameters["value"], listing.time]);
+      listingsArray.splice(i, 0, [
+        listing.name,
+        listing.description,
+        listing.parameters["trait_type"],
+        listing.parameters["value"],
+        listing.time,
+      ]);
     }
-    
   }
 
   return (
