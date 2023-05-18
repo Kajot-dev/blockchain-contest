@@ -24,7 +24,7 @@ async function main() {
   console.log("Minting and uploading tokenURis!");
 
   for (let i = 0; i < jsonNikeCIDs.length; i++) {
-    iteratedFullURI = PROTOCOL_PREFIX + jsonCIDs[i];
+    iteratedFullURI = PROTOCOL_PREFIX + jsonNikeCIDs[i];
 
     const NFTMinter = await NFTFactory.connect(nikeDP).mintNFT(0, iteratedFullURI);
     await NFTMinter.wait(1);
