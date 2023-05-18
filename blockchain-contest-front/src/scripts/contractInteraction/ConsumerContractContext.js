@@ -1,35 +1,66 @@
-import ethers from "ethers";
-import { createContext, useEffect, useCallback, useRef, useMemo } from "react";
-
-const contractAddress = process.env.MARKETPLACE_CONTRACT_ADDRESS;
-
-const abi = ["TODO"];
+import { BrowserProvider, Contract } from "ethers";
+import {
+  createContext,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+  useState,
+} from "react";
+import { Marketplace, CustomIPFSNFT, desiredChainId } from "./contractInfo";
+import { useMetaMask } from "metamask-react";
 
 export const ConsumerContractContext = createContext(undefined);
 
 //for purposes of customer panel and /launches page - write access
 export function ConsumerContractProvider({ ...props }) {
+  const { status, chainId } = useMetaMask();
+  const [isReady, setIsReady] = useState(false);
+
   const provider = useRef(null);
+  const signer = useRef(null);
   const contract = useRef(null);
 
   useEffect(() => {
-    provider.current = new ethers.providers.Web3Provider(window.ethereum);
-    contract.current = new ethers.Contract(
-      contractAddress,
-      abi,
-      provider.current
-    );
-  }, []);
+    if (status === "connected" && chainId === desiredChainId) {
+      provider.current = new BrowserProvider(window.ethereum);
+      //signer.current = await provider.current.getSigner();
+      contract.current = new Contract(
+        Marketplace.address,
+        Marketplace.abiString,
+        provider.current
+      );
+      setIsReady(true);
+    } else {
+      setIsReady(false);
+    }
+  }, [status, chainId]);
 
   //it will get NFTs that belong to given user
-  const getConsumerNfts = useCallback(async (start = 0, amount = 30) => {}, []); //TODO - may be replaced with recent transaction (na koniec)
+  const getConsumerNfts = useCallback(async () => {
+    return contract.current.fetchMyPurchasedItems();
+  }, []);
 
   //it will get details about an NFT that belongs to given user
-  const getConsumerNft = useCallback(async (nftContractAddress, tokenId) => {},
-  []); //READY
+  const getConsumerNftIPFSUri = useCallback(
+    async (nftContractAddress, tokenId) => {
+      let nftContract = new Contract(
+        nftContractAddress,
+        CustomIPFSNFT.abiString,
+        provider.current
+      );
+
+      return nftContract.getTokenUri(tokenId);
+    },
+    []
+  );
 
   //it will buy an NFT from retailer
-  const buyNft = useCallback(async (nftContractAddress, tokenId) => {}, []); //READY
+  const buyNft = useCallback(async (tokenId) => {
+    let signer = await provider.current.getSigner();
+    contract.current.connect(signer);
+    return contract.current.buyItem(tokenId);
+  }, []);
 
   //it will transfer an NFT to another user
   const transferNft = useCallback(async (listingId, toChainId, toAddress) => {},
@@ -38,11 +69,20 @@ export function ConsumerContractProvider({ ...props }) {
   const value = useMemo(
     () => ({
       getConsumerNfts,
-      getConsumerNft,
+      getConsumerNftIPFSUri,
       buyNft,
       transferNft,
+      isReady,
+      contractProviderRef: provider,
     }),
-    [getConsumerNfts, getConsumerNft, buyNft, transferNft]
+    [
+      getConsumerNfts,
+      getConsumerNftIPFSUri,
+      buyNft,
+      transferNft,
+      provider,
+      isReady,
+    ]
   );
 
   return <ConsumerContractContext.Provider value={value} {...props} />;
@@ -51,6 +91,6 @@ export function ConsumerContractProvider({ ...props }) {
 const exports = {
   ConsumerContractContext,
   ConsumerContractProvider,
-}
+};
 
 export default exports;

@@ -4,6 +4,7 @@ import { useState, useEffect, useContext } from "react";
 import { useMetaMask } from "metamask-react";
 import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import UserContext from "../scripts/UserContext";
+import { desiredChainId } from "@/scripts/contractInteraction/contractInfo";
 
 import styles from "@styles/Forms.module.css";
 import stylesNavBar from "@styles/NavBar.module.css";
@@ -11,7 +12,7 @@ import stylesNavBar from "@styles/NavBar.module.css";
 export default function ConnectWallet({ connectLocation }) {
   const [destination, setDestination] = useState(connectLocation);
 
-  const { userType, setUserType } = useContext(UserContext);
+  const { userType } = useContext(UserContext);
 
   const { status, account, chainId } = useMetaMask();
 
@@ -34,10 +35,9 @@ export default function ConnectWallet({ connectLocation }) {
   };
 
   if (status === "connected") {
-    if (chainId !== "0x1") {
-      return getConnect("Switch to mainnet");
+    if (chainId !== desiredChainId) {
+      return getConnect("Switch to local network");
     } else {
-      //TODO Add link to account page (for switching wallets)
       return (
         <div>
           <Link

@@ -3,16 +3,54 @@ import Table from "./Table";
 import Link from "next/link";
 import { InfoBox } from "./Utils";
 import { FormContents as AccountFormContents } from "./ConnectForm";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { ConsumerContractContext } from "@/scripts/contractInteraction/ConsumerContractContext";
+import { getNFTInfoGenerator } from "@/scripts/contractInteraction/contractUtils";
 
 import { CartRegular } from "@fluentui/react-icons";
 import styles from "@styles/Consumer.module.css";
 import stylesForm from "@styles/Forms.module.css";
 
 function NftList({ ...props }) {
+  const { getConsumerNfts, isReady, contractProviderRef } = useContext(
+    ConsumerContractContext
+  );
+  const [nftObj, setNftObj] = useState({});
+
+  const prepareNFTList = useCallback(async () => {
+    let ownedNFTs = await getConsumerNfts();
+
+    for await (const listing of getNFTInfoGenerator(
+      ownedNFTs,
+      contractProviderRef.current
+    )) {
+      setNftObj((nftObj) => {
+        Object.assign({}, nftObj, {
+          [listing.id]: listing,
+        });
+      });
+    }
+  }, [contractProviderRef, getConsumerNfts]);
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+    prepareNFTList();
+  }, [isReady, prepareNFTList]);
+
+  let nftList = [];
+
+  for (const nftId in nftObj) {
+    const { name, description, image, priceETH } = nftObj[nftId];
+    nftList.push([name, description, image, `${priceETH} ETH`]);
+  }
+
   return (
     <Panel label="NFT List" {...props}>
       <Table
-        headers={["Symbol", "Name", "Image url"]}
+        headers={["Symbol", "Name", "Image url", "Price"]}
+        data={nftList}
         noElements={
           "It seems like you don't own any NFTs... But you can always buy some!"
         }

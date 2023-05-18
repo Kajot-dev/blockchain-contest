@@ -8,7 +8,6 @@ const unbounded6 = Unbounded({ subsets: ["latin"], weight: "600" });
 
 export default function Home() {
   useEffect(() => {
-    console.log(document.documentElement);
     document.documentElement.classList.add(styles.scrollType);
     return () => {
       document.documentElement.classList.remove(styles.scrollType);

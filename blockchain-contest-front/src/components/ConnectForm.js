@@ -1,8 +1,9 @@
 import { useMetaMask } from "metamask-react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { PulseLoader } from "react-spinners";
 import { InfoBox, ErrorBox } from "./Utils";
 import { Panel } from "./Forms";
+import { desiredChainId } from "@/scripts/contractInteraction/contractInfo";
 import UserContext from "@/scripts/UserContext";
 import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import Link from "next/link";
@@ -10,6 +11,8 @@ import Link from "next/link";
 import styles from "@styles/Forms.module.css";
 import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
+
+const finalLocationRegex = /^\/(?:\w+\/)*(?:\w+\/?)?$/;
 
 export default function ConnectForm() {
   return (
@@ -27,8 +30,18 @@ export function FormContents({
   displayConnectedGreetings = true,
 }) {
   const [errorMsg, setErrorMsg] = useState("");
+  const [destination, setDestination] = useState("/");
   const { status, account, chainId, connect, switchChain } = useMetaMask();
   const { userType } = useContext(UserContext);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    let finalLocation = urlParams.get("redirect");
+    // validate that final location is valid pathname
+    if (finalLocation && finalLocationRegex.test(finalLocation)) {
+      setDestination(finalLocation);
+    }
+  }, []);
 
   const handleRefreshClick = (e) => {
     e.preventDefault();
@@ -38,7 +51,7 @@ export function FormContents({
   const handleSwitchClick = async (e) => {
     e.preventDefault();
     try {
-      await switchChain({ chainId: "0x1" });
+      await switchChain(desiredChainId);
     } catch (e) {
       setErrorMsg(e.message);
     }
@@ -98,15 +111,15 @@ export function FormContents({
       );
 
     case "connected":
-      if (chainId !== "0x1") {
+      if (chainId !== desiredChainId) {
         return (
           <>
             <div className={styles.subTitle}>Switch net</div>
             <div className="side-margin">
-              <InfoBox text="Our app uses Etherum mainnet" />
+              <InfoBox text="Our app uses Local net" />
             </div>
             <button className={styles.formBtn} onClick={handleSwitchClick}>
-              Switch to mainnet
+              Switch to local net
             </button>
           </>
         );
@@ -131,7 +144,7 @@ export function FormContents({
               </span>
             </div>
             {displayExploreButton && (
-              <Link href="/">
+              <Link href={destination}>
                 <button className={styles.formBtn}>Explore</button>
               </Link>
             )}

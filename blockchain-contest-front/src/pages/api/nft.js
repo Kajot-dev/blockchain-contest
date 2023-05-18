@@ -39,7 +39,7 @@ router.post(expressWrapper(multerUpload.single("image")));
  * - symbol -> text
  * - image -> file
  */
-const validTextFields = ["name", "symbol", "variant"];
+const validTextFields = ["name", "symbol", "attribute", "trait"];
 
 router.post(async (req, res) => {
   if (!req.file) {
@@ -52,6 +52,7 @@ router.post(async (req, res) => {
 
   //validate form fields
   for (const fieldName in req.body) {
+    console.log(fieldName, validTextFields);
     if (!validTextFields.includes(fieldName)) {
       throw new FormError("Invalid field", fieldName);
     } else if (req.body[fieldName].length > 100) {
@@ -81,7 +82,8 @@ router.post(async (req, res) => {
       type: req.file.mimetype,
     }),
     properties: {
-      variant: req.body.variant,
+      trait_type: req.body.attribute,
+      value: req.body.trait,
     },
   });
 
