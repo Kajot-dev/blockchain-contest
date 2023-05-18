@@ -52,6 +52,17 @@ function ListingCard({ listing, refreshFunc }) {
     return realImageUrl;
   }, [image]);
 
+  const definiteBuyHandler = useCallback(async () => {
+    try {
+      await buyNft(listing.id, listing.priceETH);
+      refreshFunc();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      closePopup();
+    }
+  }, [buyNft, closePopup, listing, refreshFunc]);
+
   const buyButtonHandler = useCallback(() => {
     createPopup(
       "Buy NFT",
@@ -79,17 +90,6 @@ function ListingCard({ listing, refreshFunc }) {
       <Button onClick={definiteBuyHandler}>Buy</Button>
     );
   }, [createPopup, definiteBuyHandler, getImageUrl, listing.description, name, priceETH]);
-
-  const definiteBuyHandler = useCallback(async () => {
-    try {
-      await buyNft(listing.id, listing.priceETH);
-      refreshFunc();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      closePopup();
-    }
-  }, [buyNft, closePopup, listing, refreshFunc]);
 
   return (
     <Panel className={`${styles.card} ${stylesForm.thin}`}>

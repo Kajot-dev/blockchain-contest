@@ -6,7 +6,6 @@
     transparent 85%,
     transparent 100%
   );
-  opacity: 0.7;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -47,9 +46,14 @@
   font-size: 3rem;
   mix-blend-mode: overlay;
   color: var(--text-color);
-  filter: contrast(1.2);
   transition: color 0.2s ease-in-out;
   text-shadow: 4px 4px 10px rgba(0, 0, 0, var(--shadow-alpha));
+}
+
+@media (prefers-color-scheme: dark) {
+  .zenEmphasize {
+    filter: brightness(1.5);
+  }
 }
 
 .scrollType {
