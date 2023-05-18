@@ -79,7 +79,7 @@ function NftList({ ...props }) {
         } else {
           singeListingList = [];
         }
-        Object.assign({}, listings, {
+        return Object.assign({}, listings, {
           [listingIdentifier]: singeListingList,
         });
       });
