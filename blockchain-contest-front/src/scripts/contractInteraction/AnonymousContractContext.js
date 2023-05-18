@@ -1,4 +1,4 @@
-import { BrowserProvider, Contract } from "ethers";
+import { BrowserProvider, Contract, parseEther } from "ethers";
 import {
   createContext,
   useEffect,
@@ -56,11 +56,21 @@ export function AnonymousContractProvider({ ...props }) {
     return nftContract.getTokenUri(tokenId);
   }, []);
 
+  //it will buy an NFT from retailer
+  const buyNft = useCallback(async (tokenId, price) => {
+    let signer = await provider.current.getSigner();
+    let contractWithSigner = contract.current.connect(signer);
+    return contractWithSigner.buyItem(tokenId, {
+      value: parseEther(price.toString()),
+    });
+  }, []);
+
   const value = useMemo(
     () => ({
       getAvailableListings,
       getAvailableListingsCount,
       getListingIPFSUri,
+      buyNft,
       isReady,
       contractProviderRef: provider,
     }),
@@ -68,6 +78,7 @@ export function AnonymousContractProvider({ ...props }) {
       getAvailableListings,
       getAvailableListingsCount,
       getListingIPFSUri,
+      buyNft,
       isReady,
       provider,
     ]

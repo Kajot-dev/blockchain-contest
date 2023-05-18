@@ -38,6 +38,7 @@ export function ConsumerContractProvider({ ...props }) {
 
   //it will get NFTs that belong to given user
   const getConsumerNfts = useCallback(async () => {
+    console.log("calling Marketplace.fetchMyPurchasedItems()");
     return contract.current.fetchMyPurchasedItems();
   }, []);
 
@@ -55,13 +56,6 @@ export function ConsumerContractProvider({ ...props }) {
     []
   );
 
-  //it will buy an NFT from retailer
-  const buyNft = useCallback(async (tokenId) => {
-    let signer = await provider.current.getSigner();
-    contract.current.connect(signer);
-    return contract.current.buyItem(tokenId);
-  }, []);
-
   //it will transfer an NFT to another user
   const transferNft = useCallback(async (listingId, toChainId, toAddress) => {},
   []); //READY - proposal (no UI is ready)
@@ -70,19 +64,11 @@ export function ConsumerContractProvider({ ...props }) {
     () => ({
       getConsumerNfts,
       getConsumerNftIPFSUri,
-      buyNft,
       transferNft,
       isReady,
       contractProviderRef: provider,
     }),
-    [
-      getConsumerNfts,
-      getConsumerNftIPFSUri,
-      buyNft,
-      transferNft,
-      provider,
-      isReady,
-    ]
+    [getConsumerNfts, getConsumerNftIPFSUri, transferNft, provider, isReady]
   );
 
   return <ConsumerContractContext.Provider value={value} {...props} />;
