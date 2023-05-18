@@ -2,7 +2,7 @@
 pragma solidity ^0.8.8;
 
 import "./CustomIPFSNFT.sol";
-//import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract NFTFactory {
     
@@ -16,12 +16,11 @@ contract NFTFactory {
     }
 
     uint256 public createdContractCount;
+    CreatedContract[] public allCreatedContracts;
     address[] private creators;
 
     mapping(address => uint16) private creatorContractsSum;
     mapping(address => CreatedContract[]) private creatorContracts;
-
-    mapping(uint256 => CreatedContract) public allCreatedContracts;
 
     event tokenCreated(address indexed contractAddress, string tokenName, string tokenSymbol);
 
