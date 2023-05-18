@@ -7,7 +7,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
 
     log("----------------------------")
     const args = []
-    const CustomIPFSNFTFactory = await deploy("CustomIPFSNFTFactory", {
+    const NFTFactory = await deploy("NFTFactory", {
         from: admin,
         args: args,
         log: true,
@@ -20,4 +20,4 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
 
 }
 
-module.exports.tags = ["all", "marketplace"]
+module.exports.tags = ["all", "factory"]

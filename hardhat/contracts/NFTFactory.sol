@@ -4,7 +4,7 @@ pragma solidity ^0.8.8;
 import "./CustomIPFSNFT.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract customIPFSNFTFactory {
+contract NFTFactory {
     
     struct CreatedContract {
         CustomIPFSNFT token;
@@ -13,13 +13,11 @@ contract customIPFSNFTFactory {
         address creator;
         string name;
         string symbol;
-        string[] tokenUris;
     }
 
     uint256 public createdContractCount;
     CreatedContract[] public allCreatedContracts;
     address[] private creators;
-
 
     mapping(address => uint16) private creatorContractsSum;
     mapping(address => CreatedContract[]) private creatorContracts;
@@ -28,8 +26,9 @@ contract customIPFSNFTFactory {
 
     error tokenWithSuchIdDoesNotExist(uint256 yourId, uint256 maximumTokenId);
 
-    function deployToken(string memory tokenName, string memory tokenSymbol, string[] memory tokenUris) public {
-        CustomIPFSNFT token = new CustomIPFSNFT(tokenName, tokenSymbol, tokenUris);
+    function deployToken(string memory tokenName, string memory tokenSymbol) public {
+
+        CustomIPFSNFT token = new CustomIPFSNFT(tokenName, tokenSymbol);
 
         CreatedContract memory newContract;
         
@@ -42,14 +41,31 @@ contract customIPFSNFTFactory {
         newContract.creator = msg.sender;
         newContract.name = tokenName;
         newContract.symbol = tokenSymbol;
-        newContract.tokenUris = tokenUris;
 
         creatorContracts[msg.sender].push(newContract);
         allCreatedContracts[createdContractCount] = newContract;
         creatorContractsSum[msg.sender]++;
+
         createdContractCount++;
         emit tokenCreated(address(token), tokenName, tokenSymbol);
     }   
+
+    function mintNFT(uint256 collectionIndex, string memory nextTokenUri) public {
+         if(collectionIndex > createdContractCount) {
+            revert tokenWithSuchIdDoesNotExist(collectionIndex, createdContractCount);
+         }
+        CustomIPFSNFT collectionContract = allCreatedContracts[collectionIndex].token;
+        collectionContract.mintRequestedNFT(nextTokenUri);        
+    }
+
+    function showTokenUri(uint256 collectionIndex, uint256 tokenId) public view returns(string memory tokenUri) {
+        CustomIPFSNFT collectionContract = allCreatedContracts[collectionIndex].token;
+
+        if(collectionIndex > createdContractCount && tokenId > collectionContract.getTokenCounter() ) {
+            revert tokenWithSuchIdDoesNotExist(collectionIndex, createdContractCount);
+         }
+        return collectionContract.tokenURI(tokenId);
+    }
 
     function viewCreatorContracts() external view returns (CreatedContract[] memory) {
         return creatorContracts[msg.sender];

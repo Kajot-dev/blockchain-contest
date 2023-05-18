@@ -14,7 +14,7 @@ module.exports = {
       default: 0,
       localhost: 0,
     },
-    randomRetailer: {
+    unusedRetailer: {
       default: 1,
       localhost: 1,
     },
@@ -30,6 +30,14 @@ module.exports = {
       default: 12,
       localhost: 12,
     },
+    ticketRetailer: {
+      default: 13,
+      localhost: 13,
+    },
+    coinTrader: {
+      default: 14,
+      localhost: 14
+    }
   },
 
 };
