@@ -9,3 +9,5 @@ export const CustomIPFSNFT = Object.freeze({
 });
 
 export const desiredChainId = "0x7a69";
+
+export const networkName = "Local";

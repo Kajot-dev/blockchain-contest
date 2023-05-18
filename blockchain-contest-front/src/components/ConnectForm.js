@@ -3,7 +3,7 @@ import { useState, useContext, useEffect } from "react";
 import { PulseLoader } from "react-spinners";
 import { InfoBox, ErrorBox } from "./Utils";
 import { Panel } from "./Forms";
-import { desiredChainId } from "@/scripts/contractInteraction/contractInfo";
+import { desiredChainId, networkName } from "@/scripts/contractInteraction/contractInfo";
 import UserContext from "@/scripts/UserContext";
 import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import Link from "next/link";
@@ -116,10 +116,10 @@ export function FormContents({
           <>
             <div className={styles.subTitle}>Switch net</div>
             <div className="side-margin">
-              <InfoBox text="Our app uses Local net" />
+              <InfoBox text={`Our app uses ${networkName} Net`} />
             </div>
             <button className={styles.formBtn} onClick={handleSwitchClick}>
-              Switch to local net
+              Switch to {networkName} Net
             </button>
           </>
         );
