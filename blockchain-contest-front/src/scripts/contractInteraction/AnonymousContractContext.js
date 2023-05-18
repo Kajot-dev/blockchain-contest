@@ -37,7 +37,6 @@ export function AnonymousContractProvider({ ...props }) {
   //it will get NFTs that are available for sale
   const getAvailableListings = useCallback(async () => {
     let activeItems = contract.current.fetchActiveItems();
-    //TODO return only nftContract and tokenId
     return activeItems;
   }, []);
 

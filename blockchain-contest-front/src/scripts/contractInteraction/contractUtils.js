@@ -43,6 +43,11 @@ export async function* getNFTInfoGenerator(listings, contractRunner) {
     ipfsUri = ipfsUri.substring(7);
     let res = await fetch(`https://ipfs.io/ipfs/${ipfsUri}`);
     let info = await res.json();
+    //convert attributes to parameters (for example format)
+    if (info.attributes && info.attributes.length === 1) {
+      info.parameters = info.attributes[0];
+      delete info.attributes;
+    }
     return {
       ...info,
       priceETH,

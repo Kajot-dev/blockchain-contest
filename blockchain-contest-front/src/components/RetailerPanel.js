@@ -44,33 +44,6 @@ function AccountInfo({ ...props }) {
 }
 
 function RecentTransactions({ ...props }) {
-  const [mintedListings, setMintedListings] = useState({});
-
-  const { isReady, getMintedListings, contractProviderRef } = useContext(
-    RetailerContractContext
-  );
-
-  const handleMintedListings = useCallback(async () => {
-    let listings = await getMintedListings();
-    for await (const listingInfo of getNFTInfoGenerator(
-      listings,
-      contractProviderRef
-    )) {
-      setMintedListings((prev) => {
-        return {
-          ...prev,
-          [listingInfo.id]: listingInfo,
-        };
-      });
-    }
-  }, [getMintedListings, contractProviderRef]);
-
-  useEffect(() => {
-    if (!isReady) {
-      return;
-    }
-    handleMintedListings();
-  }, [isReady, handleMintedListings]);
 
   return (
     <Panel label="Recent transactions" {...props}>
@@ -83,10 +56,65 @@ function RecentTransactions({ ...props }) {
 }
 
 function NftList({ ...props }) {
+  const [mintedListings, setMintedListings] = useState({});
+
+  const { isReady, getMintedListings, contractProviderRef } = useContext(
+    RetailerContractContext
+  );
+
+  const handleMintedListings = useCallback(async () => {
+    setMintedListings({});
+    let listings = await getMintedListings();
+    console.log("got listings", listings)
+    for await (const listingInfo of getNFTInfoGenerator(
+      listings,
+      contractProviderRef
+    )) {
+      let listingIdentifier = `${listingInfo.id}-${listingInfo.name}`;
+      let singeListingList;
+      if (listingIdentifier in mintedListings) {
+        singeListingList = mintedListings[listingIdentifier];
+      } else {
+        singeListingList = [];
+      }
+      singeListingList.push(listingInfo);
+      setMintedListings((listings) =>
+        Object.assign({}, listings, {
+          [listingIdentifier]: singeListingList,
+        })
+      );
+    }
+  }, [getMintedListings, contractProviderRef]);
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+    console.log("reading listings");
+    handleMintedListings();
+  }, [isReady, handleMintedListings]);
+
+
+  let listingsArray = [];
+
+  for (const listingIdentifier in mintedListings) {
+    const similarListingArray = mintedListings[listingIdentifier];
+    for (const listing of similarListingArray) {
+      //do insertion sort
+      let i = 0;
+      while (i < listingsArray.length && listingsArray[i].id < listing.id) {
+        i++;
+      }
+      listingsArray.splice(i, 0, [listing.name, listing.description, listing.parameters["trait_type"], listing.parameters["value"], listing.time]);
+    }
+    
+  }
+
   return (
     <Panel label="NFT List" {...props}>
       <Table
-        headers={["Symbol", "Name", "Number of items", "Status"]}
+        headers={["Name", "Description", "Attribute", "Trait", "Status"]}
+        data={listingsArray}
         noElements={
           "It seems like you don't have any more NFTs to sell... But you can always create a new launch!"
         }

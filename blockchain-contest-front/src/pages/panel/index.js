@@ -1,15 +1,17 @@
 import NavBar from "@/components/NavBar";
 import UserContext from "@/scripts/UserContext";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { PulseLoader } from "react-spinners";
 
 export default function Panel() {
   const { userType } = useContext(UserContext);
   const router = useRouter();
-  if (userType !== null) {
-    router.push(`/panel/${userType}`);
-  }
+  useEffect(() => {
+    if (userType !== null) {
+      router.push(`/panel/${userType}`);
+    }
+  }, [userType, router]);
   return (
     <>
       <NavBar displayConnectButton={false} />

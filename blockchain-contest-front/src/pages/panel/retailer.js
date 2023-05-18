@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useContext, useEffect } from "react";
 import { useMetaMask } from "metamask-react";
 import { RetailerContractProvider } from "@/scripts/contractInteraction/RetailerContractContext";
+import { desiredChainId } from "@/scripts/contractInteraction/contractInfo";
 
 import { Roboto_Condensed } from "next/font/google";
 const roboto = Roboto_Condensed({ subsets: ["latin"], weight: "400" });
@@ -19,7 +20,7 @@ export default function CreateLaunch() {
       (status === "connected" && chainId !== desiredChainId)
     ) {
       router.push(`/connect?redirect=${encodeURIComponent(router.asPath)}`);
-    } else if (userType !== "consumer" && userType !== null) {
+    } else if (userType !== "retailer" && userType !== null) {
       router.push(`/panel/${userType}`);
     }
   }, [userType, status, chainId, router]);

@@ -44,6 +44,7 @@ export function ConsumerContractProvider({ ...props }) {
   //it will get details about an NFT that belongs to given user
   const getConsumerNftIPFSUri = useCallback(
     async (nftContractAddress, tokenId) => {
+      
       let nftContract = new Contract(
         nftContractAddress,
         CustomIPFSNFT.abiString,

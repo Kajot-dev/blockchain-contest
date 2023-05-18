@@ -12,7 +12,7 @@ import stylesNavBar from "@styles/NavBar.module.css";
 export default function ConnectWallet({ connectLocation }) {
   const [destination, setDestination] = useState(connectLocation);
 
-  const { userType, setUserType } = useContext(UserContext);
+  const { userType } = useContext(UserContext);
 
   const { status, account, chainId } = useMetaMask();
 
