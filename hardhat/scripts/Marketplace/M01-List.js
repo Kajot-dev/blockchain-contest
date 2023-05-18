@@ -32,7 +32,7 @@ async function main() {
 
     console.log(`Current number of listings: ${await Marketplace.getTotalListings()}`)
 
-    console.log(await Marketplace.fetchActiveItems())
+    console.log(await Marketplace.connect(deployer).fetchMyCreatedItems())
 
 }
 

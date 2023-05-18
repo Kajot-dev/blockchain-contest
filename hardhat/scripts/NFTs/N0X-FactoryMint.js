@@ -11,32 +11,38 @@ const tokenInfo = {
 };
 
 async function main() {
-  console.log("Assigning user roles...");
+    
+    console.log("Assigning user roles...");
 
-  const { nikeRetailer } = await getNamedAccounts();
-  const nikeDP = await ethers.getSigner(nikeRetailer);
+    const { nikeRetailer } = await getNamedAccounts();
+    const nikeDP = await ethers.getSigner(nikeRetailer);
 
-  const NFTFactory = await ethers.getContract("NFTFactory");
+    const NFTFactory = await ethers.getContract("NFTFactory");
+    const Marketplace = await ethers.getContract("Marketplace")
 
-  console.log("Creating new NFT Contracts:");
-  await NFTFactory.connect(nikeDP).deployToken(tokenInfo.name, tokenInfo.symbol);
+    console.log("Creating new NFT Contracts:");
+    await NFTFactory.connect(nikeDP).deployToken(tokenInfo.name, tokenInfo.symbol);
 
-  console.log("Minting and uploading tokenURis!");
+    console.log("Minting and uploading tokenURis!");
 
-  for (let i = 0; i < jsonNikeCIDs.length; i++) {
-    iteratedFullURI = PROTOCOL_PREFIX + jsonNikeCIDs[i];
+    for (let i = 0; i < jsonNikeCIDs.length; i++) {
+        iteratedFullURI = PROTOCOL_PREFIX + jsonNikeCIDs[i];
 
-    const NFTMinter = await NFTFactory.connect(nikeDP).mintNFT(0, iteratedFullURI);
-    await NFTMinter.wait(1);
+        const NFTMinter = await NFTFactory.connect(nikeDP).mintNFT(0, iteratedFullURI);
+        await NFTMinter.wait(1);
+        console.log("NFT Minted..")
 
-    const tokenUriByIndex = await NFTFactory.showTokenUri(0, i);
-    console.log(`URI of token #${i} is ${tokenUriByIndex}`);
-  }
+        const tokenUriByIndex = await NFTFactory.showTokenUri(1, i);
+        console.log(`URI of token #${i} is ${tokenUriByIndex}`);
+
+        const approvalTx = await NFTFactory.connect(nikeDP).approve(Marketplace.address, i)
+        console.log(`Token #${i} got approved!`)
+    }
 }
 
 main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });

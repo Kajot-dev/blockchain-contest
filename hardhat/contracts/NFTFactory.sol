@@ -2,25 +2,15 @@
 pragma solidity ^0.8.8;
 
 import "./CustomIPFSNFT.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "./StoreAccessControl.sol";
 
-contract NFTFactory {
+contract NFTFactory is StoreAccessControl {
     
-    struct CreatedContract {
-        CustomIPFSNFT token;
-        uint16 contractId;
-        uint256 contractPublicId;
-        address creator;
-        string name;
-        string symbol;
-    }
+    CustomIPFSNFT[] public ipfsNFTs;
+    mapping(address => CustomIPFSNFT[]) public storeCollection;
+    mapping(address => uint256) public personalCollectionCount;
 
-    uint256 public createdContractCount;
-    CreatedContract[] public allCreatedContracts;
-    address[] private creators;
-
-    mapping(address => uint16) private creatorContractsSum;
-    mapping(address => CreatedContract[]) private creatorContracts;
+    address private deployer;
 
     event tokenCreated(address indexed contractAddress, string tokenName, string tokenSymbol);
 
@@ -30,55 +20,45 @@ contract NFTFactory {
 
         CustomIPFSNFT token = new CustomIPFSNFT(tokenName, tokenSymbol);
 
-        CreatedContract memory newContract;
-        
+        ipfsNFTs.push(token);
 
-        uint16 counter = creatorContractsSum[msg.sender];
+        /*personalCollectionCount[msg.sender]++;
+        uint256 contractId = personalCollectionCount[msg.sender];
 
-        newContract.token = token;
-        newContract.contractId = counter;
-        newContract.contractPublicId = createdContractCount;
-        newContract.creator = msg.sender;
-        newContract.name = tokenName;
-        newContract.symbol = tokenSymbol;
+        storeCollection[msg.sender][contractId] = token;
 
-        creatorContracts[msg.sender].push(newContract);
-        allCreatedContracts[createdContractCount] = newContract;
-        creatorContractsSum[msg.sender]++;
+        emit tokenCreated(address(token), tokenName, tokenSymbol);*/
 
-        createdContractCount++;
-        emit tokenCreated(address(token), tokenName, tokenSymbol);
-    }   
+    } 
 
     function mintNFT(uint256 collectionIndex, string memory nextTokenUri) public {
-         if(collectionIndex > createdContractCount) {
-            revert tokenWithSuchIdDoesNotExist(collectionIndex, createdContractCount);
-         }
-        CustomIPFSNFT collectionContract = allCreatedContracts[collectionIndex].token;
+        
+        CustomIPFSNFT collectionContract = ipfsNFTs[collectionIndex];
+        uint256 maxToken = collectionContract.getTokenCounter();
+
+        if(collectionIndex > ipfsNFTs.length) {
+            revert tokenWithSuchIdDoesNotExist(collectionIndex, maxToken);
+        }
+
         collectionContract.mintRequestedNFT(nextTokenUri);        
     }
 
     function showTokenUri(uint256 collectionIndex, uint256 tokenId) public view returns(string memory tokenUri) {
-        CustomIPFSNFT collectionContract = allCreatedContracts[collectionIndex].token;
+        CustomIPFSNFT collectionContract = ipfsNFTs[collectionIndex];
+        uint256 maxToken = collectionContract.getTokenCounter();
 
-        if(collectionIndex > createdContractCount && tokenId > collectionContract.getTokenCounter() ) {
-            revert tokenWithSuchIdDoesNotExist(collectionIndex, createdContractCount);
-         }
+        if(collectionIndex > ipfsNFTs.length && tokenId > collectionContract.getTokenCounter() ) {
+            revert tokenWithSuchIdDoesNotExist(collectionIndex, maxToken);
+        }
+
         return collectionContract.tokenURI(tokenId);
     }
 
-    function viewCreatorContracts() external view returns (CreatedContract[] memory) {
-        return creatorContracts[msg.sender];
+    function viewCreatorContracts(address store) external view returns (CustomIPFSNFT[] memory) {
+        return storeCollection[store];
     }
 
-    function getSingleContract(uint256 publicContractId) external view returns(CreatedContract memory) {
-        if (publicContractId > createdContractCount) {
-            revert tokenWithSuchIdDoesNotExist(publicContractId, createdContractCount);
-        }
-        return allCreatedContracts[publicContractId];
-    }
-
-    function getAllContracts() external view returns(CreatedContract[] memory){
-        return allCreatedContracts;
+    function getSingleContract(uint256 contractId) external view returns(CustomIPFSNFT) {
+        return ipfsNFTs[contractId];
     }
 }
