@@ -10,9 +10,7 @@ const unbounded5 = Unbounded({ subsets: ["latin"], weight: "500" });
 export async function getStaticProps() {
   const fs = require("fs");
   const path = require("path");
-  const partnerSvgs = fs.readdirSync(
-    path.join(process.cwd(), "public", "partners")
-  );
+  const partnerSvgs = fs.readdirSync(path.join(process.cwd(), "public", "partners"));
   return {
     props: {
       partnerSvgs,
@@ -32,13 +30,14 @@ export default function Home({ partnerSvgs }) {
           <section className={`${styles.heroSection} ${unbounded6.className}`}>
             <div>
               <h1>
-                Digital Minted
+                Digitally Minted
                 <br />
-                Physical Forged
+                Physically Forged
               </h1>
               <span className={`${unbounded5.className}`}>
-                A new way to mint and trade digital assets. <br /> Powered by
-                the blockchain.
+                Launching unique collectibles ahead of time.
+                <br />
+                Seamlessly blending the digital and physical worlds.
               </span>
             </div>
             <div className={styles.logoBg} />
@@ -48,12 +47,7 @@ export default function Home({ partnerSvgs }) {
             <div className={styles.partnersContainer}>
               {partnerSvgs
                 ? partnerSvgs.map((svgName) => (
-                    <ShiningImage
-                      key={svgName}
-                      dataMask={`/partners/${svgName}`}
-                      width="64px"
-                      height="64px"
-                    />
+                    <ShiningImage key={svgName} dataMask={`/partners/${svgName}`} width="64px" height="64px" />
                   ))
                 : null}
             </div>

@@ -40,7 +40,7 @@
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 200%;
   font-weight: 600;
 }
 
@@ -62,7 +62,6 @@
 }
 
 .formBtn:hover {
-  box-shadow: 2px 2px 8px rgba(var(--shadow-color), 0);
   filter: brightness(1.1);
   transform: scale(1.05);
   border-radius: 0.2rem;
@@ -130,7 +129,7 @@
   top: -0.75em;
   text-shadow: -1px -1px 0 var(--border-color), 1px -1px 0 var(--border-color),
     -1px 1px 0 var(--border-color), 1px 1px 0 var(--border-color),
-    0 0 8px transparent;
+    0 0 var(--glow-radius) transparent;
   transition: text-shadow 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
@@ -138,14 +137,14 @@
   color: var(--accent-color);
   text-shadow: 0 0 0 var(--accent-color), 0 0 0 var(--accent-color),
     0 0 0 var(--accent-color), 0 0 0 var(--accent-color),
-    0 0 8px var(--accent-color);
+    0 0 var(--glow-radius) var(--accent-color);
 }
 
 .formLabel {
   text-align: left;
   align-self: flex-start;
   text-transform: capitalize;
-  font-size: 0.9rem;
+  font-size: 90%;
   color: var(--accent-color);
 }
 
@@ -165,14 +164,10 @@
   opacity: 0.7;
 }
 
+.account,
 .emphasize {
   color: var(--accent-color);
-  text-shadow: 0px 0px 8px var(--accent-color);
-}
-
-.account {
-  color: var(--accent-color);
-  text-shadow: 0px 0px 12px var(--accent-color);
+  text-shadow: 0px 0px var(--glow-radius) var(--accent-color);
 }
 
 .inputWrapper {

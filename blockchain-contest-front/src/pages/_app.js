@@ -5,6 +5,7 @@ import Head from "next/head";
 import { MetaMaskProvider } from "metamask-react";
 import { useState, useEffect, useMemo } from "react";
 import UserContext from "@/scripts/UserContext";
+import { PopupContextProvider } from "@/scripts/PopupContext";
 
 export default function App({ Component, pageProps }) {
   const [userType, setUserType] = useState(null);
@@ -42,7 +43,9 @@ export default function App({ Component, pageProps }) {
       </Head>
       <MetaMaskProvider>
         <UserContext.Provider value={userContextData}>
-          <Component {...pageProps} />
+          <PopupContextProvider>
+            <Component {...pageProps} />
+          </PopupContextProvider>
         </UserContext.Provider>
       </MetaMaskProvider>
     </>

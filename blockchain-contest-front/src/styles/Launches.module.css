@@ -99,3 +99,22 @@
 .narrowField {
   width: 100px;
 }
+
+.popupImage {
+  max-height: 200px;
+}
+
+.popupInfo {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 1rem;
+  text-align: center;
+}
+
+.popupNotice {
+  font-size: 140%;
+  text-transform: capitalize;
+}
