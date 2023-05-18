@@ -110,6 +110,7 @@ export default function LaunchesPanel({ className = "" }) {
         activeListings,
         contractProviderRef.current
       )) {
+        if (listing.time * 1000n > BigInt(Date.now())) continue;
         setListings((listings) =>
           Object.assign({}, listings, {
             [listing.id]: listing,
