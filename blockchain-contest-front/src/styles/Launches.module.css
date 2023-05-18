@@ -53,6 +53,14 @@
   padding: 2rem;
 }
 
+.placeholder {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .card {
   height: 450px;
   width: 300px;

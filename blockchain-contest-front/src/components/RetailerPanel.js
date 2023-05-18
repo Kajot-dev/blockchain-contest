@@ -3,8 +3,11 @@ import Table from "./Table";
 import Link from "next/link";
 import { InfoBox } from "./Utils";
 import { FormContents as AccountFormContents } from "./ConnectForm";
+import { useCallback, useContext, useState, useEffect } from "react";
+import { RetailerContractContext } from "@/scripts/contractInteraction/RetailerContractContext";
+import { getNFTInfoGenerator } from "@/scripts/contractInteraction/contractUtils";
 
-import { RocketRegular, SearchRegular } from "@fluentui/react-icons";
+import { RocketRegular, MoneyRegular } from "@fluentui/react-icons";
 import styles from "@styles/Retailer.module.css";
 import stylesForm from "@styles/Forms.module.css";
 
@@ -52,10 +55,69 @@ function RecentTransactions({ ...props }) {
 }
 
 function NftList({ ...props }) {
+  const [mintedListings, setMintedListings] = useState({});
+
+  const { isReady, getMintedListings, contractProviderRef } = useContext(
+    RetailerContractContext
+  );
+
+  const handleMintedListings = useCallback(async () => {
+    setMintedListings({});
+    let listings = await getMintedListings();
+    console.log("got listings", listings);
+    for await (const listingInfo of getNFTInfoGenerator(
+      listings,
+      contractProviderRef
+    )) {
+      let listingIdentifier = `${listingInfo.id}-${listingInfo.name}`;
+      let singeListingList;
+      if (listingIdentifier in mintedListings) {
+        singeListingList = mintedListings[listingIdentifier];
+      } else {
+        singeListingList = [];
+      }
+      singeListingList.push(listingInfo);
+      setMintedListings((listings) =>
+        Object.assign({}, listings, {
+          [listingIdentifier]: singeListingList,
+        })
+      );
+    }
+  }, [getMintedListings, contractProviderRef, mintedListings]);
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+    console.log("reading listings");
+    handleMintedListings();
+  }, [isReady, handleMintedListings]);
+
+  let listingsArray = [];
+
+  for (const listingIdentifier in mintedListings) {
+    const similarListingArray = mintedListings[listingIdentifier];
+    for (const listing of similarListingArray) {
+      //do insertion sort
+      let i = 0;
+      while (i < listingsArray.length && listingsArray[i].id < listing.id) {
+        i++;
+      }
+      listingsArray.splice(i, 0, [
+        listing.name,
+        listing.description,
+        listing.parameters["trait_type"],
+        listing.parameters["value"],
+        listing.time,
+      ]);
+    }
+  }
+
   return (
     <Panel label="NFT List" {...props}>
       <Table
-        headers={["Symbol", "Name", "Number of items", "Status"]}
+        headers={["Name", "Description", "Attribute", "Trait", "Status"]}
+        data={listingsArray}
         noElements={
           "It seems like you don't have any more NFTs to sell... But you can always create a new launch!"
         }
@@ -64,23 +126,52 @@ function NftList({ ...props }) {
   );
 }
 
-function BlockExplorer({ ...props }) {
+function WithdrawBox({ ...props }) {
+  const [balanceETH, setBalanceETH] = useState(0n);
+
+  const { isReady, cashOut, getBalance } = useContext(RetailerContractContext);
+
+  const handleBalance = useCallback(async () => {
+    let priceWei = await getBalance();
+    let priceETH = priceWei / 10n ** 18n;
+    setBalanceETH(priceETH);
+  }, [getBalance]);
+
+  const handleCashOut = useCallback(async () => {
+    await cashOut();
+    handleBalance();
+  }, [cashOut, handleBalance]);
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+    handleBalance();
+  }, [isReady, handleBalance]);
+
   return (
     <Panel label="Block Explorer" {...props}>
-      <InfoBox text="Go to block explorer to see the details about transactions!" />
-      <Link href="https://etherscan.io/">
-        <OutlineButton
-          style={{
-            fontSize: "1.5rem",
-            gap: "0.25rem",
-          }}
-          className="flexRow"
-        >
-          <SearchRegular />
-          Go to Block Explorer
-          <SearchRegular />
-        </OutlineButton>
-      </Link>
+      <InfoBox text="You can withdraw the ETH that you made selling your NFTs here!" />
+      <div>
+        Current balance:{" "}
+        <span className={stylesForm.emphasize}>
+          {balanceETH.toString()} ETH
+        </span>
+      </div>
+      <OutlineButton
+        style={{
+          fontSize: "1.5rem",
+          gap: "0.25rem",
+          width: "auto",
+        }}
+        className="flexRow"
+        disabled={balanceETH === 0n}
+        onClick={handleCashOut}
+      >
+        <MoneyRegular />
+        Cash out!
+        <MoneyRegular />
+      </OutlineButton>
     </Panel>
   );
 }
@@ -95,7 +186,7 @@ export default function RetailerPanel({ className = "", ...props }) {
       <CreateLaunch
         className={`${styles.newLaunch} ${stylesForm.form} ${stylesForm.center}`}
       />
-      <BlockExplorer
+      <WithdrawBox
         className={`${styles.blockExplorer} ${stylesForm.form} ${stylesForm.center}`}
       />
       <RecentTransactions

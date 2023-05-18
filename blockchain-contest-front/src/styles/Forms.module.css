@@ -165,6 +165,11 @@
   opacity: 0.7;
 }
 
+.emphasize {
+  color: var(--accent-color);
+  text-shadow: 0px 0px 8px var(--accent-color);
+}
+
 .account {
   color: var(--accent-color);
   text-shadow: 0px 0px 12px var(--accent-color);
