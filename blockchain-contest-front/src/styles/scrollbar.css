@@ -3,11 +3,11 @@ body::-webkit-scrollbar {
   height: 6px;
 }
 body::-webkit-scrollbar-track {
-  border-radius: 10px;
+  border-radius: 0.2rem;
   background: rgba(0, 0, 0, 0.1);
 }
 body::-webkit-scrollbar-thumb {
-  border-radius: 10px;
+  border-radius: 0.2rem;
   background: rgba(0, 0, 0, 0.2);
 }
 body::-webkit-scrollbar-thumb:hover {

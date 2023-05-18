@@ -4,6 +4,7 @@
   --text-color: #000000;
   --bg-color: #fff;
   --bg-color-semi-transparent: rgba(255, 255, 255, 0.6);
+  --bg-color-08: rgba(255, 255, 255, 0.8);
   --bg-inv-semi-transparent: rgba(0, 0, 0, 0.2);
   --shadow-color: 0, 0, 0;
   --shadow-alpha: 0.6;
@@ -11,7 +12,9 @@
   --navbar-height: 60px;
   --screen-size: calc(100vh - var(--navbar-height));
   --grid-gap: 1.5em;
+  --default-padding: 1.5rem 1.5rem;
   --borderWidth: 1.25px;
+  --glow-radius: 8px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,6 +22,7 @@
     --text-color: #ffffff;
     --bg-color: #000;
     --bg-color-semi-transparent: rgba(0, 0, 0, 0.6);
+    --bg-color-08: rgba(0, 0, 0, 0.8);
     --bg-inv-semi-transparent: rgba(255, 255, 255, 0.2);
     --border-color: #cccccc;
   }
