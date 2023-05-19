@@ -4,9 +4,13 @@ async function buyItem() {
 
     const Marketplace = await ethers.getContract("Marketplace")
 
-    const { normalUser, nikeRetailer } = await getNamedAccounts()
+    const { normalUser, nikeRetailer, rolexRetailer, ticketRetailer, coinTrader } = await getNamedAccounts();
     const customer = await ethers.getSigner(normalUser) // Comment if does not insert the signer
-    const seller = await ethers.getSigner(nikeRetailer)
+    const sellerNike = await ethers.getSigner(nikeRetailer)
+    const sellerRolex = await ethers.getSigner(rolexRetailer);
+    const sellerTicket = await ethers.getSigner(ticketRetailer)
+    const sellerCoin = await ethers.getSigner(coinTrader)
+    const signers = [sellerNike, sellerRolex, sellerTicket, sellerCoin]
     const listingsTotal = await Marketplace.getTotalListings()
 
     for (let i = 1; i <= listingsTotal; i++) {
@@ -31,9 +35,12 @@ async function buyItem() {
     const ownedNFTs = await Marketplace.connect(customer).fetchMyPurchasedItems()
     console.log(ownedNFTs)
 
-    console.log("Checking seller balance after purchase...")
-    const nikeBalance = await Marketplace.connect(seller).getMyBalance()
-    console.log(nikeBalance)
+    console.log("Checking sellers balance after purchase...")
+
+    for (let i = 0; i < signers.length; i++) {
+        const sellerBalance = await Marketplace.connect(signers[i]).getMyBalance()
+        console.log(sellerBalance)
+    }
 
 }
 

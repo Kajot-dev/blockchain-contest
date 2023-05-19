@@ -33,23 +33,63 @@ const firstNikeOffer = {
   const thirdRolexOffer = {
     price: ethers.utils.parseEther("24.0"),
     tokenId: 2,
+    time: 1200,
+  }
+
+  const firstTicketOffer = {
+    price: ethers.utils.parseEther("0.03"),
+    tokenId: 0,
+    time: 1200,
+  }
+
+  const secondTicketOffer = {
+    price: ethers.utils.parseEther("0.04"),
+    tokenId: 1,
     time: 5,
+  }
+
+  const thirdTicketOffer = {
+    price: ethers.utils.parseEther("0.01"),
+    tokenId: 2,
+    time: 150,
+  }
+
+  const firstCoinOffer = {
+    price: ethers.utils.parseEther("0.25"),
+    tokenId: 0,
+    time: 1200,
+  }
+
+  const secondCoinOffer = {
+    price: ethers.utils.parseEther("0.5"),
+    tokenId: 1,
+    time: 5,
+  }
+
+  const thirdCoinOffer = {
+    price: ethers.utils.parseEther("1.0"),
+    tokenId: 2,
+    time: 1500,
   }
 
 const Offers = [
   [ firstNikeOffer, secondNikeOffer, thirdNikeOffer ],
-  [ firstRolexOffer, secondRolexOffer, thirdRolexOffer ]
-]
+  [ firstRolexOffer, secondRolexOffer, thirdRolexOffer ],
+  [ firstTicketOffer, secondTicketOffer, thirdTicketOffer],
+  [ firstCoinOffer, secondCoinOffer, thirdTicketOffer ]
+];
 
 async function main() {
 
     const Marketplace = await ethers.getContract("Marketplace")
     const NFTFactory = await ethers.getContract("NFTFactory")
 
-    const { nikeRetailer, rolexRetailer } = await getNamedAccounts();
+    const { nikeRetailer, rolexRetailer, ticketRetailer, coinTrader } = await getNamedAccounts();
     const nikeDP = await ethers.getSigner(nikeRetailer);
     const rolexDP = await ethers.getSigner(rolexRetailer);
-    const signers = [nikeDP, rolexDP]
+    const ticketDP = await ethers.getSigner(ticketRetailer)
+    const coinDP = await ethers.getSigner(coinTrader)
+    const signers = [nikeDP, rolexDP, ticketDP, coinDP]
 
     console.log("Listing NFTs...")
 
@@ -66,7 +106,8 @@ async function main() {
     }
 
     console.log(`Current number of listings: ${await Marketplace.getTotalListings()}`)
-    console.log(await Marketplace.connect(nikeDP).fetchMyCreatedItems())
+    // console.log(await Marketplace.connect(nikeDP).fetchMyCreatedItems())
+    console.log(await Marketplace.connect(rolexDP).fetchMyCreatedItems())
 
 }
 
