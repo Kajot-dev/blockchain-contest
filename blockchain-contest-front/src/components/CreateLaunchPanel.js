@@ -4,6 +4,7 @@ import {
   useCallback,
   useMemo,
   useEffect,
+  useContext,
   Component,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
@@ -32,13 +33,14 @@ import {
   ImageProhibitedRegular,
 } from "@fluentui/react-icons";
 import { PopupContext } from "@/scripts/PopupContext";
+import { parseEther } from "ethers";
 
 import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
 import stylesPopup from "@styles/Popup.module.css";
 
+
 class LaunchDeployPopup extends Component {
-  static contextType = RetailerContractContext;
 
   constructor(props) {
     super(props);
@@ -48,47 +50,52 @@ class LaunchDeployPopup extends Component {
       symbol,
       imageDataUri,
       traitType,
-      priceETH,
+      priceWei,
       itemCountsAndTraits,
       deployTime,
+      createListingFunc
     } = props;
-    this.state = {
-      description: description,
-      symbol: symbol,
-      imageDataUri: imageDataUri,
-      traitType: traitType,
-      priceETH: priceETH,
-      itemCountsAndTraits: itemCountsAndTraits,
-      deployTime: deployTime,
-      isDeploying: false,
-      deployStatus: {
-        status: "Waiting for user...",
-        CurrentNft: "-",
-        NFTsTotal: "-",
-      },
-    };
-  }
 
-  handleDeployClick = async () => {
-    this.setState({ isDeploying: true });
-
-    let itemsData = this.state.itemCountsAndTraits.reduce((acc, item) => {
+    let itemsData = itemCountsAndTraits.reduce((acc, item) => {
       for (let i = 0; i < item.count; i++) {
         acc.push({
-          traitType: this.state.traitType,
+          traitType: traitType,
           traitValue: item.traitValue,
-          rawImageDataURL: this.state.imageDataUri,
+          rawImageDataURL: imageDataUri,
         });
       }
       return acc;
     }, []);
 
-    const deployStatusGenerator = this.context.createListing(
+    this.state = {
+      description: description,
+      symbol: symbol,
+      imageDataUri: imageDataUri,
+      traitType: traitType,
+      priceWei: priceWei,
+      deployTime: deployTime,
+      isDeploying: false,
+      itemsData,
+      deployStatus: {
+        status: "Waiting for user...",
+        CurrentNft: "-",
+        NFTsTotal: itemsData.length,
+      },
+      _createListing: createListingFunc,
+    };
+    console.log(this.state);
+  }
+
+  handleDeployClick = async () => {
+    this.setState({ isDeploying: true });
+
+
+    const deployStatusGenerator = this.state._createListing(
       this.state.symbol,
       this.state.description,
-      this.state.priceETH,
+      this.state.priceWei,
       this.state.deployTime,
-      itemsData
+      this.state.itemsData
     );
 
     for await (const deployStatus of deployStatusGenerator) {
@@ -99,22 +106,26 @@ class LaunchDeployPopup extends Component {
   render() {
     return (
       <>
-        <div className={stylesPopup.content}>
+        <div className={stylesPopup.content} style={{
+          flexDirection: "column",
+          gap: "0.5rem",
+          alignItems: "flex-start"
+        }}>
           <div>
-            Status: {this.state.deployStatus.status}
+            Status: <span className={stylesForm.emphasize}>{this.state.deployStatus.status}</span>
           </div>
           <div>
-            Current NFT: {this.state.deployStatus.CurrentNft}
+            Current NFT: <span className={stylesForm.emphasize}>{this.state.deployStatus.CurrentNft}</span>
           </div>
           <div>
-            NFTs Total: {this.state.deployStatus.NFTsTotal}
+            NFTs Total: <span className={stylesForm.emphasize}>{this.state.deployStatus.NFTsTotal}</span>
           </div>
         </div>
         <div className={stylesPopup.footer}>
           <Button
             onClick={this.handleDeployClick}
             disabled={this.state.isDeploying}
-          />
+          >Deploy</Button>
         </div>
       </>
     );
@@ -260,6 +271,10 @@ export function ItemImage({
       setImageState("blank");
     }
   }, [fileImageData, ipfs]);
+
+  useEffect(() => {
+    onRawImageData(fileImageData || ipfsImageData || "");
+  }, [fileImageData, ipfsImageData, onRawImageData]);
 
   const renderReadyImage = useCallback(() => {
     let imageData = ipfsImageData || fileImageData;
@@ -491,13 +506,13 @@ export function DeployLaunch({
 
 export default function CreateLaunchPanel({ className = "" }) {
   const { createPopup } = useContext(PopupContext);
-
+  const { createListing } = useContext(RetailerContractContext);
 
   // ITEM INFO
   const name = useRef("");
   const attribute = useRef("");
   const symbol = useRef("");
-  const price = useRef(0);
+  const price = useRef("");
   const [ipfs, setIpfs] = useState("");
   const rawImageData = useRef("");
 
@@ -537,23 +552,32 @@ export default function CreateLaunchPanel({ className = "" }) {
   }, []);
 
   const onDeployStart = useCallback(() => {
+    console.log(launches)
     createPopup(
       "Create Launch",
       <LaunchDeployPopup
-        description={name}
-        symbol={symbol}
+        description={name.current}
+        symbol={symbol.current}
         imageDataUri={rawImageData.current}
-        traitType={attribute}
-        priceETH={}
-        itemCountsAndTraits={}
-        deployTime={}
+        traitType={attribute.current}
+        priceWei={price.current}
+        itemCountsAndTraits={launches.map((launch) => {
+          return {
+            count: launch.quantity,
+            traitType: attribute.current,
+            traitValue: launch.trait
+          }
+        })}
+        deployTime={Math.floor(date.current.getTime() / 100)} //unix timestamp
+        createListingFunc={createListing}
       />
     )
-  }, []);
+  }, [launches, createListing]);
 
   // LIST FUNCTIONS
   const onListAdd = useCallback(
     (launch) => {
+      console.log(launch);
       setLaunches(launches.concat({ id: uuidv4(), ...launch }));
     },
     [launches]
@@ -572,7 +596,11 @@ export default function CreateLaunchPanel({ className = "" }) {
   );
 
   const onPriceChange = useCallback((e) => {
-    price.current = parseFloat(e.target.value.trim());
+    if (e.target.value.trim() === "") {
+      price.current = 0n;
+      return;
+    }
+    price.current = parseEther(e.target.value.trim());
   }, []);
 
   return (

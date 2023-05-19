@@ -1,4 +1,4 @@
-import { BrowserProvider, Contract, parseEther } from "ethers";
+import { BrowserProvider, Contract, formatEther, parseEther } from "ethers";
 import {
   createContext,
   useEffect,
@@ -28,6 +28,16 @@ function dataURIToBlob(dataURI) {
   return new Blob([ab], { type: mimeString });
 }
 
+function waitForEvent(contract, eventName) {
+  console.log("waiting for event", eventName);
+  return new Promise((resolve, reject) => {
+    contract.once(eventName, (...args) => {
+      console.log("event", eventName, "fired");
+      resolve(args);
+    });
+  });
+}
+
 
 //set of functions for retailer panel
 export function RetailerContractProvider({ ...props }) {
@@ -51,6 +61,7 @@ export function RetailerContractProvider({ ...props }) {
         NFTFactory.abiString,
         provider.current
       );
+      window.contractFactory = contractFactory.current;
       setIsReady(true);
     } else {
       setIsReady(false);
@@ -60,7 +71,6 @@ export function RetailerContractProvider({ ...props }) {
   //this should give us all the listings that given retailer has
   //event the ones that are not yet available for sale
   const getMintedListings = useCallback(async () => {
-    console.log("calling Marketplace.fetchMyCreatedItems()");
     return contractMarketplace.current.fetchMyCreatedItems();
   }, []);
 
@@ -71,7 +81,7 @@ export function RetailerContractProvider({ ...props }) {
   }, []);
 
   //this will create a new deployment of NFTs
-  const createListing = useCallback(async function*(symbol, description, priceETH, deployUnixTime, itemsData) {
+  const createListing = useCallback(async function*(symbol, description, priceWei, deployUnixTime, itemsData) {
     let signer = await provider.current.getSigner();
     let signedMContract = contractMarketplace.current.connect(signer);
     let signedFContract = contractFactory.current.connect(signer);
@@ -83,17 +93,13 @@ export function RetailerContractProvider({ ...props }) {
     }
 
     //create NFT contract
-    let collectionContractAddress;
-    let collectionIndex;
+    let deployTx = await signedFContract.deployToken(description, symbol);
+    let allDplEvents = await signedFContract.queryFilter("collectionCreated", deployTx.blockNumber, deployTx.blockNumber);
+    
+    let dplEvent = allDplEvents.find((e) => e.transactionHash === deployTx.hash);
 
-    signedFContract.once("collectionCreated", ([address, _name, _symbol, index]) => {
-      collectionContractAddress = address;
-      collectionIndex = index;
-    });
-
-    await signedFContract.deployToken(description, symbol);
-
-    //TODO implement waiting
+    const collectionContractAddress = dplEvent.args[0];
+    const collectionIndex = dplEvent.args[3];
 
     for (let i = 0; i < itemsData.length; i++) {
 
@@ -109,19 +115,24 @@ export function RetailerContractProvider({ ...props }) {
       let formData = new FormData();
       formData.append("symbol", symbol);
       formData.append("description", description);
-      formData.append("traitName", traitType);
+      formData.append("traitType", traitType);
       formData.append("traitValue", traitValue);
       formData.append("image", dataURIToBlob(rawImageDataURL));
 
-      
-
-      let res = await fetch(`https://${window.location.host}/api/nft`, {
+      const endpoint = `${window.location.protocol}//${window.location.host}/api/nft`;
+      let res = await fetch(endpoint, {
         method: "POST",
         body: formData,
       });
 
       let statusCode = res.status;
+      
       //assert that status code is 201
+      if (statusCode === 400) {
+        console.log(await res.json())
+        throw new Error("Bad Request");
+      }
+
       if (statusCode !== 201) {
         throw new Error("Error while uploading NFT");
       }
@@ -133,15 +144,13 @@ export function RetailerContractProvider({ ...props }) {
         "CurrentNft": i + 1,
         "NFTsTotal": itemsData.length,
       }
-
-      let mintedTokenId;
-
-      signedFContract.once("nftMinted", ([_collectionIndex, tokenId]) => {
-        mintedTokenId = tokenId;
-      })
-
+      console.log("minting NFT", collectionIndex, resJson.metadataURL)
       //mint NFT
-      await signedFContract.mintNFT(newCollectionId, resJson.metadataURL);
+      let mintTx = await signedFContract.mintNFT(collectionIndex, resJson.data.metadataURL);
+      let allMintEvents = await signedFContract.queryFilter("nftMinted", mintTx.blockNumber, mintTx.blockNumber);
+      let mintEvent = allMintEvents.find((e) => e.transactionHash === mintTx.hash);
+
+      const mintedTokenId = mintEvent.args[1];
 
       yield {
         "status": "Approving NFT",
@@ -158,7 +167,6 @@ export function RetailerContractProvider({ ...props }) {
       //approve NFT
       await collectionContract.approve(Marketplace.address, mintedTokenId);
 
-
       yield {
         "status": "Listing NFT",
         "CurrentNft": i + 1,
@@ -170,7 +178,7 @@ export function RetailerContractProvider({ ...props }) {
       await signedMContract.listItem(
         collectionContractAddress,
         mintedTokenId,
-        parseEther(priceETH),
+        priceWei,
         deployUnixTime
       );
     }

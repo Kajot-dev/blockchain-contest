@@ -18,6 +18,7 @@ import { PopupContext } from "@/scripts/PopupContext";
 import styles from "../styles/Launches.module.css";
 import stylesForm from "../styles/Forms.module.css";
 import stylesPopup from "../styles/Popup.module.css";
+import { formatEther, parseEther } from "ethers";
 
 const unbounded6 = Unbounded({ subsets: ["latin"], weight: "600" });
 
@@ -26,11 +27,12 @@ function ListingCard({ listing, refreshFunc }) {
     name,
     description,
     image,
-    priceETH,
+    priceWei,
     parameters: listingProperties,
   } = listing;
   const traitType = listingProperties.traitType;
   const traitValue = listingProperties.traitValue;
+  const priceETH= formatEther(listing.priceWei);
 
   const { createPopup, closePopup } = useContext(PopupContext);
   const { buyNft } = useContext(AnonymousContractContext);
@@ -55,7 +57,7 @@ function ListingCard({ listing, refreshFunc }) {
 
   const definiteBuyHandler = useCallback(async () => {
     try {
-      await buyNft(listing.id, listing.priceETH);
+      await buyNft(listing.id, listing.priceWei);
       refreshFunc();
     } catch (e) {
       console.error(e);
@@ -168,8 +170,8 @@ export default function LaunchesPanel({ className = "" }) {
 
   //fields for filtering
   const [searchText, setSearchText] = useState("");
-  const [minPrice, setMinPrice] = useState(Number.NaN);
-  const [maxPrice, setMaxPrice] = useState(Number.NaN);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   //field handlers
   const searchTextHandler = useCallback((e) => {
@@ -178,11 +180,11 @@ export default function LaunchesPanel({ className = "" }) {
   }, []);
 
   const minPriceHandler = useCallback((e) => {
-    setMinPrice(parseFloat(e.target.value));
+    setMinPrice(parseEther(e.target.value));
   }, []);
 
   const maxPriceHandler = useCallback((e) => {
-    setMaxPrice(parseFloat(e.target.value));
+    setMaxPrice(parseEther(e.target.value));
   }, []);
 
   const { getAvailableListings, isReady, contractProviderRef } = useContext(

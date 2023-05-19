@@ -39,7 +39,7 @@ router.post(expressWrapper(multerUpload.single("image")));
  * - symbol -> text
  * - image -> file
  */
-const validTextFields = ["description", "symbol", "traitName", "traitValue"];
+const validTextFields = ["description", "symbol", "traitType", "traitValue"];
 
 router.post(async (req, res) => {
   if (!req.file) {
@@ -56,7 +56,7 @@ router.post(async (req, res) => {
       throw new FormError("Invalid field", fieldName);
     } else if (req.body[fieldName].length > 100) {
       throw new FormError("Field too long", fieldName);
-    } else if (req.body[fieldName].length < 2) {
+    } else if (req.body[fieldName].length < 1) {
       throw new FormError("Field too short", fieldName);
     }
   }
@@ -82,7 +82,7 @@ router.post(async (req, res) => {
     }),
     properties: {
       traitType: req.body.traitType,
-      value: req.body.traitValue,
+      traitValue: req.body.traitValue,
     },
   });
 

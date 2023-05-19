@@ -24,7 +24,9 @@ const promiseWrapper = async (id, func, ...args) => {
 // it yields the info from IPFS, but with "naftAddress" and "tokenId" fields and "id" field
 //it does this asynchronously
 export async function* getNFTInfoGenerator(listings, contractRunner) {
+  
   const retrieveNftInfo = async (listing) => {
+    console.log("retrieveNftInfo", listing.nftContract, listing.tokenId);
     const contract = new Contract(
       listing.nftContract,
       CustomIPFSNFT.abiString,
@@ -32,9 +34,6 @@ export async function* getNFTInfoGenerator(listings, contractRunner) {
     );
 
     let priceWei = listing.price;
-    let priceETH =
-      Number((priceWei * conversionPrecision) / 10n ** 18n) /
-      conversionPrecisionNumber;
 
     let ipfsUri = await contract.getTokenUri(listing.tokenId);
     if (!ipfsUri.startsWith("ipfs://")) {
@@ -64,7 +63,7 @@ export async function* getNFTInfoGenerator(listings, contractRunner) {
 
     return {
       ...info,
-      priceETH,
+      priceWei,
       nftAddress: listing.nftAddress,
       tokenId: listing.tokenId,
       id: listing.id,

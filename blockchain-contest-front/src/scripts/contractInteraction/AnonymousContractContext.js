@@ -57,11 +57,11 @@ export function AnonymousContractProvider({ ...props }) {
   }, []);
 
   //it will buy an NFT from retailer
-  const buyNft = useCallback(async (tokenId, price) => {
+  const buyNft = useCallback(async (tokenId, priceWei) => {
     let signer = await provider.current.getSigner();
     let contractWithSigner = contract.current.connect(signer);
     return contractWithSigner.buyItem(tokenId, {
-      value: parseEther(price.toString()),
+      value: priceWei,
     });
   }, []);
 
