@@ -1,46 +1,33 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.8;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "./CustomIPFSNFT.sol";
-import "./StoreAccessControl.sol";
 
-contract NFTFactory is StoreAccessControl, IERC721Receiver {
+contract NFTFactory {
     
     CustomIPFSNFT[] public ipfsNFTs;
     mapping(address => CustomIPFSNFT[]) public storeCollection;
 
-    address private deployer;
+    event collectionCreated(address indexed contractAddress, string tokenName, string tokenSymbol, uint256 collectionIndex);
+    event nftMinted(uint256 collectionIndex, uint256 tokenId);
 
-    event tokenCreated(address indexed contractAddress, string tokenName, string tokenSymbol);
-
-    error tokenWithSuchIdDoesNotExist(uint256 yourId, uint256 maximumTokenId);
+    error tokenWithSuchIdDoesNotExist(uint16 maximumCollectionId, uint256 maximumTokenId);
 
     function deployToken(string memory tokenName, string memory tokenSymbol) public {
 
         CustomIPFSNFT token = new CustomIPFSNFT(tokenName, tokenSymbol);
-
+        token.setApprovalForAll(msg.sender, true);
         ipfsNFTs.push(token);
-
         storeCollection[msg.sender].push(token);
 
-        emit tokenCreated(address(token), tokenName, tokenSymbol);
+        uint256 collectionIndex = ipfsNFTs.length - 1;
+
+        emit collectionCreated(address(token), tokenName, tokenSymbol, collectionIndex);
 
     } 
-
-    function mintNFT(uint256 collectionIndex, string memory nextTokenUri) public {
-        
-        CustomIPFSNFT collectionContract = ipfsNFTs[collectionIndex];
-        uint256 maxToken = collectionContract.getTokenCounter();
-
-        if(collectionIndex > ipfsNFTs.length) {
-            revert tokenWithSuchIdDoesNotExist(collectionIndex, maxToken);
-        }
-
-        collectionContract.mintRequestedNFT(nextTokenUri);        
-    }
-
-    function approve(address contractApproved, uint256 collectionIndex, uint256 tokenId) public {
+    
+      /*function approve(uint16 collectionIndex, address contractApproved, uint256 tokenId) public {
         
         uint256 allContractsCount = ipfsNFTs.length;
 
@@ -49,17 +36,30 @@ contract NFTFactory is StoreAccessControl, IERC721Receiver {
         }
         
         CustomIPFSNFT contractCalled = ipfsNFTs[collectionIndex];
-
         uint256 maxToken = contractCalled.getTokenCounter();
         
         if(tokenId > maxToken) {
             revert tokenWithSuchIdDoesNotExist(collectionIndex, maxToken);
         }
-        
+
         contractCalled.approve(contractApproved, tokenId);
+    }*/
+
+    function mintNFT(uint16 collectionIndex, string memory nextTokenUri) public {
+        
+        CustomIPFSNFT collectionContract = ipfsNFTs[collectionIndex];
+        uint256 maxToken = collectionContract.getTokenCounter();
+
+        if(collectionIndex > ipfsNFTs.length) {
+            revert tokenWithSuchIdDoesNotExist(collectionIndex, maxToken);
+        }
+
+        collectionContract.mintRequestedNFT(msg.sender, nextTokenUri);       
+
+        emit nftMinted(collectionIndex, maxToken);
     }
 
-    function showTokenUri(uint256 collectionIndex, uint256 tokenId) public view returns(string memory tokenUri) {
+    function showTokenUri(uint16 collectionIndex, uint256 tokenId) public view returns(string memory tokenUri) {
         
         uint256 allContractsCount = ipfsNFTs.length;
 
@@ -88,4 +88,15 @@ contract NFTFactory is StoreAccessControl, IERC721Receiver {
     function getSingleContract(uint256 contractId) external view returns(CustomIPFSNFT) {
         return ipfsNFTs[contractId];
     }
+
+    function isUserApproved(uint16 collectionIndex, address owner, address operator) external view returns(bool) {
+        CustomIPFSNFT collectionContract = ipfsNFTs[collectionIndex];
+        return collectionContract.isApprovedForAll(owner, operator);
+    }
+
+    function isOwner(uint16 collectionIndex, uint256 tokenId) external view returns(address) {
+        CustomIPFSNFT collectionContract = ipfsNFTs[collectionIndex];
+        return collectionContract.ownerOf(tokenId);
+    }
+
 }

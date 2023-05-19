@@ -15,18 +15,21 @@ const firstOffer = {
 async function main() {
 
     const Marketplace = await ethers.getContract("Marketplace")
-    const CustomIPFSNFT = await ethers.getContract("CustomIPFSNFT")
+    const NFTFactory = await ethers.getContract("NFTFactory")
 
     const { nikeRetailer } = await getNamedAccounts()
     const deployer = await ethers.getSigner(nikeRetailer)
+
+    const firstNikeCollection = await NFTFactory.getSingleContract(0);
+    console.log(firstNikeCollection)
     
     console.log("Listing NFTs...")
 
-    const firstTx = await Marketplace.connect(deployer).listItem(CustomIPFSNFT.address, firstOffer.tokenId, firstOffer.price, firstOffer.time)
+    const firstTx = await Marketplace.connect(deployer).listItem(firstNikeCollection, firstOffer.tokenId, firstOffer.price, firstOffer.time)
     await firstTx.wait(1)
     console.log("NFT #1 Listed!")
 
-    const secondTx = await Marketplace.connect(deployer).listItem(CustomIPFSNFT.address, secondOffer.tokenId, secondOffer.price, secondOffer.time)
+    const secondTx = await Marketplace.connect(deployer).listItem(firstNikeCollection, secondOffer.tokenId, secondOffer.price, secondOffer.time)
     await secondTx.wait(1)
     console.log("NFT #2 Listed!")
 
