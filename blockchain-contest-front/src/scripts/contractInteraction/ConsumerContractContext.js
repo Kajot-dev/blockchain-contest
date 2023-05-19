@@ -24,7 +24,6 @@ export function ConsumerContractProvider({ ...props }) {
   useEffect(() => {
     if (status === "connected" && chainId === desiredChainId) {
       provider.current = new BrowserProvider(window.ethereum);
-      //signer.current = await provider.current.getSigner();
       contract.current = new Contract(
         Marketplace.address,
         Marketplace.abiString,

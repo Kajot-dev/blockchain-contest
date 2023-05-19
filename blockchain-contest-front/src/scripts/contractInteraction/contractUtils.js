@@ -54,12 +54,12 @@ export async function* getNFTInfoGenerator(listings, contractRunner) {
       info.parameters = {};
     }
 
-    if (!info.parameters["trait_type"]) {
-      info.parameters["trait_type"] = null;
+    if (!info.parameters["traitType"]) {
+      info.parameters["traitType"] = info.parameters["trait_type"] ? info.parameters["trait_type"] : null;
     }
 
     if (!info.parameters["value"]) {
-      info.parameters["value"] = null;
+      info.parameters["traitValue"] = info.parameters["value"] ? info.parameters["value"] : null;
     }
 
     return {

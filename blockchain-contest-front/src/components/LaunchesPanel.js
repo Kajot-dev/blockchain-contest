@@ -17,6 +17,7 @@ import { PopupContext } from "@/scripts/PopupContext";
 
 import styles from "../styles/Launches.module.css";
 import stylesForm from "../styles/Forms.module.css";
+import stylesPopup from "../styles/Popup.module.css";
 
 const unbounded6 = Unbounded({ subsets: ["latin"], weight: "600" });
 
@@ -28,8 +29,8 @@ function ListingCard({ listing, refreshFunc }) {
     priceETH,
     parameters: listingProperties,
   } = listing;
-  const traitType = listingProperties["trait_type"];
-  const traitValue = listingProperties["value"];
+  const traitType = listingProperties.traitType;
+  const traitValue = listingProperties.traitValue;
 
   const { createPopup, closePopup } = useContext(PopupContext);
   const { buyNft } = useContext(AnonymousContractContext);
@@ -64,16 +65,14 @@ function ListingCard({ listing, refreshFunc }) {
   }, [buyNft, closePopup, listing, refreshFunc]);
 
   const buyButtonHandler = useCallback(() => {
-    createPopup(
-      "Buy NFT",
-      [
+    createPopup("Buy NFT", [
+      <div className={stylesPopup.content} key="content">
         <img
           className={styles.popupImage}
           src={getImageUrl()}
           alt={listing.description}
-          key="image"
-        />,
-        <div className={styles.popupInfo} key="info">
+        />
+        <div className={styles.popupInfo}>
           <div className={styles.popupNotice}>You are about to buy</div>
           <div className={unbounded6.className}>{name}</div>
           <div
@@ -86,10 +85,12 @@ function ListingCard({ listing, refreshFunc }) {
             <div className={stylesForm.subtle}>for:</div>
             <div className={stylesForm.emphasize}>{priceETH} ETH</div>
           </div>
-        </div>,
-      ],
-      <Button onClick={definiteBuyHandler}>Buy</Button>
-    );
+        </div>
+      </div>,
+      <div className={stylesPopup.footer} key="footer">
+        <Button onClick={definiteBuyHandler}>Buy</Button>
+      </div>,
+    ]);
   }, [
     createPopup,
     definiteBuyHandler,

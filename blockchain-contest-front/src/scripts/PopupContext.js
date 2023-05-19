@@ -11,8 +11,7 @@ export const PopupContext = createContext({});
 
 function PopupRenderer({
   headerText,
-  jsxContent,
-  footerElements,
+  children,
   closeCallback,
 }) {
   return (
@@ -24,8 +23,7 @@ function PopupRenderer({
             <DismissFilled />
           </button>
         </div>
-        <div className={styles.content}>{jsxContent}</div>
-        <div className={styles.footer}>{footerElements}</div>
+        {children}
       </div>
     </div>
   );
@@ -39,14 +37,14 @@ export function PopupContextProvider({ children }) {
   }, []);
 
   const createPopup = useCallback(
-    (headerText, jsxContent, footerElements) => {
+    (headerText, content) => {
       setPopup(
         <PopupRenderer
           headerText={headerText}
-          jsxContent={jsxContent}
-          footerElements={footerElements}
           closeCallback={closePopup}
-        />
+        >
+          {content}
+        </PopupRenderer>
       );
     },
     [closePopup]

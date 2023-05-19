@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useMemo, useEffect } from "react";
+import { useState, useRef, useCallback, useMemo, useEffect, Component } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { PulseLoader } from "react-spinners";
 import {
@@ -25,6 +25,13 @@ import {
 } from "@fluentui/react-icons";
 import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
+
+
+class LaunchDeployPopup extends Component {
+  constructor(props) {
+    super(props);
+  }
+}
 
 export function ItemInfo({
   onNameChange = () => {},

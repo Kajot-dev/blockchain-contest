@@ -39,7 +39,7 @@ router.post(expressWrapper(multerUpload.single("image")));
  * - symbol -> text
  * - image -> file
  */
-const validTextFields = ["name", "symbol", "attribute", "trait"];
+const validTextFields = ["description", "symbol", "traitName", "traitValue"];
 
 router.post(async (req, res) => {
   if (!req.file) {
@@ -76,13 +76,13 @@ router.post(async (req, res) => {
 
   const metadata = await nftStorageClient.store({
     name: req.body.symbol,
-    description: req.body.name,
+    description: req.body.description,
     image: new File([req.file.buffer], `nft.${imageExtension}`, {
       type: req.file.mimetype,
     }),
     properties: {
-      trait_type: req.body.attribute,
-      value: req.body.trait,
+      traitType: req.body.traitType,
+      value: req.body.traitValue,
     },
   });
 
