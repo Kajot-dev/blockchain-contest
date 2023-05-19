@@ -31,6 +31,7 @@ import {
   ImageRegular,
   ImageProhibitedRegular,
 } from "@fluentui/react-icons";
+import { PopupContext } from "@/scripts/PopupContext";
 
 import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
@@ -439,6 +440,7 @@ export function DeployLaunch({
   initialReleaseNow = false,
   onDateChange = () => {},
   onReleaseNowChange = () => {},
+  onDeployStart = () => {}
 }) {
   const [date, setDate] = useState(initialDate);
   const [releaseNow, setReleaseNow] = useState(initialReleaseNow);
@@ -480,7 +482,7 @@ export function DeployLaunch({
 
       <InfoBox text="The launch will be deployed on First Come First Serve basis. The first person to buy the NFT will get it." />
 
-      <Button onClick={() => console.log("click")} className={stylesForm.major}>
+      <Button onClick={onDeployStart} className={stylesForm.major}>
         Deploy
       </Button>
     </Panel>
@@ -488,10 +490,14 @@ export function DeployLaunch({
 }
 
 export default function CreateLaunchPanel({ className = "" }) {
+  const { createPopup } = useContext(PopupContext);
+
+
   // ITEM INFO
   const name = useRef("");
   const attribute = useRef("");
   const symbol = useRef("");
+  const price = useRef(0);
   const [ipfs, setIpfs] = useState("");
   const rawImageData = useRef("");
 
@@ -530,6 +536,21 @@ export default function CreateLaunchPanel({ className = "" }) {
     releaseNow.current = state;
   }, []);
 
+  const onDeployStart = useCallback(() => {
+    createPopup(
+      "Create Launch",
+      <LaunchDeployPopup
+        description={name}
+        symbol={symbol}
+        imageDataUri={rawImageData.current}
+        traitType={attribute}
+        priceETH={}
+        itemCountsAndTraits={}
+        deployTime={}
+      />
+    )
+  }, []);
+
   // LIST FUNCTIONS
   const onListAdd = useCallback(
     (launch) => {
@@ -550,6 +571,10 @@ export default function CreateLaunchPanel({ className = "" }) {
     [launches]
   );
 
+  const onPriceChange = useCallback((e) => {
+    price.current = parseFloat(e.target.value.trim());
+  }, []);
+
   return (
     <div className={`${styles.launchGrid} ${className}`}>
       <ItemInfo
@@ -557,6 +582,7 @@ export default function CreateLaunchPanel({ className = "" }) {
         onAttributeChange={attributeChangeHandler}
         onSymbolChange={symbolChangeHandler}
         onIpfsChange={ipfsChangeHandler}
+        onPriceChange={onPriceChange}
         className={`${styles.itemInfo} ${stylesForm.form} ${stylesForm.thin} ${stylesForm.left}`}
       />
 
@@ -576,6 +602,7 @@ export default function CreateLaunchPanel({ className = "" }) {
         onDateChange={dateChangeHandler}
         initialReleaseNow={releaseNow.current}
         onReleaseNowChange={releaseNowChangeHandler}
+        onDeployStart={onDeployStart}
         className={`${styles.deployLaunch} ${stylesForm.form} ${stylesForm.thin}`}
       />
 
