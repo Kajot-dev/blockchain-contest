@@ -7,7 +7,12 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Marketplace, NFTFactory, CustomIPFSNFT, desiredChainId } from "./contractInfo";
+import {
+  Marketplace,
+  NFTFactory,
+  CustomIPFSNFT,
+  desiredChainId,
+} from "./contractInfo";
 import { useMetaMask } from "metamask-react";
 
 export const RetailerContractContext = createContext(undefined);
@@ -16,7 +21,6 @@ function dataURIToBlob(dataURI) {
   //this is only to be called in the browser
   let byteString = window.atob(dataURI.split(",")[1]);
   let mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
-
 
   let ab = new ArrayBuffer(byteString.length);
   let dw = new DataView(ab);
@@ -37,7 +41,6 @@ function waitForEvent(contract, eventName) {
     });
   });
 }
-
 
 //set of functions for retailer panel
 export function RetailerContractProvider({ ...props }) {
@@ -81,33 +84,44 @@ export function RetailerContractProvider({ ...props }) {
   }, []);
 
   //this will create a new deployment of NFTs
-  const createListing = useCallback(async function*(symbol, description, priceWei, deployUnixTime, itemsData) {
+  const createListing = useCallback(async function* (
+    symbol,
+    description,
+    priceWei,
+    deployUnixTime,
+    itemsData
+  ) {
     let signer = await provider.current.getSigner();
     let signedMContract = contractMarketplace.current.connect(signer);
     let signedFContract = contractFactory.current.connect(signer);
 
     yield {
-      "status": "Deploying Contract",
-      "CurrentNft": 0,
-      "NFTsTotal": itemsData.length,
-    }
+      status: "Deploying Contract",
+      CurrentNft: 0,
+      NFTsTotal: itemsData.length,
+    };
 
     //create NFT contract
     let deployTx = await signedFContract.deployToken(description, symbol);
-    let allDplEvents = await signedFContract.queryFilter("collectionCreated", deployTx.blockNumber, deployTx.blockNumber);
-    
-    let dplEvent = allDplEvents.find((e) => e.transactionHash === deployTx.hash);
+    let allDplEvents = await signedFContract.queryFilter(
+      "collectionCreated",
+      deployTx.blockNumber,
+      deployTx.blockNumber
+    );
+
+    let dplEvent = allDplEvents.find(
+      (e) => e.transactionHash === deployTx.hash
+    );
 
     const collectionContractAddress = dplEvent.args[0];
     const collectionIndex = dplEvent.args[3];
 
     for (let i = 0; i < itemsData.length; i++) {
-
       yield {
-        "status": "Uploading NFT",
-        "CurrentNft": i + 1,
-        "NFTsTotal": itemsData.length,
-      }
+        status: "Uploading NFT",
+        CurrentNft: i + 1,
+        NFTsTotal: itemsData.length,
+      };
 
       let item = itemsData[i];
       const { traitType, traitValue, rawImageDataURL } = item;
@@ -126,10 +140,10 @@ export function RetailerContractProvider({ ...props }) {
       });
 
       let statusCode = res.status;
-      
+
       //assert that status code is 201
       if (statusCode === 400) {
-        console.log(await res.json())
+        console.log(await res.json());
         throw new Error("Bad Request");
       }
 
@@ -140,23 +154,32 @@ export function RetailerContractProvider({ ...props }) {
       let resJson = await res.json();
 
       yield {
-        "status": "Minting NFT",
-        "CurrentNft": i + 1,
-        "NFTsTotal": itemsData.length,
-      }
-      console.log("minting NFT", collectionIndex, resJson.metadataURL)
+        status: "Minting NFT",
+        CurrentNft: i + 1,
+        NFTsTotal: itemsData.length,
+      };
+      console.log("minting NFT", collectionIndex, resJson.metadataURL);
       //mint NFT
-      let mintTx = await signedFContract.mintNFT(collectionIndex, resJson.data.metadataURL);
-      let allMintEvents = await signedFContract.queryFilter("nftMinted", mintTx.blockNumber, mintTx.blockNumber);
-      let mintEvent = allMintEvents.find((e) => e.transactionHash === mintTx.hash);
+      let mintTx = await signedFContract.mintNFT(
+        collectionIndex,
+        resJson.data.metadataURL
+      );
+      let allMintEvents = await signedFContract.queryFilter(
+        "nftMinted",
+        mintTx.blockNumber,
+        mintTx.blockNumber
+      );
+      let mintEvent = allMintEvents.find(
+        (e) => e.transactionHash === mintTx.hash
+      );
 
       const mintedTokenId = mintEvent.args[1];
 
       yield {
-        "status": "Approving NFT",
-        "CurrentNft": i + 1,
-        "NFTsTotal": itemsData.length,
-      }
+        status: "Approving NFT",
+        CurrentNft: i + 1,
+        NFTsTotal: itemsData.length,
+      };
 
       const collectionContract = new Contract(
         collectionContractAddress,
@@ -168,11 +191,10 @@ export function RetailerContractProvider({ ...props }) {
       await collectionContract.approve(Marketplace.address, mintedTokenId);
 
       yield {
-        "status": "Listing NFT",
-        "CurrentNft": i + 1,
-        "NFTsTotal": itemsData.length,
-      }
-
+        status: "Listing NFT",
+        CurrentNft: i + 1,
+        NFTsTotal: itemsData.length,
+      };
 
       //list NFT
       await signedMContract.listItem(
@@ -184,22 +206,19 @@ export function RetailerContractProvider({ ...props }) {
     }
 
     yield {
-      "status": "Done",
-      "CurrentNft": itemsData.length,
-      "NFTsTotal": itemsData.length,
-    }
-  }, []);
+      status: "Done",
+      CurrentNft: itemsData.length,
+      NFTsTotal: itemsData.length,
+    };
+  },
+  []);
 
   //this will update existing listing which has not yet been deployed
   const updateListing = useCallback(
     async (listingId, priceWei, deployUnixTime) => {
       let signer = await provider.current.getSigner();
       let signedContract = contractMarketplace.current.connect(signer);
-      return signedContract.updateListing(
-        listingId,
-        priceWei,
-        deployUnixTime
-      );
+      return signedContract.updateListing(listingId, priceWei, deployUnixTime);
     },
     []
   );

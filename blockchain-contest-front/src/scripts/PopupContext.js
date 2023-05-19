@@ -9,11 +9,7 @@ const unbounded6 = Unbounded({ subsets: ["latin"], weight: "600" });
 
 export const PopupContext = createContext({});
 
-function PopupRenderer({
-  headerText,
-  children,
-  closeCallback,
-}) {
+function PopupRenderer({ headerText, children, closeCallback }) {
   return (
     <div className={styles.container}>
       <div className={`${styles.popup} ${roboto4.className}`}>
@@ -39,10 +35,7 @@ export function PopupContextProvider({ children }) {
   const createPopup = useCallback(
     (headerText, content) => {
       setPopup(
-        <PopupRenderer
-          headerText={headerText}
-          closeCallback={closePopup}
-        >
+        <PopupRenderer headerText={headerText} closeCallback={closePopup}>
           {content}
         </PopupRenderer>
       );

@@ -28,11 +28,11 @@ function ListingCard({ listing, refreshFunc }) {
     description,
     image,
     priceWei,
-    parameters: listingProperties,
+    properties: listingProperties,
   } = listing;
   const traitType = listingProperties.traitType;
   const traitValue = listingProperties.traitValue;
-  const priceETH= formatEther(listing.priceWei);
+  const priceETH = formatEther(listing.priceWei);
 
   const { createPopup, closePopup } = useContext(PopupContext);
   const { buyNft } = useContext(AnonymousContractContext);

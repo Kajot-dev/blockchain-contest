@@ -39,9 +39,7 @@ import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
 import stylesPopup from "@styles/Popup.module.css";
 
-
 class LaunchDeployPopup extends Component {
-
   constructor(props) {
     super(props);
 
@@ -53,7 +51,7 @@ class LaunchDeployPopup extends Component {
       priceWei,
       itemCountsAndTraits,
       deployTime,
-      createListingFunc
+      createListingFunc,
     } = props;
 
     let itemsData = itemCountsAndTraits.reduce((acc, item) => {
@@ -89,7 +87,6 @@ class LaunchDeployPopup extends Component {
   handleDeployClick = async () => {
     this.setState({ isDeploying: true });
 
-
     const deployStatusGenerator = this.state._createListing(
       this.state.symbol,
       this.state.description,
@@ -106,26 +103,40 @@ class LaunchDeployPopup extends Component {
   render() {
     return (
       <>
-        <div className={stylesPopup.content} style={{
-          flexDirection: "column",
-          gap: "0.5rem",
-          alignItems: "flex-start"
-        }}>
+        <div
+          className={stylesPopup.content}
+          style={{
+            flexDirection: "column",
+            gap: "0.5rem",
+            alignItems: "flex-start",
+          }}
+        >
           <div>
-            Status: <span className={stylesForm.emphasize}>{this.state.deployStatus.status}</span>
+            Status:{" "}
+            <span className={stylesForm.emphasize}>
+              {this.state.deployStatus.status}
+            </span>
           </div>
           <div>
-            Current NFT: <span className={stylesForm.emphasize}>{this.state.deployStatus.CurrentNft}</span>
+            Current NFT:{" "}
+            <span className={stylesForm.emphasize}>
+              {this.state.deployStatus.CurrentNft}
+            </span>
           </div>
           <div>
-            NFTs Total: <span className={stylesForm.emphasize}>{this.state.deployStatus.NFTsTotal}</span>
+            NFTs Total:{" "}
+            <span className={stylesForm.emphasize}>
+              {this.state.deployStatus.NFTsTotal}
+            </span>
           </div>
         </div>
         <div className={stylesPopup.footer}>
           <Button
             onClick={this.handleDeployClick}
             disabled={this.state.isDeploying}
-          >Deploy</Button>
+          >
+            Deploy
+          </Button>
         </div>
       </>
     );
@@ -455,7 +466,7 @@ export function DeployLaunch({
   initialReleaseNow = false,
   onDateChange = () => {},
   onReleaseNowChange = () => {},
-  onDeployStart = () => {}
+  onDeployStart = () => {},
 }) {
   const [date, setDate] = useState(initialDate);
   const [releaseNow, setReleaseNow] = useState(initialReleaseNow);
@@ -552,7 +563,7 @@ export default function CreateLaunchPanel({ className = "" }) {
   }, []);
 
   const onDeployStart = useCallback(() => {
-    console.log(launches)
+    console.log(launches);
     createPopup(
       "Create Launch",
       <LaunchDeployPopup
@@ -565,14 +576,18 @@ export default function CreateLaunchPanel({ className = "" }) {
           return {
             count: launch.quantity,
             traitType: attribute.current,
-            traitValue: launch.trait
-          }
+            traitValue: launch.trait,
+          };
         })}
-        deployTime={Math.floor(date.current.getTime() / 100)} //unix timestamp
+        deployTime={
+          releaseNow.current
+            ? Math.floor((Date.now() + 2 * 60 * 1000) / 1000)
+            : Math.floor(date.current.getTime() / 100)
+        } //unix timestamp
         createListingFunc={createListing}
       />
-    )
-  }, [launches, createListing]);
+    );
+  }, [launches, createListing, createPopup]);
 
   // LIST FUNCTIONS
   const onListAdd = useCallback(

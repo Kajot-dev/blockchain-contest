@@ -24,7 +24,6 @@ const promiseWrapper = async (id, func, ...args) => {
 // it yields the info from IPFS, but with "naftAddress" and "tokenId" fields and "id" field
 //it does this asynchronously
 export async function* getNFTInfoGenerator(listings, contractRunner) {
-  
   const retrieveNftInfo = async (listing) => {
     console.log("retrieveNftInfo", listing.nftContract, listing.tokenId);
     const contract = new Contract(
@@ -35,31 +34,39 @@ export async function* getNFTInfoGenerator(listings, contractRunner) {
 
     let priceWei = listing.price;
 
-    let ipfsUri = await contract.getTokenUri(listing.tokenId);
+    let ipfsUri = await contract.tokenURI(listing.tokenId);
+    console.log("ipfsUri", ipfsUri);
     if (!ipfsUri.startsWith("ipfs://")) {
       throw new Error("Invalid IPFS URI");
     }
     ipfsUri = ipfsUri.substring(7);
     let res = await fetch(`https://ipfs.io/ipfs/${ipfsUri}`);
     let info = await res.json();
-    //convert attributes to parameters (for example format)
+    console.log(info);
+    //convert attributes to properties (for example format)
     if (info.attributes && info.attributes.length === 1) {
-      info.parameters = info.attributes[0];
+      info.properties = info.attributes[0];
       delete info.attributes;
     }
 
-    //assure that info.parameters has all the fields
-    if (!info.parameters) {
-      info.parameters = {};
+    //assure that info.properties has all the fields
+    if (!info.properties) {
+      info.properties = {};
     }
 
-    if (!info.parameters["traitType"]) {
-      info.parameters["traitType"] = info.parameters["trait_type"] ? info.parameters["trait_type"] : null;
+    if (!info.properties["traitType"]) {
+      info.properties["traitType"] = info.properties["trait_type"]
+        ? info.properties["trait_type"]
+        : null;
     }
 
-    if (!info.parameters["value"]) {
-      info.parameters["traitValue"] = info.parameters["value"] ? info.parameters["value"] : null;
+    if (!info.properties["value"]) {
+      info.properties["traitValue"] = info.properties["value"]
+        ? info.properties["value"]
+        : null;
     }
+
+    console.log("info.properties", info.properties);
 
     return {
       ...info,
