@@ -236,12 +236,16 @@ export function RetailerContractProvider({ ...props }) {
 
   //this will cash out the money that was earned from sales
   const cashOut = useCallback(async () => {
-    return contractMarketplace.current.withdraw();
+    let signer = await provider.current.getSigner();
+    let signedContract = contractMarketplace.current.connect(signer);
+    return signedContract.withdraw();
   }, []);
 
   //this will return balance of the retailer in Wei
   const getBalance = useCallback(async () => {
-    return contractMarketplace.current.getMyBalance();
+    let signer = await provider.current.getSigner();
+    let signedContract = contractMarketplace.current.connect(signer);
+    return signedContract.getMyBalance();
   }, []);
 
   const value = useMemo(

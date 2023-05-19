@@ -10,6 +10,7 @@ import { getNFTInfoGenerator } from "@/scripts/contractInteraction/contractUtils
 import { RocketRegular, MoneyRegular } from "@fluentui/react-icons";
 import styles from "@styles/Retailer.module.css";
 import stylesForm from "@styles/Forms.module.css";
+import { parseEther } from "ethers";
 
 function CreateLaunch({ ...props }) {
   return (
@@ -129,14 +130,13 @@ function NftList({ ...props }) {
 }
 
 function WithdrawBox({ ...props }) {
-  const [balanceETH, setBalanceETH] = useState(0n);
+  const [balanceWei, setBalanceWei] = useState(0n);
 
   const { isReady, cashOut, getBalance } = useContext(RetailerContractContext);
 
   const handleBalance = useCallback(async () => {
     let priceWei = await getBalance();
-    let priceETH = priceWei / 10n ** 18n;
-    setBalanceETH(priceETH);
+    setBalanceWei(priceWei);
   }, [getBalance]);
 
   const handleCashOut = useCallback(async () => {
@@ -157,7 +157,7 @@ function WithdrawBox({ ...props }) {
       <div>
         Current balance:{" "}
         <span className={stylesForm.emphasize}>
-          {balanceETH.toString()} ETH
+          {parseEther(balanceWei)} ETH
         </span>
       </div>
       <OutlineButton
@@ -167,7 +167,7 @@ function WithdrawBox({ ...props }) {
           width: "auto",
         }}
         className="flexRow"
-        disabled={balanceETH === 0n}
+        disabled={balanceWei === 0n}
         onClick={handleCashOut}
       >
         <MoneyRegular />
