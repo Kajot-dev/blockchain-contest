@@ -9,9 +9,11 @@
 }
 
 .motto {
-  font-size: 200%;
+  font-size: 150%;
   justify-self: flex-start;
-  align-self: flex-start;
+  align-self: center;
+  text-align: center;
+  opacity: 0.8;
 }
 
 .motto .emphasize {

@@ -110,7 +110,7 @@ async function main() {
       await firstTx.wait(1);
       console.log(`NFT #${i} from Collection ${j} listed!`);
 
-      await delay(1000);
+      // await delay(1000);
     }
   }
 
