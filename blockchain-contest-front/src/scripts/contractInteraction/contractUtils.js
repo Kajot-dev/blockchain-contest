@@ -36,7 +36,7 @@ export async function* getNFTInfoGenerator(listings, contractRunner) {
       Number((priceWei * conversionPrecision) / 10n ** 18n) /
       conversionPrecisionNumber;
 
-    let ipfsUri = await contract.getTokenUri(listing.tokenId - 1n);
+    let ipfsUri = await contract.getTokenUri(listing.tokenId);
     if (!ipfsUri.startsWith("ipfs://")) {
       throw new Error("Invalid IPFS URI");
     }
@@ -48,6 +48,20 @@ export async function* getNFTInfoGenerator(listings, contractRunner) {
       info.parameters = info.attributes[0];
       delete info.attributes;
     }
+
+    //assure that info.parameters has all the fields
+    if (!info.parameters) {
+      info.parameters = {};
+    }
+
+    if (!info.parameters["trait_type"]) {
+      info.parameters["trait_type"] = null;
+    }
+
+    if (!info.parameters["value"]) {
+      info.parameters["value"] = null;
+    }
+
     return {
       ...info,
       priceETH,

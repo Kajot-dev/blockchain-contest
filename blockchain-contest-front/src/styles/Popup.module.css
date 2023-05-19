@@ -37,12 +37,16 @@
   justify-content: space-between;
   width: 100%;
   padding: 0.5rem 1rem;
-  border-bottom: var(--borderWidth) solid var(--border-color);
   background-color: var(--bg-color-semi-transparent);
+}
+
+.header {
+  border-bottom: var(--borderWidth) solid var(--border-color);
 }
 
 .footer {
   flex-direction: row-reverse;
+  border-top: var(--borderWidth) solid var(--border-color);
 }
 
 .closeButton {
@@ -54,6 +58,7 @@
   padding: 0.1rem;
   border: 0;
   border-radius: 0.25rem;
+  color: var(--text-color);
   background-color: transparent;
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
@@ -70,10 +75,11 @@
 
 .content {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  gap: 1rem;
   width: 100%;
   flex-grow: 1;
   overflow: auto;

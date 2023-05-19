@@ -25,32 +25,32 @@ export default function Home() {
           <div className={styles.scrollStop}>
             A{" "}
             <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>
-              Platform with NFTs Launches
+              Web 3.0 Platform
             </span>
           </div>
           <div>{" for "}</div>
           <div className={styles.scrollStop}>
             <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>
-              Unique Physical Collectibles Enthusiasts, Traders and Investors
+              Unique Physical Collectibles Lovers
             </span>
           </div>
           <div>{" that "}</div>
           <div className={styles.scrollStop}>
             <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>
-              Undertakes Partnerships with Stores and Retailers assuring
-              Authenticity
+              Facilitates Retailers to Launch Collections
             </span>
           </div>
           <div>{" enabling, "}</div>
           <div className={styles.scrollStop}>
             <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>
-              Pre-release trading, and providing broader B2B Services
+              Secure pre-release Trading, assured Authenticity for Various
+              Products
             </span>
           </div>
+          <div>{" unlike "}</div>
           <div className={styles.scrollStop}>
-            {" unlike "}
             <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>
-              RTFKT
+              brand-specific RTFKT
             </span>
           </div>
         </div>

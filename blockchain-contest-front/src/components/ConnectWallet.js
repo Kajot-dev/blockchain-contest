@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { PulseLoader } from "react-spinners";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { useMetaMask } from "metamask-react";
 import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import UserContext from "../scripts/UserContext";
-import { desiredChainId } from "@/scripts/contractInteraction/contractInfo";
+import {
+  desiredChainId,
+  networkName,
+} from "@/scripts/contractInteraction/contractInfo";
 
 import styles from "@styles/Forms.module.css";
 import stylesNavBar from "@styles/NavBar.module.css";
@@ -24,19 +27,22 @@ export default function ConnectWallet({ connectLocation }) {
     setDestination(finalLocation);
   }, [connectLocation]);
 
-  const getConnect = (text) => {
-    return (
-      <div>
-        <Link href={destination}>
-          <button className={styles.outlineBtn}>{text}</button>
-        </Link>
-      </div>
-    );
-  };
+  const getConnect = useCallback(
+    (text) => {
+      return (
+        <div>
+          <Link href={destination}>
+            <button className={styles.outlineBtn}>{text}</button>
+          </Link>
+        </div>
+      );
+    },
+    [destination]
+  );
 
   if (status === "connected") {
     if (chainId !== desiredChainId) {
-      return getConnect("Switch to local network");
+      return getConnect(`Switch to ${networkName} Net`);
     } else {
       return (
         <div>
