@@ -3,11 +3,11 @@
   height: 6px;
 }
 .listContainer::-webkit-scrollbar-track {
-  border-radius: 10px;
+  border-radius: 0.2rem;
   background: rgba(0, 0, 0, 0.1);
 }
 .listContainer::-webkit-scrollbar-thumb {
-  border-radius: 10px;
+  border-radius: 0.2rem;
   background: rgba(0, 0, 0, 0.2);
 }
 .listContainer::-webkit-scrollbar-thumb:hover {

@@ -1,0 +1,106 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: 100;
+  background-color: var(--bg-color-08);
+  animation: initPopupContainer 0.4s ease;
+}
+
+.popup {
+  background-color: var(--bg-color-semi-transparent);
+  border-radius: 1rem;
+  border: var(--borderWidth) solid var(--border-color);
+  min-width: 400px;
+  min-height: 200px;
+  max-width: 80vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  animation: initPopup 0.2s ease;
+}
+
+.header,
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg-color-semi-transparent);
+}
+
+.header {
+  border-bottom: var(--borderWidth) solid var(--border-color);
+}
+
+.footer {
+  flex-direction: row-reverse;
+  border-top: var(--borderWidth) solid var(--border-color);
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 150%;
+  overflow: hidden;
+  padding: 0.1rem;
+  border: 0;
+  border-radius: 0.25rem;
+  color: var(--text-color);
+  background-color: transparent;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.closeButton:hover {
+  cursor: pointer;
+  background-color: red;
+  color: white;
+}
+
+.footer:empty {
+  display: none;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  gap: 1rem;
+  width: 100%;
+  flex-grow: 1;
+  overflow: auto;
+}
+
+@keyframes initPopupContainer {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: var(--bg-color-08);
+  }
+}
+
+@keyframes initPopup {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

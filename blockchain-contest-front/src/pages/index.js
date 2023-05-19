@@ -32,13 +32,14 @@ export default function Home({ partnerSvgs }) {
           <section className={`${styles.heroSection} ${unbounded6.className}`}>
             <div>
               <h1>
-                Digital Minted
+                Digitally Minted
                 <br />
-                Physical Forged
+                Physically Forged
               </h1>
               <span className={`${unbounded5.className}`}>
-                A new way to mint and trade digital assets. <br /> Powered by
-                the blockchain.
+                Launching unique collectibles ahead of time.
+                <br />
+                Seamlessly blending the digital and physical worlds.
               </span>
             </div>
             <div className={styles.logoBg} />
