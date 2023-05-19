@@ -10,7 +10,7 @@ import { getNFTInfoGenerator } from "@/scripts/contractInteraction/contractUtils
 import { RocketRegular, MoneyRegular } from "@fluentui/react-icons";
 import styles from "@styles/Retailer.module.css";
 import stylesForm from "@styles/Forms.module.css";
-import { parseEther } from "ethers";
+import { formatEther, parseEther } from "ethers";
 
 function CreateLaunch({ ...props }) {
   return (
@@ -136,6 +136,7 @@ function WithdrawBox({ ...props }) {
 
   const handleBalance = useCallback(async () => {
     let priceWei = await getBalance();
+    console.log("priceWei", priceWei)
     setBalanceWei(priceWei);
   }, [getBalance]);
 
@@ -157,7 +158,7 @@ function WithdrawBox({ ...props }) {
       <div>
         Current balance:{" "}
         <span className={stylesForm.emphasize}>
-          {parseEther(balanceWei)} ETH
+          {formatEther(balanceWei)} ETH
         </span>
       </div>
       <OutlineButton
