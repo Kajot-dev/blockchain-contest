@@ -239,7 +239,7 @@ contract Marketplace is ReentrancyGuard {
     {
         if (_op == FetchOperator.MyCreatedListings) {
             return
-                (listing.seller == msg.sender && listing.state != State.Inactive)
+                (listing.seller == msg.sender/* && listing.state != State.Inactive*/)
                     ? true
                     : false;
         } else if (_op == FetchOperator.MyPurchasedItems) {

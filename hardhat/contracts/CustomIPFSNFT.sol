@@ -15,8 +15,6 @@ contract CustomIPFSNFT is ERC721URIStorage {
 
     // NFT Variables
     uint256 private s_tokenCounter;
-    string[] internal s_TokenUris;
-    bool private s_initialized;
     string internal s_tokenName;
     string internal s_tokenSymbol;
 
@@ -31,35 +29,23 @@ contract CustomIPFSNFT is ERC721URIStorage {
         }
     }
 
-    constructor(string memory _name, string memory _symbol, string[] memory tokenUris) ERC721(s_tokenName, s_tokenSymbol) {
+    constructor(string memory _name, string memory _symbol) ERC721(s_tokenName, s_tokenSymbol) {
         owner=msg.sender;        
         s_tokenCounter = 0;
         s_tokenName = _name;
         s_tokenSymbol = _symbol;
-
-        _initializeContract(tokenUris);
     }
 
-    function mintRequestedNFT() public onlyOwner {
+    function mintRequestedNFT(address to, string memory ftokenURI) public onlyOwner {
 
-        address tokenOwner = msg.sender;
+        address tokenOwner = to;
         uint256 tokenId = s_tokenCounter;
         s_tokenCounter = s_tokenCounter + 1;
         _safeMint(tokenOwner, tokenId);
-        _setTokenURI(tokenId, s_TokenUris[uint256(tokenId)]);
+        _setTokenURI(tokenId, ftokenURI);
 
         emit NFTMinted(tokenId, tokenOwner);
 
-    }
-
-    function _initializeContract(string[] memory tokenUris) private {
-
-        if (s_initialized) {
-            revert NFT_AlreadyInitialized();
-        }
-
-        s_TokenUris = tokenUris;
-        s_initialized = true;
     }
 
     function withdraw() public onlyOwner {
@@ -70,12 +56,12 @@ contract CustomIPFSNFT is ERC721URIStorage {
         }
     }
 
-    function getTokenUri(uint256 index) public view returns (string memory) {
-        return s_TokenUris[index];
+    function tokenURI(uint256 tokenId) public view override(ERC721URIStorage) returns (string memory) {
+        return super.tokenURI(tokenId);
     }
 
-    function getInitialized() public view returns (bool) {
-        return s_initialized;
+    function approve(address to, uint256 tokenId) public virtual override(ERC721) {
+        _approve(to, tokenId);
     }
 
     function getTokenCounter() public view returns (uint256) {

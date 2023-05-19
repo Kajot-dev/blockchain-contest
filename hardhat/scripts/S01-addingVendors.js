@@ -5,7 +5,7 @@ async function main() {
 
     const StoreAccessControl = await ethers.getContract("StoreAccessControl")
     
-    const { nikeRetailer, rolexRetailer } = await getNamedAccounts()
+    const { nikeRetailer, rolexRetailer, ticketRetailer, coinTrader } = await getNamedAccounts()
 
     const nikeStore = {
       address: await nikeRetailer,
@@ -17,16 +17,31 @@ async function main() {
       name: 'Rolex',
     }
 
-    await StoreAccessControl.markUserAsStore(nikeStore.address, nikeStore.name)
-    await StoreAccessControl.markUserAsStore(rolexStore.address, rolexStore.name)
+    const ticketStore = {
+      address: await ticketRetailer,
+      name: 'Ticketmaster',
+    }
+
+    const coinStore = {
+      address: await coinTrader,
+      name: 'Coin Afficionado'
+    }
+
+    const storeList = [nikeStore, rolexStore, ticketStore, coinStore];
+
+    console.log(`Adding privileges to every store.`)
+
+    for(let i=0;i<storeList.length; i++) {
+      tx = await StoreAccessControl.markUserAsStore(storeList[i].address, storeList[i].name)
+    }
 
     console.log(`Veryfing input...`)
 
-    const infoAboutStoreOne = await StoreAccessControl.getStoreByIndex(0)
-    const infoAboutStoreTwo = await  StoreAccessControl.getStoreByIndex(1)
-
-    console.log(infoAboutStoreOne)
-    console.log(infoAboutStoreTwo)
+    for(let i=0;i<storeList.length; i++) {
+      txSearch = await StoreAccessControl.getStoreByIndex(i)
+ 
+      console.log(txSearch)
+    }
 
         
 }

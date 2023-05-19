@@ -9,5 +9,4 @@ typechain-types
 cache
 artifacts
 
-# local deployment files
-deployments/localhost/**/*.json
+deployments/**/*.json

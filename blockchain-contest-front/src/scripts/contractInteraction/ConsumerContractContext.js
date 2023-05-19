@@ -18,13 +18,11 @@ export function ConsumerContractProvider({ ...props }) {
   const [isReady, setIsReady] = useState(false);
 
   const provider = useRef(null);
-  const signer = useRef(null);
   const contract = useRef(null);
 
   useEffect(() => {
     if (status === "connected" && chainId === desiredChainId) {
       provider.current = new BrowserProvider(window.ethereum);
-      //signer.current = await provider.current.getSigner();
       contract.current = new Contract(
         Marketplace.address,
         Marketplace.abiString,

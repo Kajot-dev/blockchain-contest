@@ -4,7 +4,7 @@
   "scripts": {
     "block": "hardhat block-number --network localhost",
     "add-stores": "hardhat run scripts/S01-addingVendors.js --network localhost",
-    "mint-nfts": "hardhat run scripts/NFTs/N01-Mint.js --network localhost",
+    "mint-nfts": "hardhat run scripts/NFTs/N0X-FactoryMint.js --network localhost",
     "mp-list": "hardhat run scripts/Marketplace/M01-List.js --network localhost",
     "mp-buy": "hardhat run scripts/Marketplace/M02-Buy.js --network localhost",
     "mp-cancel": "hardhat run scripts/Marketplace/M03-Cancel.js --network localhost",
