@@ -79,10 +79,6 @@ const Offers = [
   [firstCoinOffer, secondCoinOffer, thirdCoinOffer],
 ];
 
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 async function main() {
   const Marketplace = await ethers.getContract("Marketplace");
   const NFTFactory = await ethers.getContract("NFTFactory");
@@ -109,8 +105,6 @@ async function main() {
       );
       await firstTx.wait(1);
       console.log(`NFT #${i} from Collection ${j} listed!`);
-
-      // await delay(1000);
     }
   }
 
