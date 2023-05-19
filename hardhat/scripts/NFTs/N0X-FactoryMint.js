@@ -3,7 +3,9 @@ require("dotenv").config();
 
 let PROTOCOL_PREFIX = "ipfs://";
 
-let jsonNikeCIDs = [ process.env.NIKE_CID1, process.env.NIKE_CID2, process.env.NIKE_CID3, process.env.NIKE_CID4 ];
+let jsonCIDs = [
+    [ process.env.NIKE_CID1, process.env.NIKE_CID2, process.env.NIKE_CID3 ],
+    [ process.env.ROLEX_CID1, process.env.ROLEX_CID2, process.env.ROLEX_CID3 ] ];
 
 const collectionNike = {
     name: "Nike Air Collection",
@@ -26,49 +28,31 @@ async function main() {
     const rolexDP = await ethers.getSigner(rolexRetailer);
     const signers = [nikeDP, rolexDP]
 
-    const NFTFactory = await ethers.getContract("NFTFactory");
+    const NFTFactory = await ethers.getContract("NFTFactory")
     const Marketplace = await ethers.getContract("Marketplace")
 
     console.log("Creating new NFT Contracts:");
     await NFTFactory.connect(nikeDP).deployToken(collectionNike.name, collectionNike.symbol);
     await NFTFactory.connect(rolexDP).deployToken(collectionRolex.name, collectionRolex.symbol);
 
-    const verifyNike = await NFTFactory.isUserApproved(collectionNike.id, NFTFactory.address, nikeDP.address)
-    console.log(verifyNike)
-
-    const verifyRolex = await NFTFactory.isUserApproved(collectionRolex.id, NFTFactory.address, rolexDP.address)
-    console.log(verifyRolex)
-
     console.log("Minting and uploading tokenURis!");
 
     for (let j = 0; j < signers.length; j++) {
         const currentStore = signers[j]
-        console.log(currentStore.address)
-        for (let i = 0; i < jsonNikeCIDs.length; i++) {
-            let iteratedFullURI = PROTOCOL_PREFIX + jsonNikeCIDs[i];
 
-            const NFTMinter = await NFTFactory.connect(currentStore).mintNFT(j, currentStore.address, iteratedFullURI);
+        for (let i = 0; i < jsonCIDs[j].length; i++) {
+            let iteratedFullURI = PROTOCOL_PREFIX + jsonCIDs[j][i];
+
+            const NFTMinter = await NFTFactory.connect(currentStore).mintNFT(j, iteratedFullURI);
             await NFTMinter.wait(1);
 
             const tokenUriByIndex = await NFTFactory.showTokenUri(j, i);
-            console.log(`URI of token #${i} is ${tokenUriByIndex}`);
+            await NFTFactory.connect(currentStore).approve(j, Marketplace.address, i)
+            
+            console.log(`Token #${i} from collection #${j} (${tokenUriByIndex}) got succesfully approved!`);
 
-            const isOwner = await NFTFactory.connect(currentStore).isOwner(j, i)
-            console.log(`Owner of tokens is: ${isOwner}`)
-
-            if (currentStore.address == isOwner) {
-                console.log("OWNER VERIFIED!!!")
-            } else {
-                console.log("NOT OWNER")
-            }
         }
     }
-
-    await NFTFactory.connect(nikeDP).approve(0, Marketplace.address, 1)
-
-    await NFTFactory.approve(0, Marketplace.address, 1)
-    console.log(`Token #0 got approved!`)
-
 }
 
 main()

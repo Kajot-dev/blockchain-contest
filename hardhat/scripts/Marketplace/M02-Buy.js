@@ -3,7 +3,6 @@ const { ethers, getNamedAccounts } = require("hardhat")
 async function buyItem() {
 
     const Marketplace = await ethers.getContract("Marketplace")
-    const CustomIPFSNFT = await ethers.getContract("CustomIPFSNFT")
 
     const { normalUser, nikeRetailer } = await getNamedAccounts()
     const customer = await ethers.getSigner(normalUser) // Comment if does not insert the signer
