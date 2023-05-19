@@ -43,7 +43,8 @@ export default function Home() {
           <div>{" enabling, "}</div>
           <div className={styles.scrollStop}>
             <span className={`${unbounded6.className} ${styles.zenEmphasize}`}>
-              Secure pre-release Trading, assured Authenticity for Various Products
+              Secure pre-release Trading, assured Authenticity for Various
+              Products
             </span>
           </div>
           <div>{" unlike "}</div>

@@ -66,13 +66,14 @@ function ListingCard({ listing, refreshFunc }) {
   const buyButtonHandler = useCallback(() => {
     createPopup(
       "Buy NFT",
-      <div className="flexRow">
+      [
         <img
           className={styles.popupImage}
           src={getImageUrl()}
           alt={listing.description}
-        />
-        <div className={styles.popupInfo}>
+          key="image"
+        />,
+        <div className={styles.popupInfo} key="info">
           <div className={styles.popupNotice}>You are about to buy</div>
           <div className={unbounded6.className}>{name}</div>
           <div
@@ -85,11 +86,18 @@ function ListingCard({ listing, refreshFunc }) {
             <div className={stylesForm.subtle}>for:</div>
             <div className={stylesForm.emphasize}>{priceETH} ETH</div>
           </div>
-        </div>
-      </div>,
+        </div>,
+      ],
       <Button onClick={definiteBuyHandler}>Buy</Button>
     );
-  }, [createPopup, definiteBuyHandler, getImageUrl, listing.description, name, priceETH]);
+  }, [
+    createPopup,
+    definiteBuyHandler,
+    getImageUrl,
+    listing.description,
+    name,
+    priceETH,
+  ]);
 
   return (
     <Panel className={`${styles.card} ${stylesForm.thin}`}>
@@ -111,11 +119,17 @@ function ListingCard({ listing, refreshFunc }) {
       <div className={styles.cardPrice}>{priceETH} ETH</div>
       <div className={stylesForm.subtle}>{description}</div>
       <div>
-        <span className={stylesForm.subtle}>
-          {traitType}
-          {": "}
-        </span>
-        <span className={stylesForm.emphasize}>{traitValue}</span>
+        {traitType && traitValue
+          ? [
+              <span className={stylesForm.subtle} key="traitType">
+                {traitType}
+                {": "}
+              </span>,
+              <span className={stylesForm.emphasize} key="traitValue">
+                {traitValue}
+              </span>,
+            ]
+          : "---"}
       </div>
       <OutlineButton onClick={buyButtonHandler}>Buy</OutlineButton>
     </Panel>

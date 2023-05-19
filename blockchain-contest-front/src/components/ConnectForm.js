@@ -3,7 +3,10 @@ import { useState, useContext, useEffect } from "react";
 import { PulseLoader } from "react-spinners";
 import { InfoBox, ErrorBox } from "./Utils";
 import { Panel } from "./Forms";
-import { desiredChainId, networkName } from "@/scripts/contractInteraction/contractInfo";
+import {
+  desiredChainId,
+  networkName,
+} from "@/scripts/contractInteraction/contractInfo";
 import UserContext from "@/scripts/UserContext";
 import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import Link from "next/link";

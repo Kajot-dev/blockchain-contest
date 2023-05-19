@@ -38,16 +38,19 @@ export function PopupContextProvider({ children }) {
     setPopup(null);
   }, []);
 
-  const createPopup = useCallback((headerText, jsxContent, footerElements) => {
-    setPopup(
-      <PopupRenderer
-        headerText={headerText}
-        jsxContent={jsxContent}
-        footerElements={footerElements}
-        closeCallback={closePopup}
-      />
-    );
-  }, [closePopup]);
+  const createPopup = useCallback(
+    (headerText, jsxContent, footerElements) => {
+      setPopup(
+        <PopupRenderer
+          headerText={headerText}
+          jsxContent={jsxContent}
+          footerElements={footerElements}
+          closeCallback={closePopup}
+        />
+      );
+    },
+    [closePopup]
+  );
 
   const contextValue = useMemo(() => {
     return {
