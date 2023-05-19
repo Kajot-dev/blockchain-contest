@@ -36,9 +36,9 @@ contract CustomIPFSNFT is ERC721URIStorage {
         s_tokenSymbol = _symbol;
     }
 
-    function mintRequestedNFT(string memory ftokenURI) public onlyOwner {
+    function mintRequestedNFT(address to, string memory ftokenURI) public onlyOwner {
 
-        address tokenOwner = msg.sender;
+        address tokenOwner = to;
         uint256 tokenId = s_tokenCounter;
         s_tokenCounter = s_tokenCounter + 1;
         _safeMint(tokenOwner, tokenId);

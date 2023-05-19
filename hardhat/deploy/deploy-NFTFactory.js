@@ -14,8 +14,6 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
         waitConfirmations: network.config.blockConfirmations || 1,
     })
 
-    //const deployedStoreAccessControl = await deploy("StoreAccessControl", admin)
-
     log("----------------------------")
 
 }
