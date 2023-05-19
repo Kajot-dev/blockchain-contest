@@ -25,26 +25,13 @@ contract NFTFactory {
 
         emit collectionCreated(address(token), tokenName, tokenSymbol, collectionIndex);
 
-    } 
+    }
+
+    function approve(uint16 collectionIndex, address to, uint256 tokenId) public {
+        CustomIPFSNFT collectionContract = ipfsNFTs[collectionIndex];
+        collectionContract.approve(to, tokenId);
+    }
     
-      /*function approve(uint16 collectionIndex, address contractApproved, uint256 tokenId) public {
-        
-        uint256 allContractsCount = ipfsNFTs.length;
-
-        if(collectionIndex > allContractsCount) {
-            revert tokenWithSuchIdDoesNotExist(collectionIndex, allContractsCount);
-        }
-        
-        CustomIPFSNFT contractCalled = ipfsNFTs[collectionIndex];
-        uint256 maxToken = contractCalled.getTokenCounter();
-        
-        if(tokenId > maxToken) {
-            revert tokenWithSuchIdDoesNotExist(collectionIndex, maxToken);
-        }
-
-        contractCalled.approve(contractApproved, tokenId);
-    }*/
-
     function mintNFT(uint16 collectionIndex, string memory nextTokenUri) public {
         
         CustomIPFSNFT collectionContract = ipfsNFTs[collectionIndex];

@@ -60,6 +60,10 @@ contract CustomIPFSNFT is ERC721URIStorage {
         return super.tokenURI(tokenId);
     }
 
+    function approve(address to, uint256 tokenId) public virtual override(ERC721) {
+        _approve(to, tokenId);
+    }
+
     function getTokenCounter() public view returns (uint256) {
         return s_tokenCounter;
     }

@@ -12,7 +12,6 @@ async function update() {
     const seller = await ethers.getSigner(nikeRetailer)
 
     const Marketplace = await ethers.getContract("Marketplace")
-    const CustomIPFSNFT = await ethers.getContract("CustomIPFSNFT")
 
     const listing = await Marketplace.getListingById(updatedOffer.id)
     console.log("Listing before:")

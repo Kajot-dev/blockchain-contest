@@ -8,7 +8,6 @@ async function cancel() {
     const seller = await ethers.getSigner(nikeRetailer)
 
     const Marketplace = await ethers.getContract("Marketplace")
-    const CustomIPFSNFT = await ethers.getContract("CustomIPFSNFT")
 
     const listing = await Marketplace.getListingById(LISTING_ID)
     console.log("Listing before:")
