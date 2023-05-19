@@ -7,7 +7,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Marketplace, NFTFactory, desiredChainId } from "./contractInfo";
+import { Marketplace, NFTFactory, CustomIPFSNFT, desiredChainId } from "./contractInfo";
 import { useMetaMask } from "metamask-react";
 
 export const RetailerContractContext = createContext(undefined);
@@ -27,6 +27,7 @@ function dataURIToBlob(dataURI) {
 
   return new Blob([ab], { type: mimeString });
 }
+
 
 //set of functions for retailer panel
 export function RetailerContractProvider({ ...props }) {
@@ -82,8 +83,17 @@ export function RetailerContractProvider({ ...props }) {
     }
 
     //create NFT contract
-    const newCollectionId = await signedFContract.deployToken(description, symbol);
-    const collectionContractAddress = await signedFContract.getContractAddress(newCollectionId);
+    let collectionContractAddress;
+    let collectionIndex;
+
+    signedFContract.once("collectionCreated", ([address, _name, _symbol, index]) => {
+      collectionContractAddress = address;
+      collectionIndex = index;
+    });
+
+    await signedFContract.deployToken(description, symbol);
+
+    //TODO implement waiting
 
     for (let i = 0; i < itemsData.length; i++) {
 
@@ -94,12 +104,12 @@ export function RetailerContractProvider({ ...props }) {
       }
 
       let item = itemsData[i];
-      const { symbol, description, traitName, traitValue, rawImageDataURL } = item;
+      const { traitType, traitValue, rawImageDataURL } = item;
       //create FormData
       let formData = new FormData();
       formData.append("symbol", symbol);
       formData.append("description", description);
-      formData.append("traitName", traitName);
+      formData.append("traitName", traitType);
       formData.append("traitValue", traitValue);
       formData.append("image", dataURIToBlob(rawImageDataURL));
 
@@ -124,8 +134,14 @@ export function RetailerContractProvider({ ...props }) {
         "NFTsTotal": itemsData.length,
       }
 
+      let mintedTokenId;
+
+      signedFContract.once("nftMinted", ([_collectionIndex, tokenId]) => {
+        mintedTokenId = tokenId;
+      })
+
       //mint NFT
-      const mintedTokenId = await signedFContract.mintNFT(newCollectionId, resJson.metadataURL);
+      await signedFContract.mintNFT(newCollectionId, resJson.metadataURL);
 
       yield {
         "status": "Approving NFT",
@@ -133,8 +149,14 @@ export function RetailerContractProvider({ ...props }) {
         "NFTsTotal": itemsData.length,
       }
 
+      const collectionContract = new Contract(
+        collectionContractAddress,
+        CustomIPFSNFT.abiString,
+        signer
+      );
+
       //approve NFT
-      await signedFContract.approve(Marketplace.address, newCollectionId, mintedTokenId);
+      await collectionContract.approve(Marketplace.address, mintedTokenId);
 
 
       yield {

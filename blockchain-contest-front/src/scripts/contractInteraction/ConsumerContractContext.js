@@ -18,7 +18,6 @@ export function ConsumerContractProvider({ ...props }) {
   const [isReady, setIsReady] = useState(false);
 
   const provider = useRef(null);
-  const signer = useRef(null);
   const contract = useRef(null);
 
   useEffect(() => {

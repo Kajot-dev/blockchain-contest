@@ -1,4 +1,11 @@
-import { useState, useRef, useCallback, useMemo, useEffect, Component } from "react";
+import {
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+  useEffect,
+  Component,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 import { PulseLoader } from "react-spinners";
 import {
@@ -11,6 +18,7 @@ import {
 } from "./Forms";
 import Table from "./Table";
 import { InfoBox } from "./Utils";
+import { RetailerContractContext } from "@/scripts/contractInteraction/RetailerContractContext";
 import {
   TextAddFilled,
   NumberSymbolFilled,
@@ -23,13 +31,92 @@ import {
   ImageRegular,
   ImageProhibitedRegular,
 } from "@fluentui/react-icons";
+
 import styles from "@styles/CreateLaunch.module.css";
 import stylesForm from "@styles/Forms.module.css";
-
+import stylesPopup from "@styles/Popup.module.css";
 
 class LaunchDeployPopup extends Component {
+  static contextType = RetailerContractContext;
+
   constructor(props) {
     super(props);
+
+    let {
+      description,
+      symbol,
+      imageDataUri,
+      traitType,
+      priceETH,
+      itemCountsAndTraits,
+      deployTime,
+    } = props;
+    this.state = {
+      description: description,
+      symbol: symbol,
+      imageDataUri: imageDataUri,
+      traitType: traitType,
+      priceETH: priceETH,
+      itemCountsAndTraits: itemCountsAndTraits,
+      deployTime: deployTime,
+      isDeploying: false,
+      deployStatus: {
+        status: "Waiting for user...",
+        CurrentNft: "-",
+        NFTsTotal: "-",
+      },
+    };
+  }
+
+  handleDeployClick = async () => {
+    this.setState({ isDeploying: true });
+
+    let itemsData = this.state.itemCountsAndTraits.reduce((acc, item) => {
+      for (let i = 0; i < item.count; i++) {
+        acc.push({
+          traitType: this.state.traitType,
+          traitValue: item.traitValue,
+          rawImageDataURL: this.state.imageDataUri,
+        });
+      }
+      return acc;
+    }, []);
+
+    const deployStatusGenerator = this.context.createListing(
+      this.state.symbol,
+      this.state.description,
+      this.state.priceETH,
+      this.state.deployTime,
+      itemsData
+    );
+
+    for await (const deployStatus of deployStatusGenerator) {
+      this.setState({ deployStatus: deployStatus });
+    }
+  };
+
+  render() {
+    return (
+      <>
+        <div className={stylesPopup.content}>
+          <div>
+            Status: {this.state.deployStatus.status}
+          </div>
+          <div>
+            Current NFT: {this.state.deployStatus.CurrentNft}
+          </div>
+          <div>
+            NFTs Total: {this.state.deployStatus.NFTsTotal}
+          </div>
+        </div>
+        <div className={stylesPopup.footer}>
+          <Button
+            onClick={this.handleDeployClick}
+            disabled={this.state.isDeploying}
+          />
+        </div>
+      </>
+    );
   }
 }
 
