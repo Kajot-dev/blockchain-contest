@@ -1,19 +1,19 @@
-body::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-body::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   border-radius: 0.2rem;
   background: rgba(0, 0, 0, 0.1);
 }
-body::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   border-radius: 0.2rem;
   background: rgba(0, 0, 0, 0.2);
 }
-body::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.4);
 }
-body::-webkit-scrollbar-thumb:active {
+::-webkit-scrollbar-thumb:active {
   background: rgba(0, 0, 0, 0.9);
 }
 
@@ -24,16 +24,16 @@ body {
 
 /* For Dark Theme */
 @media (prefers-color-scheme: dark) {
-  body::-webkit-scrollbar-track {
+  ::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.1);
   }
-  body::-webkit-scrollbar-thumb {
+  ::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.2);
   }
-  body::-webkit-scrollbar-thumb:hover {
+  ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.4);
   }
-  body::-webkit-scrollbar-thumb:active {
+  ::-webkit-scrollbar-thumb:active {
     background: rgba(255, 255, 255, 0.9);
   }
 

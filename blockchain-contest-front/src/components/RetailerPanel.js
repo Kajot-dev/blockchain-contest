@@ -64,23 +64,21 @@ function NftList({ ...props }) {
   const handleMintedListings = useCallback(async () => {
     setMintedListings({});
     let listings = await getMintedListings();
-    console.log("got listings", listings);
     for await (const listingInfo of getNFTInfoGenerator(
       listings,
-      contractProviderRef
+      contractProviderRef.current
     )) {
       let listingIdentifier = `${listingInfo.id}-${listingInfo.name}`;
 
-      singeListingList.push(listingInfo);
       setMintedListings((listings) => {
-        let singeListingList;
+        let singleListingList = [];
+        singleListingList.push(listingInfo);
+        console.log(listingIdentifier, "singleListingList", singleListingList);
         if (listingIdentifier in listings) {
-          singeListingList = listings[listingIdentifier];
-        } else {
-          singeListingList = [];
+          singleListingList = listings[listingIdentifier];
         }
         return Object.assign({}, listings, {
-          [listingIdentifier]: singeListingList,
+          [listingIdentifier]: singleListingList,
         });
       });
     }
@@ -96,6 +94,8 @@ function NftList({ ...props }) {
 
   let listingsArray = [];
 
+  console.log("mintedListings", mintedListings);
+
   for (const listingIdentifier in mintedListings) {
     const similarListingArray = mintedListings[listingIdentifier];
     for (const listing of similarListingArray) {
@@ -104,12 +104,13 @@ function NftList({ ...props }) {
       while (i < listingsArray.length && listingsArray[i].id < listing.id) {
         i++;
       }
+      console.log(listing.time);
       listingsArray.splice(i, 0, [
         listing.name,
         listing.description,
-        listing.parameters["trait_type"],
-        listing.parameters["value"],
-        listing.time,
+        listing.properties.traitType,
+        listing.properties.traitValue,
+        `${new Date(Number(listing.time) * 1000).toLocaleDateString()}`,
       ]);
     }
   }

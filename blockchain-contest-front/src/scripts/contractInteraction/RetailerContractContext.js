@@ -74,7 +74,9 @@ export function RetailerContractProvider({ ...props }) {
   //this should give us all the listings that given retailer has
   //event the ones that are not yet available for sale
   const getMintedListings = useCallback(async () => {
-    return contractMarketplace.current.fetchMyCreatedItems();
+    let signer = await provider.current.getSigner();
+    let signedMContract = contractMarketplace.current.connect(signer);
+    return signedMContract.fetchMyCreatedItems();
   }, []);
 
   //this will give us a list of transactions that happened and involved NFTs of given retailer
@@ -94,7 +96,7 @@ export function RetailerContractProvider({ ...props }) {
     let signer = await provider.current.getSigner();
     let signedMContract = contractMarketplace.current.connect(signer);
     let signedFContract = contractFactory.current.connect(signer);
-
+    console.log("UNIX TIME", deployUnixTime);
     yield {
       status: "Deploying Contract",
       CurrentNft: 0,
@@ -195,13 +197,15 @@ export function RetailerContractProvider({ ...props }) {
         CurrentNft: i + 1,
         NFTsTotal: itemsData.length,
       };
+      let timeLeft = deployUnixTime - Math.floor(Date.now() / 1000);
+      timeLeft = timeLeft < 0 ? 0 : timeLeft;
 
       //list NFT
       await signedMContract.listItem(
         collectionContractAddress,
         mintedTokenId,
         priceWei,
-        deployUnixTime
+        BigInt(timeLeft)
       );
     }
 

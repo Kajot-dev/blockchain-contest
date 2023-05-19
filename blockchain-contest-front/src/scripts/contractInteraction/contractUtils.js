@@ -60,7 +60,7 @@ export async function* getNFTInfoGenerator(listings, contractRunner) {
         : null;
     }
 
-    if (!info.properties["value"]) {
+    if (!info.properties["traitValue"]) {
       info.properties["traitValue"] = info.properties["value"]
         ? info.properties["value"]
         : null;

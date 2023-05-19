@@ -10,6 +10,7 @@ import { getNFTInfoGenerator } from "@/scripts/contractInteraction/contractUtils
 import { CartRegular } from "@fluentui/react-icons";
 import styles from "@styles/Consumer.module.css";
 import stylesForm from "@styles/Forms.module.css";
+import { formatEther } from "ethers";
 
 function NftList({ ...props }) {
   const { getConsumerNfts, isReady, contractProviderRef } = useContext(
@@ -24,8 +25,9 @@ function NftList({ ...props }) {
       ownedNFTs,
       contractProviderRef.current
     )) {
+      console.log(listing);
       setNftObj((nftObj) => {
-        Object.assign({}, nftObj, {
+        return Object.assign({}, nftObj, {
           [listing.id]: listing,
         });
       });
@@ -40,10 +42,10 @@ function NftList({ ...props }) {
   }, [isReady, prepareNFTList]);
 
   let nftList = [];
-
+  console.log("nftObj", nftObj);
   for (const nftId in nftObj) {
-    const { name, description, image, priceETH } = nftObj[nftId];
-    nftList.push([name, description, image, `${priceETH} ETH`]);
+    const { name, description, image, priceWei } = nftObj[nftId];
+    nftList.push([name, description, image, `${formatEther(priceWei)} ETH`]);
   }
 
   return (

@@ -36,8 +36,9 @@ export function ConsumerContractProvider({ ...props }) {
 
   //it will get NFTs that belong to given user
   const getConsumerNfts = useCallback(async () => {
-    console.log("calling Marketplace.fetchMyPurchasedItems()");
-    return contract.current.fetchMyPurchasedItems();
+    let signer = await provider.current.getSigner();
+    let signedContract = contract.current.connect(signer);
+    return signedContract.fetchMyPurchasedItems();
   }, []);
 
   //it will get details about an NFT that belongs to given user
