@@ -3,7 +3,7 @@ const { ethers, getNamedAccounts } = require("hardhat")
 const firstNikeOffer = {
     price: ethers.utils.parseEther("0.1"),
     tokenId: 0,
-    time: 6000, // 6000 seconds = 100 minutes
+    time: 3, // 6000 seconds = 100 minutes
   }
 
   const secondNikeOffer = {
@@ -21,7 +21,7 @@ const firstNikeOffer = {
   const firstRolexOffer = {
     price: ethers.utils.parseEther("10.0"),
     tokenId: 0,
-    time: 2000, // 6000 seconds = 100 minutes
+    time: 3, // 6000 seconds = 100 minutes
   }
 
   const secondRolexOffer = {
@@ -33,23 +33,23 @@ const firstNikeOffer = {
   const thirdRolexOffer = {
     price: ethers.utils.parseEther("24.0"),
     tokenId: 2,
-    time: 1200,
+    time: 20,
   }
 
   const firstTicketOffer = {
     price: ethers.utils.parseEther("0.03"),
     tokenId: 0,
-    time: 1200,
+    time: 10,
   }
 
   const secondTicketOffer = {
-    price: ethers.utils.parseEther("0.04"),
+    price: ethers.utils.parseEther("0.08"),
     tokenId: 1,
     time: 5,
   }
 
   const thirdTicketOffer = {
-    price: ethers.utils.parseEther("0.01"),
+    price: ethers.utils.parseEther("0.2"),
     tokenId: 2,
     time: 150,
   }
@@ -57,7 +57,7 @@ const firstNikeOffer = {
   const firstCoinOffer = {
     price: ethers.utils.parseEther("0.25"),
     tokenId: 0,
-    time: 1200,
+    time: 10,
   }
 
   const secondCoinOffer = {
@@ -69,14 +69,14 @@ const firstNikeOffer = {
   const thirdCoinOffer = {
     price: ethers.utils.parseEther("1.0"),
     tokenId: 2,
-    time: 1500,
+    time: 10,
   }
 
 const Offers = [
   [ firstNikeOffer, secondNikeOffer, thirdNikeOffer ],
   [ firstRolexOffer, secondRolexOffer, thirdRolexOffer ],
   [ firstTicketOffer, secondTicketOffer, thirdTicketOffer],
-  [ firstCoinOffer, secondCoinOffer, thirdTicketOffer ]
+  [ firstCoinOffer, secondCoinOffer, thirdCoinOffer ]
 ];
 
 async function main() {
