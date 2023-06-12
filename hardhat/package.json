@@ -10,7 +10,8 @@
     "mp-cancel": "hardhat run scripts/Marketplace/M03-Cancel.js --network localhost",
     "mp-update": "hardhat run scripts/Marketplace/M04-Update.js --network localhost",
     "mp-withdraw": "hardhat run scripts/Marketplace/M05-Withdraw.js --network localhost",
-    "run-base": "yarn add-stores && yarn mint-nfts && yarn mp-list && yarn block"
+    "run-base": "yarn add-stores && yarn mint-nfts && yarn mp-list && yarn block",
+    "run-box": "yarn add-stores && yarn hardhat run scripts/NFTs/N01-BoxMint.js --network localhost && yarn hardhat run scripts/Marketplace/M11-ListBox.js --network localhost"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.4.7",
